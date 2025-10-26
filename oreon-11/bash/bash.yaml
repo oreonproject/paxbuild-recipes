@@ -1,0 +1,101 @@
+name: bash
+version: "5.3"
+description: "GNU Bourne-Again SHell"
+author: "Brian Fox and Chet Ramey"
+license: "GPL-3.0-or-later"
+homepage: "https://www.gnu.org/software/bash/"
+repository: "https://git.savannah.gnu.org/git/bash.git"
+keywords:
+  - shell
+  - bash
+  - gnu
+categories:
+  - shells
+  - system
+
+dependencies:
+  build_dependencies:
+    - name: "gcc"
+      version_constraint: ">=4.0"
+      optional: false
+    - name: "make"
+      version_constraint: ">=3.0"
+      optional: false
+    - name: "readline"
+      version_constraint: ">=8.0"
+      optional: false
+  runtime_dependencies: []
+  optional_dependencies: []
+  conflicts: []
+
+build:
+  build_system: Autotools
+  build_commands:
+    - "./configure --prefix=/usr --without-bash-malloc"
+    - "make"
+  build_dependencies:
+    - "gcc"
+    - "make"
+    - "readline"
+  build_flags: []
+  environment:
+    CFLAGS: "-O2"
+  working_directory: null
+  target_architectures:
+    - X86_64v3
+    - Aarch64
+  cross_compiler_prefix: null
+  target_sysroot: null
+
+install:
+  install_method: RunCommands
+  install_commands:
+    - "make install"
+  install_directories:
+    - "/usr/bin"
+    - "/usr/share/bash"
+  install_files: []
+  post_install_commands: []
+
+files:
+  include_patterns:
+    - "*.c"
+    - "*.h"
+    - "*.y"
+    - "configure"
+    - "Makefile.in"
+    - "README"
+  exclude_patterns:
+    - "**/*.o"
+    - "**/*.a"
+    - "**/*.so"
+    - "tests/**/*"
+    - ".git/**/*"
+  binary_files: []
+  config_files: []
+  documentation_files:
+    - "README"
+    - "AUTHORS"
+  license_files:
+    - "COPYING"
+
+scripts:
+  pre_install: |
+    echo "Installing bash..."
+  post_install: |
+    echo "bash installed successfully"
+  pre_uninstall: |
+    echo "Removing bash..."
+  post_uninstall: |
+    echo "bash removed successfully"
+  pre_upgrade: null
+  post_upgrade: null
+
+metadata:
+  maintainer: "Oreon Project Team <packaging@oreonproject.org>"
+  section: "shells"
+  priority: "required"
+  provides:
+    - "sh"
+    - "bash"
+  conflicts: []

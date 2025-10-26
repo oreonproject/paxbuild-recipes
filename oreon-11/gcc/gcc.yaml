@@ -1,0 +1,147 @@
+name: gcc
+version: "14.2.0"
+description: "GNU Compiler Collection"
+author: "GNU Project"
+license: "GPL-3.0-or-later"
+homepage: "https://gcc.gnu.org/"
+repository: "https://gcc.gnu.org/git/gcc.git"
+keywords:
+  - compiler
+  - gcc
+  - gnu
+  - development
+categories:
+  - development
+  - compiler
+
+dependencies:
+  build_dependencies:
+    - name: "make"
+      version_constraint: ">=4.0"
+      optional: false
+    - name: "bison"
+      version_constraint: ">=3.0"
+      optional: false
+    - name: "flex"
+      version_constraint: ">=2.6"
+      optional: false
+    - name: "gmp"
+      version_constraint: ">=6.2"
+      optional: false
+    - name: "mpfr"
+      version_constraint: ">=4.1"
+      optional: false
+    - name: "mpc"
+      version_constraint: ">=1.2"
+      optional: false
+    - name: "isl"
+      version_constraint: ">=0.24"
+      optional: false
+    - name: "zlib"
+      version_constraint: ">=1.2"
+      optional: false
+    - name: "zstd"
+      version_constraint: ">=1.5"
+      optional: false
+  runtime_dependencies: []
+  optional_dependencies: []
+  conflicts: []
+
+build:
+  build_system: Make
+  build_commands:
+    - "./configure --prefix=/usr --enable-languages=c,c++,fortran,objc,obj-c++,go --enable-threads=posix --enable-shared --enable-__cxa_atexit --enable-clocale=gnu --enable-libstdcxx-dual-abi --enable-libssp --disable-multilib"
+    - "make -j$(nproc)"
+  build_dependencies:
+    - "make"
+    - "bison"
+    - "flex"
+    - "gmp"
+    - "mpfr"
+    - "mpc"
+    - "isl"
+    - "zlib"
+    - "zstd"
+  build_flags:
+    - "CFLAGS=-O2"
+    - "CXXFLAGS=-O2"
+  environment:
+    CC: "gcc"
+    CXX: "g++"
+  working_directory: "build"
+  target_architectures:
+    - X86_64v3
+    - Aarch64
+  cross_compiler_prefix: null
+  target_sysroot: null
+
+install:
+  install_method: RunCommands
+  install_commands:
+    - "make install"
+  install_directories:
+    - "/usr/bin"
+    - "/usr/lib/gcc"
+    - "/usr/libexec/gcc"
+    - "/usr/share/gcc"
+    - "/usr/include"
+  install_files: []
+  post_install_commands:
+    - "ldconfig"
+
+files:
+  include_patterns:
+    - "*.c"
+    - "*.h"
+    - "*.cc"
+    - "*.cpp"
+    - "*.hpp"
+    - "*.def"
+    - "configure"
+    - "configure.ac"
+    - "Makefile.in"
+    - "gcc/version.c"
+  exclude_patterns:
+    - "**/*.o"
+    - "**/*.a"
+    - "**/*.so"
+    - "**/testsuite/**/*"
+    - ".git/**/*"
+  binary_files: []
+  config_files: []
+  documentation_files:
+    - "README"
+    - "COPYING*"
+    - "ChangeLog"
+  license_files:
+    - "COPYING3"
+    - "COPYING.LIB"
+    - "COPYING.RUNTIME"
+
+scripts:
+  pre_install: |
+    echo "Installing GCC compiler..."
+  post_install: |
+    echo "GCC installed successfully"
+    echo "Compiler: $(which gcc)"
+    echo "Version: $(gcc --version | head -n1)"
+  pre_uninstall: |
+    echo "Removing GCC..."
+  post_uninstall: |
+    echo "GCC removed successfully"
+  pre_upgrade: null
+  post_upgrade: null
+
+metadata:
+  maintainer: "Oreon Project Team <packaging@oreonproject.org>"
+  section: "devel"
+  priority: "required"
+  provides:
+    - "cc"
+    - "c++"
+    - "gcc"
+    - "g++"
+    - "gfortran"
+    - "libgcc"
+    - "libstdc++"
+  conflicts: []

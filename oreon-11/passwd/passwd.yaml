@@ -1,0 +1,86 @@
+name: passwd
+version: "4.15.3"
+description: "passwd package"
+author: "Various"
+license: "Various"
+homepage: "https://wiki.archlinux.org/passwd"
+repository: "https://github.com/passwd/passwd.git"
+keywords:
+  - passwd
+categories:
+  - packages
+
+dependencies:
+  build_dependencies:
+    - name: "gcc"
+      version_constraint: ">=4.0"
+      optional: false
+    - name: "make"
+      version_constraint: ">=3.0"
+      optional: false
+  runtime_dependencies: []
+  optional_dependencies: []
+  conflicts: []
+
+build:
+  build_system: Make
+  build_commands:
+    - "./configure --prefix=/usr"
+    - "make"
+  build_dependencies:
+    - "gcc"
+    - "make"
+  build_flags: []
+  environment:
+    CFLAGS: "-O2"
+  working_directory: null
+  target_architectures:
+    - X86_64v3
+    - Aarch64
+  cross_compiler_prefix: null
+  target_sysroot: null
+
+install:
+  install_method: RunCommands
+  install_commands:
+    - "make install"
+  install_directories:
+    - "/usr/bin"
+  install_files: []
+  post_install_commands: []
+
+files:
+  include_patterns:
+    - "*.c"
+    - "*.h"
+    - "configure"
+    - "Makefile.in"
+  exclude_patterns:
+    - "**/*.o"
+    - "**/*.a"
+    - "tests/**/*"
+    - ".git/**/*"
+  binary_files: []
+  config_files: []
+  documentation_files: []
+  license_files: []
+
+scripts:
+  pre_install: |
+    echo "Installing passwd..."
+  post_install: |
+    echo "passwd installed successfully"
+  pre_uninstall: |
+    echo "Removing passwd..."
+  post_uninstall: |
+    echo "passwd removed successfully"
+  pre_upgrade: null
+  post_upgrade: null
+
+metadata:
+  maintainer: "Oreon Project Team <packaging@oreonproject.org>"
+  section: "packages"
+  priority: "optional"
+  provides:
+    - "passwd"
+  conflicts: []

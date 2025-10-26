@@ -1,0 +1,86 @@
+name: gtk
+version: "3.24.43"
+description: "GTK+ graphical user interface library"
+author: "GNOME Project"
+license: "LGPL-2.1-or-later"
+homepage: "https://www.gtk.org/"
+repository: "https://gitlab.gnome.org/GNOME/gtk.git"
+keywords:
+  - gtk
+categories:
+  - packages
+
+dependencies:
+  build_dependencies:
+    - name: "gcc"
+      version_constraint: ">=4.0"
+      optional: false
+    - name: "make"
+      version_constraint: ">=3.0"
+      optional: false
+  runtime_dependencies: []
+  optional_dependencies: []
+  conflicts: []
+
+build:
+  build_system: Make
+  build_commands:
+    - "./configure --prefix=/usr"
+    - "make"
+  build_dependencies:
+    - "gcc"
+    - "make"
+  build_flags: []
+  environment:
+    CFLAGS: "-O2"
+  working_directory: null
+  target_architectures:
+    - X86_64v3
+    - Aarch64
+  cross_compiler_prefix: null
+  target_sysroot: null
+
+install:
+  install_method: RunCommands
+  install_commands:
+    - "make install"
+  install_directories:
+    - "/usr/bin"
+  install_files: []
+  post_install_commands: []
+
+files:
+  include_patterns:
+    - "*.c"
+    - "*.h"
+    - "configure"
+    - "Makefile.in"
+  exclude_patterns:
+    - "**/*.o"
+    - "**/*.a"
+    - "tests/**/*"
+    - ".git/**/*"
+  binary_files: []
+  config_files: []
+  documentation_files: []
+  license_files: []
+
+scripts:
+  pre_install: |
+    echo "Installing gtk..."
+  post_install: |
+    echo "gtk installed successfully"
+  pre_uninstall: |
+    echo "Removing gtk..."
+  post_uninstall: |
+    echo "gtk removed successfully"
+  pre_upgrade: null
+  post_upgrade: null
+
+metadata:
+  maintainer: "Oreon Project Team <packaging@oreonproject.org>"
+  section: "packages"
+  priority: "optional"
+  provides:
+    - "gtk"
+  conflicts: []
