@@ -1,10 +1,11 @@
 name: glibc
-version: "2.39"
+version: "2.40"
 description: "GNU C library"
-author: "GNU Project"
-license: "LGPL-2.1-or-later"
-homepage: "https://www.gnu.org/software/libc/"
-repository: "https://sourceware.org/git/glibc.git"
+author: "Various"
+license: "Various"
+homepage: ""
+repository: ""
+source_url: "https://launchpad.net/ubuntu/+archive/primary/+files/glibc_2.40.orig.tar.gz"
 keywords:
   - glibc
 categories:
@@ -25,7 +26,7 @@ dependencies:
 build:
   build_system: Make
   build_commands:
-    - "./configure --prefix=/usr"
+    - "mkdir -p build && cd build && ../configure --prefix=/usr"
     - "make"
   build_dependencies:
     - "gcc"
@@ -35,6 +36,7 @@ build:
     CFLAGS: "-O2"
   working_directory: null
   target_architectures:
+    - X86_64v1
     - X86_64v3
     - Aarch64
   cross_compiler_prefix: null
@@ -43,7 +45,7 @@ build:
 install:
   install_method: RunCommands
   install_commands:
-    - "make install"
+    - "cd build && make install"
   install_directories:
     - "/usr/bin"
   install_files: []

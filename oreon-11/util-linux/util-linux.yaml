@@ -1,13 +1,13 @@
-name: systemd
-version: "258"
-description: "Systemd"
+name: util-linux
+version: "2.40.4"
+description: "Util-linux"
 author: "Various"
 license: "Various"
 homepage: ""
 repository: ""
-source_url: "https://github.com/systemd/systemd/archive/refs/tags/v258.tar.gz"
+source_url: "https://www.kernel.org/pub/linux/utils/util-linux/v2.40/util-linux-2.40.4.tar.xz"
 keywords:
-  - systemd
+  - util-linux
 categories:
   - packages
 
@@ -26,8 +26,8 @@ dependencies:
 build:
   build_system: Make
   build_commands:
-    - "meson setup build -Dprefix=/usr"
-    - "ninja -C build"
+    - "./configure --prefix=/usr"
+    - "make"
   build_dependencies:
     - "gcc"
     - "make"
@@ -45,7 +45,7 @@ build:
 install:
   install_method: RunCommands
   install_commands:
-    - "ninja -C build install"
+    - "make install"
   install_directories:
     - "/usr/bin"
   install_files: []
@@ -69,13 +69,13 @@ files:
 
 scripts:
   pre_install: |
-    echo "Installing systemd..."
+    echo "Installing util-linux..."
   post_install: |
-    echo "systemd installed successfully"
+    echo "util-linux installed successfully"
   pre_uninstall: |
-    echo "Removing systemd..."
+    echo "Removing util-linux..."
   post_uninstall: |
-    echo "systemd removed successfully"
+    echo "util-linux removed successfully"
   pre_upgrade: null
   post_upgrade: null
 
@@ -84,5 +84,5 @@ metadata:
   section: "packages"
   priority: "optional"
   provides:
-    - "systemd"
+    - "util-linux"
   conflicts: []

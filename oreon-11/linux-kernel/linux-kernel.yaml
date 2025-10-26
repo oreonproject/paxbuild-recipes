@@ -1,49 +1,26 @@
 name: linux-kernel
-version: "6.14.0"
-description: "The Linux kernel"
-author: "Linus Torvalds and the Linux community"
-license: "GPL-2.0-only"
-homepage: "https://www.kernel.org/"
-repository: "https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git"
+version: "6.17.5"
+description: "Linux Kernel"
+author: "Various"
+license: "Various"
+homepage: ""
+repository: ""
+source_url: "https://www.kernel.org/pub/linux/kernel/v6.x/linux-6.17.5.tar.xz"
 keywords:
-  - kernel
-  - linux
-  - system
+  - linux-kernel
 categories:
-  - system-core
-  - kernel
+  - packages
 
 dependencies:
   build_dependencies:
     - name: "gcc"
-      version_constraint: ">=12.0"
-      optional: false
-    - name: "make"
       version_constraint: ">=4.0"
       optional: false
-    - name: "bc"
-      version_constraint: ">=1.0"
-      optional: false
-    - name: "bison"
+    - name: "make"
       version_constraint: ">=3.0"
       optional: false
-    - name: "flex"
-      version_constraint: ">=2.6"
-      optional: false
-    - name: "elfutils"
-      version_constraint: ">=0.186"
-      optional: false
-    - name: "openssl"
-      version_constraint: ">=1.1"
-      optional: false
-    - name: "zlib"
-      version_constraint: ">=1.2"
-      optional: false
   runtime_dependencies: []
-  optional_dependencies:
-    - name: "linux-firmware"
-      version_constraint: ">=20240115"
-      optional: true
+  optional_dependencies: []
   conflicts: []
 
 build:
@@ -54,19 +31,12 @@ build:
   build_dependencies:
     - "gcc"
     - "make"
-    - "bc"
-    - "bison"
-    - "flex"
-    - "elfutils"
-    - "openssl"
-    - "zlib"
-  build_flags:
-    - "LDFLAGS=-s"
+  build_flags: []
   environment:
-    CC: "gcc"
-    HOSTCC: "gcc"
+    CFLAGS: "-O2"
   working_directory: null
   target_architectures:
+    - X86_64v1
     - X86_64v3
     - Aarch64
   cross_compiler_prefix: null
@@ -75,57 +45,45 @@ build:
 install:
   install_method: RunCommands
   install_commands:
-    - "make modules_install INSTALL_MOD_PATH=."
-    - "make install INSTALL_PATH=/boot"
+    - "make modules_install"
+    - "make install"
   install_directories:
-    - "/lib/modules"
-    - "/boot"
-    - "/usr/src/linux"
+    - "/usr/bin"
   install_files: []
-  post_install_commands:
-    - "depmod"
+  post_install_commands: []
 
 files:
   include_patterns:
     - "*.c"
     - "*.h"
-    - "Kconfig"
-    - "Makefile"
-    - "README"
-    - "COPYING"
+    - "configure"
+    - "Makefile.in"
   exclude_patterns:
     - "**/*.o"
-    - "**/*.ko"
+    - "**/*.a"
+    - "tests/**/*"
     - ".git/**/*"
-    - "Documentation/**/*"
   binary_files: []
-  config_files:
-    - "/boot/config-*"
-  documentation_files:
-    - "README"
-    - "COPYING"
-  license_files:
-    - "COPYING"
+  config_files: []
+  documentation_files: []
+  license_files: []
 
 scripts:
   pre_install: |
-    echo "Installing Linux kernel..."
+    echo "Installing linux-kernel..."
   post_install: |
-    echo "Linux kernel installed successfully"
-    echo "Modules: /lib/modules"
-    echo "Kernel: /boot/vmlinuz-*"
+    echo "linux-kernel installed successfully"
   pre_uninstall: |
-    echo "Removing Linux kernel..."
+    echo "Removing linux-kernel..."
   post_uninstall: |
-    echo "Linux kernel removed successfully"
+    echo "linux-kernel removed successfully"
   pre_upgrade: null
   post_upgrade: null
 
 metadata:
   maintainer: "Oreon Project Team <packaging@oreonproject.org>"
-  section: "kernel"
-  priority: "required"
+  section: "packages"
+  priority: "optional"
   provides:
-    - "kernel-image"
-    - "kernel-modules"
+    - "linux-kernel"
   conflicts: []

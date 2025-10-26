@@ -1,13 +1,13 @@
-name: systemd
-version: "258"
-description: "Systemd"
+name: file
+version: "5.46"
+description: "File type identification"
 author: "Various"
 license: "Various"
 homepage: ""
 repository: ""
-source_url: "https://github.com/systemd/systemd/archive/refs/tags/v258.tar.gz"
+source_url: "https://astron.com/pub/file/file-5.46.tar.gz"
 keywords:
-  - systemd
+  - file
 categories:
   - packages
 
@@ -26,8 +26,8 @@ dependencies:
 build:
   build_system: Make
   build_commands:
-    - "meson setup build -Dprefix=/usr"
-    - "ninja -C build"
+    - "./configure --prefix=/usr"
+    - "make"
   build_dependencies:
     - "gcc"
     - "make"
@@ -45,7 +45,7 @@ build:
 install:
   install_method: RunCommands
   install_commands:
-    - "ninja -C build install"
+    - "make install"
   install_directories:
     - "/usr/bin"
   install_files: []
@@ -69,13 +69,13 @@ files:
 
 scripts:
   pre_install: |
-    echo "Installing systemd..."
+    echo "Installing file..."
   post_install: |
-    echo "systemd installed successfully"
+    echo "file installed successfully"
   pre_uninstall: |
-    echo "Removing systemd..."
+    echo "Removing file..."
   post_uninstall: |
-    echo "systemd removed successfully"
+    echo "file removed successfully"
   pre_upgrade: null
   post_upgrade: null
 
@@ -84,5 +84,5 @@ metadata:
   section: "packages"
   priority: "optional"
   provides:
-    - "systemd"
+    - "file"
   conflicts: []

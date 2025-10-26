@@ -1,10 +1,11 @@
 name: iproute2
-version: "6.11.0"
-description: "iproute2 package"
+version: "6.17.0"
+description: "IP routing utilities"
 author: "Various"
 license: "Various"
-homepage: "https://wiki.archlinux.org/iproute2"
-repository: "https://github.com/iproute2/iproute2.git"
+homepage: ""
+repository: ""
+source_url: "https://www.kernel.org/pub/linux/utils/net/iproute2/iproute2-6.17.0.tar.xz"
 keywords:
   - iproute2
 categories:
@@ -25,7 +26,7 @@ dependencies:
 build:
   build_system: Make
   build_commands:
-    - "./configure --prefix=/usr"
+    - "make"
     - "make"
   build_dependencies:
     - "gcc"
@@ -35,6 +36,7 @@ build:
     CFLAGS: "-O2"
   working_directory: null
   target_architectures:
+    - X86_64v1
     - X86_64v3
     - Aarch64
   cross_compiler_prefix: null

@@ -1,13 +1,13 @@
-name: systemd
-version: "258"
-description: "Systemd"
+name: shadow
+version: "4.16.0"
+description: "Shadow password suite"
 author: "Various"
 license: "Various"
 homepage: ""
 repository: ""
-source_url: "https://github.com/systemd/systemd/archive/refs/tags/v258.tar.gz"
+source_url: "https://github.com/shadow-maint/shadow/releases/download/4.16.0/shadow-4.16.0.tar.xz"
 keywords:
-  - systemd
+  - shadow
 categories:
   - packages
 
@@ -26,8 +26,8 @@ dependencies:
 build:
   build_system: Make
   build_commands:
-    - "meson setup build -Dprefix=/usr"
-    - "ninja -C build"
+    - "./configure --prefix=/usr"
+    - "make"
   build_dependencies:
     - "gcc"
     - "make"
@@ -45,7 +45,7 @@ build:
 install:
   install_method: RunCommands
   install_commands:
-    - "ninja -C build install"
+    - "make install"
   install_directories:
     - "/usr/bin"
   install_files: []
@@ -69,13 +69,13 @@ files:
 
 scripts:
   pre_install: |
-    echo "Installing systemd..."
+    echo "Installing shadow..."
   post_install: |
-    echo "systemd installed successfully"
+    echo "shadow installed successfully"
   pre_uninstall: |
-    echo "Removing systemd..."
+    echo "Removing shadow..."
   post_uninstall: |
-    echo "systemd removed successfully"
+    echo "shadow removed successfully"
   pre_upgrade: null
   post_upgrade: null
 
@@ -84,5 +84,5 @@ metadata:
   section: "packages"
   priority: "optional"
   provides:
-    - "systemd"
+    - "shadow"
   conflicts: []

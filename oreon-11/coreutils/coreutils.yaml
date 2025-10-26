@@ -1,10 +1,11 @@
 name: coreutils
-version: "9.5"
+version: "9.8"
 description: "Core GNU utilities"
-author: "GNU Project"
-license: "GPL-3.0-or-later"
-homepage: "https://www.gnu.org/software/coreutils/"
-repository: "https://git.savannah.gnu.org/git/coreutils.git"
+author: "Various"
+license: "Various"
+homepage: ""
+repository: ""
+source_url: "https://ftp.gnu.org/gnu/coreutils/coreutils-9.8.tar.xz"
 keywords:
   - coreutils
 categories:
@@ -35,6 +36,7 @@ build:
     CFLAGS: "-O2"
   working_directory: null
   target_architectures:
+    - X86_64v1
     - X86_64v3
     - Aarch64
   cross_compiler_prefix: null
