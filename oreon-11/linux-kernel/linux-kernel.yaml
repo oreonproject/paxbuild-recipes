@@ -45,23 +45,24 @@ build:
 install:
   install_method: RunCommands
   install_commands:
-    - "make modules_install"
-    - "make install"
-  install_directories:
-    - "/usr/bin"
+    - "mkdir -p usr/boot usr/lib/modules"
+    - "cp arch/x86/boot/bzImage usr/boot/vmlinuz-6.17.5"
+    - "make modules_install INSTALL_MOD_PATH=."
+    - "cp System.map usr/boot/System.map-6.17.5"
+  install_directories: []
   install_files: []
   post_install_commands: []
 
 files:
   include_patterns:
-    - "*.c"
-    - "*.h"
-    - "configure"
-    - "Makefile.in"
+    - "usr/boot/vmlinuz-*"
+    - "usr/boot/System.map-*"
+    - "usr/lib/modules/*"
   exclude_patterns:
     - "**/*.o"
     - "**/*.a"
-    - "tests/**/*"
+    - "**/*.c"
+    - "**/*.h"
     - ".git/**/*"
   binary_files: []
   config_files: []
