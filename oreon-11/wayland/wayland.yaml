@@ -1,0 +1,103 @@
+name: wayland
+version: "1.23.0"
+description: "Display server protocol"
+author: "Kristian Høgsberg and others"
+license: "MIT"
+homepage: "https://wayland.freedesktop.org/"
+repository: "https://gitlab.freedesktop.org/wayland/wayland.git"
+keywords:
+  - wayland
+  - display
+  - protocol
+categories:
+  - system
+  - graphical
+
+dependencies:
+  build_dependencies:
+    - name: "gcc"
+      version_constraint: ">=12.0"
+      optional: false
+    - name: "meson"
+      version_constraint: ">=1.0"
+      optional: false
+    - name: "expat"
+      version_constraint: ">=2.4"
+      optional: false
+    - name: "libffi"
+      version_constraint: ">=3.4"
+      optional: false
+  runtime_dependencies: []
+  optional_dependencies: []
+  conflicts: []
+
+build:
+  build_system: Meson
+  build_commands:
+    - "meson setup build -Dprefix=/usr -Dbuildtype=release"
+    - "meson compile -C build"
+  build_dependencies:
+    - "gcc"
+    - "meson"
+    - "expat"
+    - "libffi"
+  build_flags: []
+  environment:
+    CC: "gcc"
+  working_directory: null
+  target_architectures:
+    - X86_64v3
+    - Aarch64
+  cross_compiler_prefix: null
+  target_sysroot: null
+
+install:
+  install_method: RunCommands
+  install_commands:
+    - "meson install -C build"
+  install_directories:
+    - "/usr/lib"
+    - "/usr/include"
+    - "/usr/share/wayland"
+  install_files: []
+  post_install_commands:
+    - "ldconfig"
+
+files:
+  include_patterns:
+    - "*.c"
+    - "*.h"
+    - "*.xml"
+    - "meson.build"
+  exclude_patterns:
+    - "**/*.o"
+    - "**/*.a"
+    - "tests/**/*"
+    - ".git/**/*"
+  binary_files: []
+  config_files: []
+  documentation_files:
+    - "README"
+  license_files:
+    - "COPYING"
+
+scripts:
+  pre_install: |
+    echo "Installing Wayland..."
+  post_install: |
+    echo "Wayland installed successfully"
+  pre_uninstall: |
+    echo "Removing Wayland..."
+  post_uninstall: |
+    echo "Wayland removed successfully"
+  pre_upgrade: null
+  post_upgrade: null
+
+metadata:
+  maintainer: "Oreon Project Team <packaging@oreonproject.org>"
+  section: "libs"
+  priority: "required"
+  provides:
+    - "wayland"
+    - "libwayland"
+  conflicts: []
