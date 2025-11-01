@@ -26,11 +26,13 @@ dependencies:
 build:
   build_system: Make
   build_commands:
-    - "./configure --prefix=/usr"
+    - "./configure --prefix=/usr --without-bash-malloc"
     - "make"
   build_dependencies:
     - "gcc"
     - "make"
+    - "readline-devel"
+    - "ncurses-devel"
   build_flags: []
   environment:
     CFLAGS: "-O2"
@@ -45,7 +47,7 @@ build:
 install:
   install_method: RunCommands
   install_commands:
-    - "make install"
+    - "make install DESTDIR=/buildroot"
   install_directories:
     - "/usr/bin"
   install_files: []

@@ -26,11 +26,13 @@ dependencies:
 build:
   build_system: Make
   build_commands:
-    - "./configure --prefix=/usr"
+    - "./configure --prefix=/usr --disable-zstd --disable-manpages"
     - "make"
   build_dependencies:
     - "gcc"
     - "make"
+    - "xz-devel"
+    - "zlib-devel"
   build_flags: []
   environment:
     CFLAGS: "-O2"

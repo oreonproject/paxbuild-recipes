@@ -1,11 +1,11 @@
 name: glibc
-version: "2.40"
+version: "2.38"
 description: "GNU C library"
 author: "Various"
 license: "Various"
 homepage: ""
 repository: ""
-source_url: "https://launchpad.net/ubuntu/+archive/primary/+files/glibc_2.40.orig.tar.gz"
+source_url: "https://ftp.gnu.org/gnu/glibc/glibc-2.38.tar.xz"
 keywords:
   - glibc
 categories:
@@ -26,11 +26,16 @@ dependencies:
 build:
   build_system: Make
   build_commands:
-    - "mkdir -p build && cd build && ../configure --prefix=/usr"
-    - "make"
+    - "mkdir -p build && cd build && unset LD_LIBRARY_PATH && ../configure --prefix=/usr --disable-werror --disable-profile --enable-kernel=3.2"
+    - "cd build && make"
   build_dependencies:
     - "gcc"
     - "make"
+    - "bison"
+    - "gawk"
+    - "sed"
+    - "bash"
+    - "python3"
   build_flags: []
   environment:
     CFLAGS: "-O2"
@@ -45,9 +50,17 @@ build:
 install:
   install_method: RunCommands
   install_commands:
-    - "cd build && make install"
+    - "cd build && unset LD_LIBRARY_PATH && install_root=/buildroot make -j1 install"
   install_directories:
     - "/usr/bin"
+    - "/usr/lib"
+    - "/usr/lib64"
+    - "/usr/include"
+    - "/usr/sbin"
+    - "/lib"
+    - "/lib64"
+    - "/etc"
+    - "/sbin"
   install_files: []
   post_install_commands: []
 

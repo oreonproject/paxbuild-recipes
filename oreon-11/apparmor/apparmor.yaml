@@ -1,0 +1,115 @@
+name: apparmor
+version: "3.1.7"
+description: "Application Armor security framework"
+author: "Various"
+license: "GPL-2.0"
+homepage: ""
+repository: "https://gitlab.com/apparmor/apparmor.git"
+source_url: "https://gitlab.com/apparmor/apparmor/-/archive/v3.1.7/apparmor-v3.1.7.tar.gz"
+keywords:
+  - apparmor
+  - security
+categories:
+  - packages
+
+dependencies:
+  build_dependencies:
+    - name: "gcc"
+      version_constraint: ">=4.0"
+      optional: false
+    - name: "make"
+      version_constraint: ">=3.0"
+      optional: false
+    - name: "swig"
+      version_constraint: ">=3.0"
+      optional: false
+    - name: "python3"
+      version_constraint: ">=3.6"
+      optional: false
+  runtime_dependencies: []
+  optional_dependencies: []
+  conflicts: []
+
+build:
+  build_system: Make
+  build_commands:
+    - "export PYTHONPATH=$(realpath libraries/libapparmor/swig/python 2>/dev/null || echo libraries/libapparmor/swig/python) && export PYTHON=/usr/bin/python3 && export PYTHON_VERSION=3 && export PYTHON_VERSIONS=python3"
+    - "cd libraries/libapparmor && sh ./autogen.sh && sh ./configure --prefix=/usr --disable-man-pages && make"
+    - "cd binutils && make"
+    - "cd parser && sed -i 's/-static-libstdc++//g' Makefile && sed -i 's|pod2html|true|g' ../common/Make.rules && make"
+    - "cd utils && make"
+  build_dependencies:
+    - "gcc"
+    - "make"
+    - "swig"
+    - "python3"
+    - "python3-devel"
+    - "perl"
+    - "perl-devel"
+    - "autoconf"
+    - "automake"
+    - "libtool"
+    - "perl-Pod-Checker"
+  build_flags: []
+  environment:
+    CFLAGS: "-O2"
+  working_directory: null
+  target_architectures:
+    - X86_64v1
+    - X86_64v3
+    - Aarch64
+  cross_compiler_prefix: null
+  target_sysroot: null
+
+install:
+  install_method: RunCommands
+  install_commands:
+    - "cd libraries/libapparmor && make install DESTDIR=/buildroot"
+    - "cd binutils && sed -i 's| DESTDIR=/| |g' po/Makefile ../common/Make-po.rules 2>/dev/null || true && make install DESTDIR=/buildroot"
+    - "cd parser && sed -i 's| DESTDIR=/| |g' po/Makefile ../common/Make-po.rules 2>/dev/null || true && make install DESTDIR=/buildroot"
+    - "cd utils && sed -i 's| DESTDIR=/| |g' po/Makefile ../common/Make-po.rules 2>/dev/null || true && make install DESTDIR=/buildroot"
+  install_directories:
+    - "/usr/bin"
+    - "/usr/sbin"
+    - "/usr/lib"
+    - "/usr/include"
+    - "/usr/share"
+  install_files: []
+  post_install_commands: []
+
+files:
+  include_patterns:
+    - "*.c"
+    - "*.h"
+    - "configure"
+    - "Makefile.in"
+  exclude_patterns:
+    - "**/*.o"
+    - "**/*.a"
+    - "tests/**/*"
+    - ".git/**/*"
+  binary_files: []
+  config_files: []
+  documentation_files: []
+  license_files: []
+
+scripts:
+  pre_install: |
+    echo "Installing apparmor..."
+  post_install: |
+    echo "apparmor installed successfully"
+  pre_uninstall: |
+    echo "Removing apparmor..."
+  post_uninstall: |
+    echo "apparmor removed successfully"
+  pre_upgrade: null
+  post_upgrade: null
+
+metadata:
+  maintainer: "Oreon Project Team <packaging@oreonproject.org>"
+  section: "packages"
+  priority: "optional"
+  provides:
+    - "apparmor"
+  conflicts: []
+

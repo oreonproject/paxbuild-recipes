@@ -19,6 +19,21 @@ dependencies:
     - name: "make"
       version_constraint: ">=3.0"
       optional: false
+    - name: "flex"
+      version_constraint: ">=2.5"
+      optional: false
+    - name: "bison"
+      version_constraint: ">=3.0"
+      optional: false
+    - name: "elfutils-libelf-devel"
+      version_constraint: ">=0.1"
+      optional: false
+    - name: "openssl-devel"
+      version_constraint: ">=1.0"
+      optional: false
+    - name: "ncurses-devel"
+      version_constraint: ">=5.0"
+      optional: false
   runtime_dependencies: []
   optional_dependencies: []
   conflicts: []
@@ -26,11 +41,37 @@ dependencies:
 build:
   build_system: Make
   build_commands:
-    - "make defconfig"
-    - "make -j$(nproc)"
+    - 'bash -c "if [ \"${TARGET%%-*}\" = x86_64 ]; then make defconfig ARCH=x86_64; elif [ \"${TARGET%%-*}\" = aarch64 ]; then make defconfig ARCH=arm64; else echo Unsupported: ${TARGET%%-*}; exit 1; fi"'
+    - 'bash -c "if [ \"${TARGET%%-*}\" = x86_64 ]; then make -j$(nproc) ARCH=x86_64; elif [ \"${TARGET%%-*}\" = aarch64 ]; then make -j$(nproc) ARCH=arm64; else echo Unsupported: ${TARGET%%-*}; exit 1; fi"'
+    - 'bash -c "if [ \"${TARGET%%-*}\" = x86_64 ]; then if [ -f arch/x86/boot/bzImage ]; then echo \"Kernel build successful: bzImage found\"; ls -lh arch/x86/boot/bzImage; else echo \"ERROR: Kernel build failed - bzImage not found\"; exit 1; fi; elif [ \"${TARGET%%-*}\" = aarch64 ]; then if [ -f arch/arm64/boot/Image.gz ] || [ -f arch/arm64/boot/Image ]; then echo \"Kernel build successful: ARM64 image found\"; else echo \"ERROR: Kernel build failed - no ARM64 image found\"; exit 1; fi; fi"'
   build_dependencies:
     - "gcc"
     - "make"
+    - "flex"
+    - "bison"
+    - "bc"
+    - "elfutils-libelf-devel"
+    - "openssl-devel"
+    - "ncurses-devel"
+    - "kmod"
+    - "bash"
+    - "coreutils"
+    - "tar"
+    - "git"
+    - "which"
+    - "bzip2"
+    - "xz"
+    - "findutils"
+    - "m4"
+    - "perl"
+    - "diffutils"
+    - "gawk"
+    - "binutils"
+    - "gcc-c++"
+    - "python3"
+    - "python3-devel"
+    - "rust"
+    - "dwarves"
   build_flags: []
   environment:
     CFLAGS: "-O2"
@@ -45,19 +86,18 @@ build:
 install:
   install_method: RunCommands
   install_commands:
-    - "mkdir -p usr/boot usr/lib/modules"
-    - "cp arch/x86/boot/bzImage usr/boot/vmlinuz-6.17.5"
-    - "make modules_install INSTALL_MOD_PATH=."
-    - "cp System.map usr/boot/System.map-6.17.5"
+    - "mkdir -p $DESTDIR/boot"
+    - 'bash -c "if [ \"${TARGET%%-*}\" = x86_64 ]; then if [ -f arch/x86/boot/bzImage ]; then cp arch/x86/boot/bzImage $DESTDIR/boot/vmlinuz-6.17.5; else echo \"ERROR: bzImage not found in arch/x86/boot/\"; ls -la arch/x86/boot/; exit 1; fi; elif [ \"${TARGET%%-*}\" = aarch64 ]; then if [ -f arch/arm64/boot/Image.gz ]; then cp arch/arm64/boot/Image.gz $DESTDIR/boot/vmlinuz-6.17.5; elif [ -f arch/arm64/boot/Image ]; then cp arch/arm64/boot/Image $DESTDIR/boot/vmlinuz-6.17.5; else echo \"ERROR: No ARM64 kernel image found\"; exit 1; fi; else echo Unsupported: ${TARGET%%-*}; exit 1; fi"'
+    - 'bash -c "if [ \"${TARGET%%-*}\" = x86_64 ]; then make modules_install ARCH=x86_64 INSTALL_MOD_PATH=$DESTDIR && if [ -f System.map ]; then cp System.map $DESTDIR/boot/System.map-6.17.5; fi; elif [ \"${TARGET%%-*}\" = aarch64 ]; then make modules_install ARCH=arm64 INSTALL_MOD_PATH=$DESTDIR && if [ -f System.map ]; then cp System.map $DESTDIR/boot/System.map-6.17.5; fi; else echo Unsupported: ${TARGET%%-*}; exit 1; fi"'
   install_directories: []
   install_files: []
   post_install_commands: []
 
 files:
   include_patterns:
-    - "usr/boot/vmlinuz-*"
-    - "usr/boot/System.map-*"
-    - "usr/lib/modules/*"
+    - "boot/vmlinuz-*"
+    - "boot/System.map-*"
+    - "lib/modules/*"
   exclude_patterns:
     - "**/*.o"
     - "**/*.a"

@@ -27,10 +27,15 @@ build:
   build_system: Make
   build_commands:
     - "make defconfig"
-    - "make -j$(nproc)"
+    - "sed -i 's#^CONFIG_PREFIX=.*#CONFIG_PREFIX=\"/usr\"#' .config"
+    - "sed -i 's/^CONFIG_TC=.*/CONFIG_TC=n/' .config || echo 'CONFIG_TC=n' >> .config"
+    - "sed -i 's/^# CONFIG_TC is not set/CONFIG_TC=n/' .config || true"
+    - "yes '' | make oldconfig"
+    - "make -j$(nproc) busybox SKIP_STRIP=y"
   build_dependencies:
     - "gcc"
     - "make"
+    - "perl"
   build_flags: []
   environment:
     CFLAGS: "-O2"
@@ -45,7 +50,7 @@ build:
 install:
   install_method: RunCommands
   install_commands:
-    - "make install"
+    - "make CONFIG_PREFIX=/buildroot/usr install"
   install_directories:
     - "/usr/bin"
   install_files: []

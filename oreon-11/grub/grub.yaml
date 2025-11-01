@@ -26,11 +26,16 @@ dependencies:
 build:
   build_system: Make
   build_commands:
-    - "./configure --prefix=/usr --with-platform=efi"
-    - "make"
+    - "./configure --prefix=/usr --disable-werror"
+    - "touch grub-core/extra_deps.lst || true"
+    - "make -j1"
   build_dependencies:
     - "gcc"
     - "make"
+    - "flex"
+    - "bison"
+    - "gettext-devel"
+    - "freetype-devel"
   build_flags: []
   environment:
     CFLAGS: "-O2"

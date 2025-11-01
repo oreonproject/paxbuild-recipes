@@ -24,13 +24,28 @@ dependencies:
   conflicts: []
 
 build:
-  build_system: Make
+  build_system: Meson
   build_commands:
-    - "meson setup build -Dprefix=/usr"
+    - "meson setup build -Dprefix=/usr -Dman=false -Dtests=false"
     - "ninja -C build"
   build_dependencies:
     - "gcc"
     - "make"
+    - "meson"
+    - "ninja"
+    - "python3"
+    - "gperf"
+    - "libcap-devel"
+    - "libmount-devel"
+    - "libacl-devel"
+    - "libselinux-devel"
+    - "libcrypt-devel"
+    - "libidn2-devel"
+    - "libgcrypt-devel"
+    - "liblzma-devel"
+    - "zlib-devel"
+    - "bzip2-devel"
+    - "xz-devel"
   build_flags: []
   environment:
     CFLAGS: "-O2"
