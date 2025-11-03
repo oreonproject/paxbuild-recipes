@@ -1,19 +1,24 @@
 name: linux-kernel
 version: "6.17.5"
 description: "Linux Kernel"
-author: "Various"
-license: "Various"
-homepage: ""
-repository: ""
+author: "Linus Torvalds and kernel developers"
+license: "GPL-2.0-only WITH Linux-syscall-note"
+homepage: "https://www.kernel.org/"
+repository: "https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git"
 source_url: "https://www.kernel.org/pub/linux/kernel/v6.x/linux-6.17.5.tar.xz"
 keywords:
   - linux-kernel
+  - kernel
+  - system
 categories:
-  - packages
+  - system
 
 dependencies:
   build_dependencies:
     - name: "gcc"
+      version_constraint: ">=4.0"
+      optional: false
+    - name: "gcc-c++"
       version_constraint: ">=4.0"
       optional: false
     - name: "make"
@@ -34,23 +39,72 @@ dependencies:
     - name: "ncurses-devel"
       version_constraint: ">=5.0"
       optional: false
-  runtime_dependencies: []
-  optional_dependencies: []
+    - name: "dwarves"
+      version_constraint: ">=1.13"
+      optional: false
+    - name: "bc"
+      version_constraint: ">=1.0"
+      optional: false
+    - name: "kmod"
+      version_constraint: ">=20"
+      optional: false
+    - name: "perl"
+      version_constraint: ">=5.0"
+      optional: false
+    - name: "python3"
+      version_constraint: ">=3.6"
+      optional: false
+    - name: "python3-devel"
+      version_constraint: ">=3.6"
+      optional: false
+    - name: "rust"
+      version_constraint: ">=1.70"
+      optional: false
+    - name: "bindgen"
+      version_constraint: ">=0.56"
+      optional: false
+    - name: "pahole"
+      version_constraint: ">=1.16"
+      optional: false
+    - name: "zstd"
+      version_constraint: ">=1.0"
+      optional: false
+    - name: "net-tools"
+      version_constraint: ">=1.0"
+      optional: false
+    - name: "hostname"
+      version_constraint: ">=3.0"
+      optional: false
+  runtime_dependencies:
+    - name: "kmod"
+      version_constraint: ">=20"
+      optional: false
+    - name: "dracut"
+      version_constraint: ">=027"
+      optional: false
+  optional_dependencies:
+    - name: "linux-firmware"
+      version_constraint: ">=20150904"
+      optional: true
   conflicts: []
 
 build:
   build_system: Make
   build_commands:
-    - 'bash -c "if [ \"${TARGET%%-*}\" = x86_64 ]; then make defconfig ARCH=x86_64; elif [ \"${TARGET%%-*}\" = aarch64 ]; then make defconfig ARCH=arm64; else echo Unsupported: ${TARGET%%-*}; exit 1; fi"'
-    - 'bash -c "if [ \"${TARGET%%-*}\" = x86_64 ]; then make -j$(nproc) ARCH=x86_64; elif [ \"${TARGET%%-*}\" = aarch64 ]; then make -j$(nproc) ARCH=arm64; else echo Unsupported: ${TARGET%%-*}; exit 1; fi"'
-    - 'bash -c "if [ \"${TARGET%%-*}\" = x86_64 ]; then if [ -f arch/x86/boot/bzImage ]; then echo \"Kernel build successful: bzImage found\"; ls -lh arch/x86/boot/bzImage; else echo \"ERROR: Kernel build failed - bzImage not found\"; exit 1; fi; elif [ \"${TARGET%%-*}\" = aarch64 ]; then if [ -f arch/arm64/boot/Image.gz ] || [ -f arch/arm64/boot/Image ]; then echo \"Kernel build successful: ARM64 image found\"; else echo \"ERROR: Kernel build failed - no ARM64 image found\"; exit 1; fi; fi"'
+    - 'if [ "${TARGET%%-*}" = "x86_64" ]; then make defconfig ARCH=x86_64; elif [ "${TARGET%%-*}" = "aarch64" ]; then make defconfig ARCH=arm64; else echo "Unsupported: ${TARGET%%-*}"; exit 1; fi'
+    - 'scripts/config --enable CONFIG_EXPERT --enable CONFIG_EMBEDDED --enable CONFIG_BLK_DEV_INITRD --enable CONFIG_RD_GZIP --enable CONFIG_RD_BZIP2 --enable CONFIG_RD_LZMA --enable CONFIG_RD_XZ --enable CONFIG_RD_LZO --enable CONFIG_RD_LZ4 --enable CONFIG_RD_ZSTD --enable CONFIG_EXT4_FS --enable CONFIG_BTRFS_FS --enable CONFIG_XFS_FS --enable CONFIG_OVERLAY_FS --enable CONFIG_SQUASHFS --enable CONFIG_SQUASHFS_XZ --enable CONFIG_ISO9660_FS --enable CONFIG_JOLIET --enable CONFIG_ZISOFS --enable CONFIG_VFAT_FS --enable CONFIG_NLS_CODEPAGE_437 --enable CONFIG_NLS_ISO8859_1 --enable CONFIG_NLS_UTF8 --enable CONFIG_TMPFS --enable CONFIG_TMPFS_POSIX_ACL --enable CONFIG_PROC_FS --enable CONFIG_SYSFS --enable CONFIG_DEVTMPFS --enable CONFIG_DEVTMPFS_MOUNT --set-val CONFIG_BLK_DEV_LOOP 64 --enable CONFIG_SCSI --enable CONFIG_BLK_DEV_SD --enable CONFIG_BLK_DEV_SR --enable CONFIG_CHR_DEV_SG --enable CONFIG_USB_STORAGE --enable CONFIG_FUSE_FS --enable CONFIG_DM_SNAPSHOT --enable CONFIG_DM_THIN_PROVISIONING --enable CONFIG_IKCONFIG --enable CONFIG_IKCONFIG_PROC --enable CONFIG_KEXEC --enable CONFIG_KERNEL_GZIP'
+    - 'if [ "${TARGET%%-*}" = "x86_64" ]; then make olddefconfig ARCH=x86_64; elif [ "${TARGET%%-*}" = "aarch64" ]; then make olddefconfig ARCH=arm64; else echo "Unsupported: ${TARGET%%-*}"; exit 1; fi'
+    - 'if [ "${TARGET%%-*}" = "x86_64" ]; then make -j$(nproc) ARCH=x86_64 KCFLAGS="-O2 -pipe -Wall" bzImage modules; elif [ "${TARGET%%-*}" = "aarch64" ]; then make -j$(nproc) ARCH=arm64 KCFLAGS="-O2 -pipe -Wall" Image.gz modules; else echo "Unsupported: ${TARGET%%-*}"; exit 1; fi'
+    - 'if [ "${TARGET%%-*}" = "x86_64" ]; then if [ -f arch/x86/boot/bzImage ]; then echo "Kernel build successful: bzImage found"; ls -lh arch/x86/boot/bzImage; else echo "ERROR: Kernel build failed - bzImage not found"; exit 1; fi; elif [ "${TARGET%%-*}" = "aarch64" ]; then if [ -f arch/arm64/boot/Image.gz ] || [ -f arch/arm64/boot/Image ]; then echo "Kernel build successful: ARM64 image found"; ls -lh arch/arm64/boot/; else echo "ERROR: Kernel build failed - no ARM64 image found"; exit 1; fi; fi'
   build_dependencies:
     - "gcc"
+    - "gcc-c++"
     - "make"
     - "flex"
     - "bison"
     - "bc"
     - "elfutils-libelf-devel"
+    - "elfutils-devel"
     - "openssl-devel"
     - "ncurses-devel"
     - "kmod"
@@ -61,20 +115,29 @@ build:
     - "which"
     - "bzip2"
     - "xz"
+    - "zstd"
     - "findutils"
     - "m4"
     - "perl"
+    - "perl-devel"
     - "diffutils"
     - "gawk"
     - "binutils"
-    - "gcc-c++"
     - "python3"
     - "python3-devel"
     - "rust"
+    - "rust-src"
+    - "bindgen"
     - "dwarves"
+    - "pahole"
+    - "net-tools"
+    - "hostname"
+    - "hmaccalc"
+    - "rsync"
   build_flags: []
   environment:
-    CFLAGS: "-O2"
+    KCFLAGS: "-O2 -pipe -Wall"
+    HOSTCFLAGS: "-O2 -pipe"
   working_directory: null
   target_architectures:
     - X86_64v1
@@ -87,44 +150,92 @@ install:
   install_method: RunCommands
   install_commands:
     - "mkdir -p $DESTDIR/boot"
-    - 'bash -c "if [ \"${TARGET%%-*}\" = x86_64 ]; then if [ -f arch/x86/boot/bzImage ]; then cp arch/x86/boot/bzImage $DESTDIR/boot/vmlinuz-6.17.5; else echo \"ERROR: bzImage not found in arch/x86/boot/\"; ls -la arch/x86/boot/; exit 1; fi; elif [ \"${TARGET%%-*}\" = aarch64 ]; then if [ -f arch/arm64/boot/Image.gz ]; then cp arch/arm64/boot/Image.gz $DESTDIR/boot/vmlinuz-6.17.5; elif [ -f arch/arm64/boot/Image ]; then cp arch/arm64/boot/Image $DESTDIR/boot/vmlinuz-6.17.5; else echo \"ERROR: No ARM64 kernel image found\"; exit 1; fi; else echo Unsupported: ${TARGET%%-*}; exit 1; fi"'
-    - 'bash -c "if [ \"${TARGET%%-*}\" = x86_64 ]; then make modules_install ARCH=x86_64 INSTALL_MOD_PATH=$DESTDIR && if [ -f System.map ]; then cp System.map $DESTDIR/boot/System.map-6.17.5; fi; elif [ \"${TARGET%%-*}\" = aarch64 ]; then make modules_install ARCH=arm64 INSTALL_MOD_PATH=$DESTDIR && if [ -f System.map ]; then cp System.map $DESTDIR/boot/System.map-6.17.5; fi; else echo Unsupported: ${TARGET%%-*}; exit 1; fi"'
+    - "mkdir -p $DESTDIR/lib/modules"
+    - 'if [ "${TARGET%%-*}" = "x86_64" ]; then cp arch/x86/boot/bzImage $DESTDIR/boot/vmlinuz-6.17.5; elif [ "${TARGET%%-*}" = "aarch64" ]; then if [ -f arch/arm64/boot/Image.gz ]; then cp arch/arm64/boot/Image.gz $DESTDIR/boot/vmlinuz-6.17.5; else cp arch/arm64/boot/Image $DESTDIR/boot/vmlinuz-6.17.5; fi; fi'
+    - "chmod 755 $DESTDIR/boot/vmlinuz-6.17.5"
+    - "cp System.map $DESTDIR/boot/System.map-6.17.5"
+    - "cp .config $DESTDIR/boot/config-6.17.5"
+    - 'if [ "${TARGET%%-*}" = "x86_64" ]; then make modules_install ARCH=x86_64 INSTALL_MOD_PATH=$DESTDIR KERNELRELEASE=6.17.5; elif [ "${TARGET%%-*}" = "aarch64" ]; then make modules_install ARCH=arm64 INSTALL_MOD_PATH=$DESTDIR KERNELRELEASE=6.17.5; fi'
+    - "rm -f $DESTDIR/lib/modules/6.17.5/build"
+    - "rm -f $DESTDIR/lib/modules/6.17.5/source"
+    - "depmod -b $DESTDIR -a 6.17.5 || true"
   install_directories: []
   install_files: []
-  post_install_commands: []
+  post_install_commands:
+    - 'echo "Kernel 6.17.5 installed successfully"'
+    - 'echo "Remember to regenerate initramfs with: dracut -f /boot/initramfs-6.17.5.img 6.17.5"'
 
 files:
   include_patterns:
     - "boot/vmlinuz-*"
     - "boot/System.map-*"
-    - "lib/modules/*"
+    - "boot/config-*"
+    - "lib/modules/*/kernel/**/*.ko"
+    - "lib/modules/*/kernel/**/*.ko.xz"
+    - "lib/modules/*/kernel/**/*.ko.zst"
+    - "lib/modules/*/modules.*"
+    - "lib/modules/*/build"
+    - "lib/modules/*/source"
   exclude_patterns:
     - "**/*.o"
     - "**/*.a"
     - "**/*.c"
     - "**/*.h"
+    - "**/.*.cmd"
     - ".git/**/*"
-  binary_files: []
-  config_files: []
+    - "**/.gitignore"
+    - "**/Kconfig"
+    - "**/Makefile"
+  binary_files:
+    - "boot/vmlinuz-*"
+  config_files:
+    - "boot/config-*"
   documentation_files: []
   license_files: []
 
 scripts:
   pre_install: |
-    echo "Installing linux-kernel..."
+    echo "Installing Linux kernel 6.17.5..."
   post_install: |
-    echo "linux-kernel installed successfully"
+    echo "Linux kernel 6.17.5 installed successfully"
+    echo "Generating initramfs..."
+    if command -v dracut >/dev/null 2>&1; then
+      dracut -f /boot/initramfs-6.17.5.img 6.17.5 || echo "Warning: dracut failed, you may need to generate initramfs manually"
+    else
+      echo "Warning: dracut not found. Please install dracut and generate initramfs manually."
+    fi
+    if command -v grub2-mkconfig >/dev/null 2>&1; then
+      grub2-mkconfig -o /boot/grub2/grub.cfg || echo "Warning: grub2-mkconfig failed"
+    elif command -v grub-mkconfig >/dev/null 2>&1; then
+      grub-mkconfig -o /boot/grub/grub.cfg || echo "Warning: grub-mkconfig failed"
+    fi
   pre_uninstall: |
-    echo "Removing linux-kernel..."
+    echo "Removing Linux kernel 6.17.5..."
+    rm -f /boot/initramfs-6.17.5.img
   post_uninstall: |
-    echo "linux-kernel removed successfully"
+    echo "Linux kernel 6.17.5 removed successfully"
+    if command -v grub2-mkconfig >/dev/null 2>&1; then
+      grub2-mkconfig -o /boot/grub2/grub.cfg || true
+    elif command -v grub-mkconfig >/dev/null 2>&1; then
+      grub-mkconfig -o /boot/grub/grub.cfg || true
+    fi
   pre_upgrade: null
-  post_upgrade: null
+  post_upgrade: |
+    echo "Linux kernel 6.17.5 upgraded successfully"
+    if command -v dracut >/dev/null 2>&1; then
+      dracut -f /boot/initramfs-6.17.5.img 6.17.5 || echo "Warning: dracut failed"
+    fi
+    if command -v grub2-mkconfig >/dev/null 2>&1; then
+      grub2-mkconfig -o /boot/grub2/grub.cfg || true
+    elif command -v grub-mkconfig >/dev/null 2>&1; then
+      grub-mkconfig -o /boot/grub/grub.cfg || true
+    fi
 
 metadata:
   maintainer: "Oreon Project Team <packaging@oreonproject.org>"
-  section: "packages"
-  priority: "optional"
+  section: "system"
+  priority: "required"
   provides:
     - "linux-kernel"
+    - "kernel"
   conflicts: []

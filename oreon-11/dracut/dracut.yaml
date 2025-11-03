@@ -1,0 +1,198 @@
+name: dracut
+version: "108"
+description: "Initramfs generator using udev"
+author: "dracut-ng team"
+license: "GPL-2.0-or-later AND LGPL-2.1-or-later AND GPL-2.0-only"
+homepage: "https://github.com/dracut-ng/dracut-ng"
+repository: "https://github.com/dracut-ng/dracut-ng"
+source_url: "https://github.com/dracut-ng/dracut-ng/archive/refs/tags/108.tar.gz"
+keywords:
+  - dracut
+  - initramfs
+  - boot
+categories:
+  - system
+
+dependencies:
+  build_dependencies:
+    - name: "gcc"
+      version_constraint: ">=4.0"
+      optional: false
+    - name: "make"
+      version_constraint: ">=3.0"
+      optional: false
+    - name: "bash"
+      version_constraint: ">=4.0"
+      optional: false
+    - name: "pkg-config"
+      version_constraint: ">=0.1"
+      optional: false
+    - name: "kmod"
+      version_constraint: ">=23"
+      optional: false
+    - name: "systemd"
+      version_constraint: ">=219"
+      optional: false
+    - name: "asciidoctor"
+      version_constraint: ">=0.1"
+      optional: true
+    - name: "cargo"
+      version_constraint: ">=1.0"
+      optional: false
+    - name: "openssl-devel"
+      version_constraint: ">=1.0"
+      optional: false
+  runtime_dependencies:
+    - name: "bash"
+      version_constraint: ">=4.0"
+      optional: false
+    - name: "coreutils"
+      version_constraint: ">=8.0"
+      optional: false
+    - name: "cpio"
+      version_constraint: ">=2.0"
+      optional: false
+    - name: "filesystem"
+      version_constraint: ">=2.1.0"
+      optional: false
+    - name: "findutils"
+      version_constraint: ">=4.0"
+      optional: false
+    - name: "grep"
+      version_constraint: ">=2.0"
+      optional: false
+    - name: "kmod"
+      version_constraint: ">=23"
+      optional: false
+    - name: "sed"
+      version_constraint: ">=4.0"
+      optional: false
+    - name: "zstd"
+      version_constraint: ">=1.0"
+      optional: false
+    - name: "xz"
+      version_constraint: ">=5.0"
+      optional: false
+    - name: "util-linux"
+      version_constraint: ">=2.21"
+      optional: false
+    - name: "systemd"
+      version_constraint: ">=219"
+      optional: false
+    - name: "systemd-udev"
+      version_constraint: ">=219"
+      optional: false
+    - name: "procps-ng"
+      version_constraint: ">=3.0"
+      optional: false
+  optional_dependencies:
+    - name: "memstrack"
+      version_constraint: ">=0.1"
+      optional: true
+    - name: "hardlink"
+      version_constraint: ">=1.0"
+      optional: true
+    - name: "kpartx"
+      version_constraint: ">=0.1"
+      optional: true
+    - name: "tpm2-tools"
+      version_constraint: ">=4.0"
+      optional: true
+  conflicts: []
+
+build:
+  build_system: Make
+  build_commands:
+    - './configure --prefix=/usr --sysconfdir=/etc --libdir=/usr/lib --disable-documentation --enable-dracut-cpio || (echo "Configure failed - checking for kmod..." && pkg-config --exists libkmod && echo "libkmod found" || echo "libkmod NOT found")'
+    - 'make -j$(nproc)'
+  build_dependencies:
+    - "gcc"
+    - "make"
+    - "bash"
+    - "pkgconf"
+    - "kmod"
+    - "systemd"
+    - "cargo"
+    - "openssl-devel"
+    - "git"
+    - "which"
+  build_flags: []
+  environment:
+    CFLAGS: "-O2"
+  working_directory: null
+  target_architectures:
+    - X86_64v1
+    - X86_64v3
+    - Aarch64
+  cross_compiler_prefix: null
+  target_sysroot: null
+
+install:
+  install_method: RunCommands
+  install_commands:
+    - "make install DESTDIR=$DESTDIR"
+    - "mkdir -p $DESTDIR/boot/dracut"
+    - "mkdir -p $DESTDIR/var/lib/dracut/overlay"
+    - "mkdir -p $DESTDIR/var/log"
+    - "touch $DESTDIR/var/log/dracut.log"
+    - "mkdir -p $DESTDIR/usr/lib/dracut/dracut.conf.d"
+    - "echo 'DRACUT_VERSION=108' > $DESTDIR/usr/lib/dracut/dracut-version.sh"
+    - "rm -rf $DESTDIR/usr/lib/dracut/modules.d/10dash"
+    - "rm -rf $DESTDIR/usr/lib/dracut/modules.d/00mksh"
+    - "rm -rf $DESTDIR/usr/lib/dracut/modules.d/35network-legacy"
+  install_directories: []
+  install_files: []
+  post_install_commands:
+    - 'echo "hostonly=\"no\"" > $DESTDIR/usr/lib/dracut/dracut.conf.d/02-generic-image.conf'
+    - 'echo "add_dracutmodules+=\" dmsquash-live livenet \"" > $DESTDIR/usr/lib/dracut/dracut.conf.d/03-live.conf'
+
+files:
+  include_patterns:
+    - "usr/bin/dracut"
+    - "usr/bin/lsinitrd"
+    - "usr/bin/dracut-catimages"
+    - "usr/lib/dracut/**/*"
+    - "usr/share/bash-completion/completions/dracut"
+    - "usr/share/bash-completion/completions/lsinitrd"
+    - "etc/dracut.conf"
+    - "etc/dracut.conf.d/**/*"
+    - "boot/dracut/**/*"
+    - "var/lib/dracut/**/*"
+    - "usr/lib/systemd/system/dracut-*.service"
+    - "usr/lib/kernel/install.d/*.install"
+  exclude_patterns:
+    - "**/*.o"
+    - "**/*.a"
+    - ".git/**/*"
+  binary_files:
+    - "usr/lib/dracut/dracut-install"
+    - "usr/lib/dracut/dracut-util"
+    - "usr/lib/dracut/skipcpio"
+    - "usr/lib/dracut/dracut-cpio"
+  config_files:
+    - "etc/dracut.conf"
+  documentation_files: []
+  license_files: []
+
+scripts:
+  pre_install: |
+    echo "Installing dracut..."
+  post_install: |
+    echo "dracut installed successfully"
+    echo "To create a live ISO initramfs, use: dracut --add dmsquash-live --add livenet"
+  pre_uninstall: |
+    echo "Removing dracut..."
+  post_uninstall: |
+    echo "dracut removed successfully"
+  pre_upgrade: null
+  post_upgrade: null
+
+metadata:
+  maintainer: "Oreon Project Team <packaging@oreonproject.org>"
+  section: "system"
+  priority: "optional"
+  provides:
+    - "dracut"
+    - "initramfs-generator"
+  conflicts: []
+
