@@ -1,0 +1,64 @@
+name: attr
+version: "2.5.2"
+description: "Extended attribute support library for ACL support"
+author: "SGI"
+license: "LGPL-2.1-or-later"
+homepage: "https://savannah.nongnu.org/projects/attr"
+repository: "https://git.savannah.nongnu.org/git/attr.git"
+source_url: "https://download.savannah.gnu.org/releases/attr/attr-2.5.2.tar.xz"
+keywords: [attr, extended-attributes, filesystem]
+categories: [system, libraries]
+
+dependencies:
+  build_dependencies:
+    - {name: "gcc", version_constraint: ">=4.0", optional: false}
+  runtime_dependencies:
+    - {name: "glibc", version_constraint: ">=2.30", optional: false}
+  optional_dependencies: []
+  conflicts: []
+
+build:
+  build_system: Make
+  build_commands:
+    - "./configure --prefix=/usr --libdir=/usr/lib --libexecdir=/usr/lib --disable-static"
+    - "make -j$(nproc)"
+  build_dependencies: ["gcc", "make"]
+  build_flags: ["-O2"]
+  environment: {CFLAGS: "-O2"}
+  working_directory: null
+  target_architectures: [X86_64v1, X86_64v3, Aarch64]
+  cross_compiler_prefix: null
+  target_sysroot: null
+
+install:
+  install_method: RunCommands
+  install_commands: ["make install DESTDIR=$DESTDIR"]
+  install_directories: ["/usr/bin", "/usr/lib"]
+  install_files: []
+  post_install_commands: ["ldconfig -n $DESTDIR/usr/lib"]
+
+files:
+  include_patterns: ["**/*.c", "configure"]
+  exclude_patterns: ["**/*.o", "**/.libs/**"]
+  binary_files: ["usr/bin/attr", "usr/bin/getfattr", "usr/bin/setfattr", "usr/lib/libattr.so*"]
+  config_files: []
+  documentation_files: []
+  license_files: ["COPYING", "COPYING.LGPL"]
+
+scripts:
+  pre_install: "echo 'Installing attr...'"
+  post_install: |
+    echo "attr installed"
+    ldconfig 2>/dev/null || true
+  pre_uninstall: null
+  post_uninstall: "ldconfig 2>/dev/null || true"
+  pre_upgrade: null
+  post_upgrade: "ldconfig 2>/dev/null || true"
+
+metadata:
+  maintainer: "Oreon Project Team <packaging@oreonproject.org>"
+  section: "system"
+  priority: "required"
+  provides: ["attr", "libattr.so.1"]
+  conflicts: []
+

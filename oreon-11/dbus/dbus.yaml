@@ -1,0 +1,178 @@
+name: dbus
+version: "1.14.10"
+description: "D-Bus message bus system for inter-process communication"
+author: "freedesktop.org"
+license: "GPL-2.0-or-later OR AFL-2.1"
+homepage: "https://www.freedesktop.org/wiki/Software/dbus/"
+repository: "https://gitlab.freedesktop.org/dbus/dbus"
+source_url: "https://dbus.freedesktop.org/releases/dbus/dbus-1.14.10.tar.xz"
+keywords:
+  - dbus
+  - ipc
+  - message-bus
+  - system
+  - communication
+categories:
+  - system
+  - libraries
+
+dependencies:
+  build_dependencies:
+    - name: "gcc"
+      version_constraint: ">=4.0"
+      optional: false
+    - name: "make"
+      version_constraint: ">=3.0"
+      optional: false
+    - name: "pkg-config"
+      version_constraint: ">=0.20"
+      optional: false
+    - name: "expat"
+      version_constraint: ">=2.0"
+      optional: false
+  runtime_dependencies:
+    - name: "glibc"
+      version_constraint: ">=2.30"
+      optional: false
+    - name: "expat"
+      version_constraint: ">=2.0"
+      optional: false
+  optional_dependencies:
+    - name: "systemd"
+      version_constraint: ">=230"
+      optional: true
+  conflicts: []
+
+build:
+  build_system: Make
+  build_commands:
+    - "./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --libexecdir=/usr/lib/dbus-1.0 --with-dbus-user=messagebus --with-system-pid-file=/run/dbus/pid --with-system-socket=/run/dbus/system_bus_socket --enable-user-session --disable-static --disable-doxygen-docs --disable-xml-docs --with-systemdsystemunitdir=/usr/lib/systemd/system --with-systemduserunitdir=/usr/lib/systemd/user"
+    - "make -j$(nproc)"
+  build_dependencies:
+    - "gcc"
+    - "make"
+    - "pkg-config"
+    - "pkgconf"
+    - "expat-devel"
+    - "systemd-devel"
+  build_flags:
+    - "-O2"
+    - "-pipe"
+  environment:
+    CFLAGS: "-O2 -pipe -Wall"
+    LDFLAGS: "-Wl,-z,relro -Wl,-z,now"
+  working_directory: null
+  target_architectures:
+    - X86_64v1
+    - X86_64v3
+    - Aarch64
+  cross_compiler_prefix: null
+  target_sysroot: null
+
+install:
+  install_method: RunCommands
+  install_commands:
+    - "make install DESTDIR=$DESTDIR"
+    - "mkdir -p $DESTDIR/etc/dbus-1/session.d"
+    - "mkdir -p $DESTDIR/etc/dbus-1/system.d"
+    - "mkdir -p $DESTDIR/usr/share/dbus-1/services"
+    - "mkdir -p $DESTDIR/usr/share/dbus-1/system-services"
+    - "mkdir -p $DESTDIR/var/lib/dbus"
+    - "mkdir -p $DESTDIR/run/dbus"
+  install_directories:
+    - "/usr/bin"
+    - "/usr/lib"
+    - "/usr/lib/dbus-1.0"
+    - "/etc/dbus-1"
+    - "/usr/share/dbus-1"
+    - "/var/lib/dbus"
+    - "/run/dbus"
+  install_files: []
+  post_install_commands:
+    - "ldconfig -n $DESTDIR/usr/lib"
+
+files:
+  include_patterns:
+    - "dbus/**/*.c"
+    - "dbus/**/*.h"
+    - "configure"
+    - "Makefile.in"
+  exclude_patterns:
+    - "**/*.o"
+    - "**/*.lo"
+    - "**/.libs/**"
+    - ".git/**/*"
+    - "doc/**/*"
+    - "**/*.pyc"
+  binary_files:
+    - "usr/bin/dbus-daemon"
+    - "usr/bin/dbus-send"
+    - "usr/bin/dbus-monitor"
+    - "usr/bin/dbus-launch"
+    - "usr/bin/dbus-cleanup-sockets"
+    - "usr/bin/dbus-uuidgen"
+    - "usr/lib/libdbus-1.so*"
+    - "usr/lib/dbus-1.0/dbus-daemon-launch-helper"
+  config_files:
+    - "/etc/dbus-1/session.conf"
+    - "/etc/dbus-1/system.conf"
+  documentation_files:
+    - "usr/share/man/**/*"
+    - "usr/share/doc/dbus/**/*"
+  license_files:
+    - "COPYING"
+
+scripts:
+  pre_install: |
+    echo "Installing D-Bus..."
+    if ! getent group messagebus >/dev/null 2>&1; then
+      echo "Creating messagebus system group..."
+      groupadd -r -g 18 messagebus 2>/dev/null || true
+    fi
+    if ! getent passwd messagebus >/dev/null 2>&1; then
+      echo "Creating messagebus system user..."
+      useradd -r -u 18 -g messagebus -d /run/dbus -s /sbin/nologin -c "D-Bus Message Daemon User" messagebus 2>/dev/null || true
+    fi
+  post_install: |
+    echo "D-Bus installed successfully"
+    ldconfig 2>/dev/null || true
+    if [ ! -f /var/lib/dbus/machine-id ]; then
+      echo "Generating D-Bus machine UUID..."
+      dbus-uuidgen --ensure=/var/lib/dbus/machine-id 2>/dev/null || true
+    fi
+    if [ -d /run/systemd/system ]; then
+      echo "Enabling D-Bus systemd service..."
+      systemctl daemon-reload 2>/dev/null || true
+      systemctl enable dbus.service 2>/dev/null || true
+      systemctl enable dbus.socket 2>/dev/null || true
+    fi
+    echo "D-Bus message bus is now available"
+  pre_uninstall: |
+    echo "Removing D-Bus..."
+    if [ -d /run/systemd/system ]; then
+      systemctl stop dbus.service 2>/dev/null || true
+      systemctl stop dbus.socket 2>/dev/null || true
+      systemctl disable dbus.service 2>/dev/null || true
+      systemctl disable dbus.socket 2>/dev/null || true
+    fi
+  post_uninstall: |
+    echo "D-Bus removed successfully"
+    ldconfig 2>/dev/null || true
+  pre_upgrade: null
+  post_upgrade: |
+    echo "D-Bus upgraded successfully"
+    ldconfig 2>/dev/null || true
+    if [ -d /run/systemd/system ]; then
+      systemctl daemon-reload 2>/dev/null || true
+      systemctl try-restart dbus.service 2>/dev/null || true
+    fi
+
+metadata:
+  maintainer: "Oreon Project Team <packaging@oreonproject.org>"
+  section: "system"
+  priority: "required"
+  provides:
+    - "dbus"
+    - "libdbus-1.so.3"
+  conflicts: []
+

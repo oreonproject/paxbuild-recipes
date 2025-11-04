@@ -1,0 +1,125 @@
+name: pam
+version: "1.6.1"
+description: "Pluggable Authentication Modules for Linux"
+author: "Linux-PAM Project"
+license: "BSD-3-Clause OR GPL-2.0"
+homepage: "http://www.linux-pam.org/"
+repository: "https://github.com/linux-pam/linux-pam"
+source_url: "https://github.com/linux-pam/linux-pam/releases/download/v1.6.1/Linux-PAM-1.6.1.tar.xz"
+keywords:
+  - pam
+  - authentication
+  - security
+  - login
+categories:
+  - security
+  - system
+
+dependencies:
+  build_dependencies:
+    - name: "gcc"
+      version_constraint: ">=4.0"
+      optional: false
+    - name: "make"
+      version_constraint: ">=3.0"
+      optional: false
+  runtime_dependencies:
+    - name: "glibc"
+      version_constraint: ">=2.30"
+      optional: false
+  optional_dependencies: []
+  conflicts: []
+
+build:
+  build_system: Make
+  build_commands:
+    - "./configure --prefix=/usr --libdir=/usr/lib --sbindir=/usr/sbin --sysconfdir=/etc --enable-securedir=/usr/lib/security --disable-doc --disable-selinux"
+    - "make -j$(nproc)"
+  build_dependencies:
+    - "gcc"
+    - "make"
+    - "flex"
+    - "bison"
+  build_flags:
+    - "-O2"
+    - "-pipe"
+  environment:
+    CFLAGS: "-O2 -pipe -Wall"
+    LDFLAGS: "-Wl,-z,relro -Wl,-z,now"
+  working_directory: null
+  target_architectures:
+    - X86_64v1
+    - X86_64v3
+    - Aarch64
+  cross_compiler_prefix: null
+  target_sysroot: null
+
+install:
+  install_method: RunCommands
+  install_commands:
+    - "make install DESTDIR=$DESTDIR"
+    - "mkdir -p $DESTDIR/etc/pam.d"
+    - "chmod 755 $DESTDIR/usr/sbin/unix_chkpwd"
+    - "chmod 4755 $DESTDIR/usr/sbin/unix_chkpwd"
+  install_directories:
+    - "/usr/lib"
+    - "/usr/lib/security"
+    - "/usr/sbin"
+    - "/etc/pam.d"
+  install_files: []
+  post_install_commands:
+    - "ldconfig -n $DESTDIR/usr/lib"
+
+files:
+  include_patterns:
+    - "modules/**/*.c"
+    - "libpam/**/*.c"
+    - "**/*.h"
+    - "configure"
+    - "Makefile.in"
+  exclude_patterns:
+    - "**/*.o"
+    - "**/*.lo"
+    - "**/.libs/**"
+    - ".git/**/*"
+    - "doc/**/*"
+  binary_files:
+    - "usr/lib/libpam.so*"
+    - "usr/lib/libpam_misc.so*"
+    - "usr/lib/libpamc.so*"
+    - "usr/lib/security/*.so"
+    - "usr/sbin/unix_chkpwd"
+    - "usr/sbin/unix_update"
+  config_files:
+    - "/etc/security/*"
+    - "/etc/pam.d/*"
+  documentation_files: []
+  license_files:
+    - "COPYING"
+    - "Copyright"
+
+scripts:
+  pre_install: |
+    echo "Installing PAM..."
+  post_install: |
+    echo "PAM installed successfully"
+    ldconfig 2>/dev/null || true
+    echo "Pluggable Authentication Modules are now available"
+    echo "Configure /etc/pam.d/ for your services"
+  pre_uninstall: |
+    echo "Removing PAM..."
+  post_uninstall: |
+    ldconfig 2>/dev/null || true
+  pre_upgrade: null
+  post_upgrade: |
+    ldconfig 2>/dev/null || true
+
+metadata:
+  maintainer: "Oreon Project Team <packaging@oreonproject.org>"
+  section: "system"
+  priority: "required"
+  provides:
+    - "pam"
+    - "libpam.so.0"
+  conflicts: []
+

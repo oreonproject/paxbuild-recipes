@@ -1,0 +1,78 @@
+name: tar
+version: "1.35"
+description: "GNU version of the tar archiving utility"
+author: "GNU Project"
+license: "GPL-3.0-or-later"
+homepage: "https://www.gnu.org/software/tar/"
+repository: "https://git.savannah.gnu.org/git/tar.git"
+source_url: "https://ftp.gnu.org/gnu/tar/tar-1.35.tar.xz"
+keywords:
+  - tar
+  - archive
+  - compression
+categories:
+  - utilities
+
+dependencies:
+  build_dependencies:
+    - name: "gcc"
+      version_constraint: ">=4.0"
+      optional: false
+  runtime_dependencies:
+    - name: "glibc"
+      version_constraint: ">=2.30"
+      optional: false
+  optional_dependencies: []
+  conflicts: []
+
+build:
+  build_system: Make
+  build_commands:
+    - "./configure --prefix=/usr --libexecdir=/usr/lib/tar"
+    - "make -j$(nproc)"
+  build_dependencies:
+    - "gcc"
+    - "make"
+  build_flags: ["-O2", "-pipe"]
+  environment:
+    CFLAGS: "-O2 -pipe"
+  working_directory: null
+  target_architectures: [X86_64v1, X86_64v3, Aarch64]
+  cross_compiler_prefix: null
+  target_sysroot: null
+
+install:
+  install_method: RunCommands
+  install_commands:
+    - "make install DESTDIR=$DESTDIR"
+  install_directories: ["/usr/bin"]
+  install_files: []
+  post_install_commands: []
+
+files:
+  include_patterns: ["src/**/*.c", "**/*.h", "configure"]
+  exclude_patterns: ["**/*.o", ".git/**/*"]
+  binary_files: ["usr/bin/tar"]
+  config_files: []
+  documentation_files: []
+  license_files: ["COPYING"]
+
+scripts:
+  pre_install: |
+    echo "Installing tar..."
+  post_install: |
+    echo "tar installed successfully"
+  pre_uninstall: |
+    echo "Removing tar..."
+  post_uninstall: |
+    echo "tar removed"
+  pre_upgrade: null
+  post_upgrade: null
+
+metadata:
+  maintainer: "Oreon Project Team <packaging@oreonproject.org>"
+  section: "utilities"
+  priority: "required"
+  provides: ["tar"]
+  conflicts: []
+

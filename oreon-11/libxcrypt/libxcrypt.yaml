@@ -1,0 +1,122 @@
+name: libxcrypt
+version: "4.4.36"
+description: "Extended crypt library for password and passphrase hashing"
+author: "Björn Esser and Zack Weinberg"
+license: "LGPL-2.1-or-later"
+homepage: "https://github.com/besser82/libxcrypt"
+repository: "https://github.com/besser82/libxcrypt"
+source_url: "https://github.com/besser82/libxcrypt/releases/download/v4.4.36/libxcrypt-4.4.36.tar.xz"
+keywords:
+  - crypt
+  - password
+  - hashing
+  - security
+  - library
+categories:
+  - security
+  - libraries
+
+dependencies:
+  build_dependencies:
+    - name: "gcc"
+      version_constraint: ">=4.0"
+      optional: false
+    - name: "make"
+      version_constraint: ">=3.0"
+      optional: false
+    - name: "pkg-config"
+      version_constraint: ">=0.20"
+      optional: false
+  runtime_dependencies:
+    - name: "glibc"
+      version_constraint: ">=2.30"
+      optional: false
+  optional_dependencies: []
+  conflicts: []
+
+build:
+  build_system: Make
+  build_commands:
+    - "./configure --prefix=/usr --libdir=/usr/lib --disable-static --enable-obsolete-api=glibc --disable-failure-tokens"
+    - "make -j$(nproc)"
+  build_dependencies:
+    - "gcc"
+    - "make"
+    - "pkg-config"
+    - "pkgconf"
+    - "perl"
+    - "perl-core"
+  build_flags:
+    - "-O2"
+    - "-pipe"
+  environment:
+    CFLAGS: "-O2 -pipe -Wall"
+    LDFLAGS: "-Wl,-z,relro -Wl,-z,now"
+  working_directory: null
+  target_architectures:
+    - X86_64v1
+    - X86_64v3
+    - Aarch64
+  cross_compiler_prefix: null
+  target_sysroot: null
+
+install:
+  install_method: RunCommands
+  install_commands:
+    - "make install DESTDIR=$DESTDIR"
+  install_directories:
+    - "/usr/lib"
+    - "/usr/include"
+  install_files: []
+  post_install_commands:
+    - "ldconfig -n $DESTDIR/usr/lib"
+
+files:
+  include_patterns:
+    - "lib/**/*.c"
+    - "lib/**/*.h"
+    - "configure"
+    - "Makefile.in"
+  exclude_patterns:
+    - "**/*.o"
+    - "**/*.lo"
+    - "**/.libs/**"
+    - ".git/**/*"
+    - "test-driver"
+    - "**/*.pyc"
+  binary_files:
+    - "usr/lib/libcrypt.so*"
+  config_files: []
+  documentation_files:
+    - "usr/share/man/**/*"
+  license_files:
+    - "COPYING.LIB"
+    - "LICENSING"
+
+scripts:
+  pre_install: |
+    echo "Installing libxcrypt..."
+  post_install: |
+    echo "libxcrypt installed successfully"
+    ldconfig 2>/dev/null || true
+    echo "Extended crypt library is now available"
+  pre_uninstall: |
+    echo "Removing libxcrypt..."
+  post_uninstall: |
+    echo "libxcrypt removed successfully"
+    ldconfig 2>/dev/null || true
+  pre_upgrade: null
+  post_upgrade: |
+    echo "libxcrypt upgraded successfully"
+    ldconfig 2>/dev/null || true
+
+metadata:
+  maintainer: "Oreon Project Team <packaging@oreonproject.org>"
+  section: "libraries"
+  priority: "required"
+  provides:
+    - "libxcrypt"
+    - "libcrypt.so.2"
+    - "libcrypt"
+  conflicts: []
+

@@ -1,0 +1,116 @@
+name: libsepol
+version: "3.7"
+description: "SELinux binary policy manipulation library"
+author: "SELinux Project"
+license: "LGPL-2.1"
+homepage: "https://github.com/SELinuxProject/selinux"
+repository: "https://github.com/SELinuxProject/selinux"
+source_url: "https://github.com/SELinuxProject/selinux/releases/download/3.7/libsepol-3.7.tar.gz"
+keywords:
+  - selinux
+  - security
+  - policy
+  - library
+categories:
+  - security
+  - libraries
+
+dependencies:
+  build_dependencies:
+    - name: "gcc"
+      version_constraint: ">=4.0"
+      optional: false
+    - name: "make"
+      version_constraint: ">=3.0"
+      optional: false
+  runtime_dependencies: []
+  optional_dependencies: []
+  conflicts: []
+
+build:
+  build_system: Make
+  build_commands:
+    - "make -C src CFLAGS=\"-O2 -pipe -Wall -Werror -Wno-error=unused-function -Wno-error=unused-variable -fPIC\" LDFLAGS=\"-Wl,-z,relro -Wl,-z,now\""
+  build_dependencies:
+    - "gcc"
+    - "make"
+    - "flex"
+  build_flags:
+    - "-O2"
+    - "-pipe"
+    - "-fPIC"
+  environment:
+    LIBDIR: "/usr/lib64"
+    SHLIBDIR: "/usr/lib64"
+    MANDIR: "/usr/share/man"
+    INCDIR: "/usr/include"
+  working_directory: null
+  target_architectures:
+    - X86_64v1
+    - X86_64v3
+    - Aarch64
+  cross_compiler_prefix: null
+  target_sysroot: null
+
+install:
+  install_method: RunCommands
+  install_commands:
+    - "make -C src install DESTDIR=$DESTDIR PREFIX=/usr LIBDIR=/usr/lib64 SHLIBDIR=/usr/lib64"
+    - "mkdir -p $DESTDIR/usr/lib64/pkgconfig"
+    - "mkdir -p $DESTDIR/usr/include/sepol"
+  install_directories:
+    - "/usr/lib64"
+    - "/usr/include/sepol"
+  install_files: []
+  post_install_commands:
+    - "ldconfig -n $DESTDIR/usr/lib64"
+
+files:
+  include_patterns:
+    - "src/**/*.c"
+    - "src/**/*.h"
+    - "include/**/*.h"
+    - "Makefile"
+    - "src/Makefile"
+  exclude_patterns:
+    - "**/*.o"
+    - "**/*.lo"
+    - "**/*.a"
+    - "**/.libs/**"
+    - ".git/**/*"
+  binary_files:
+    - "usr/lib64/libsepol.so*"
+    - "usr/lib64/libsepol.a"
+  config_files: []
+  documentation_files:
+    - "usr/share/man/**/*"
+  license_files:
+    - "COPYING"
+
+scripts:
+  pre_install: |
+    echo "Installing libsepol..."
+  post_install: |
+    echo "libsepol installed successfully"
+    ldconfig 2>/dev/null || true
+  pre_uninstall: |
+    echo "Removing libsepol..."
+  post_uninstall: |
+    echo "libsepol removed successfully"
+    ldconfig 2>/dev/null || true
+  pre_upgrade: null
+  post_upgrade: |
+    echo "libsepol upgraded successfully"
+    ldconfig 2>/dev/null || true
+
+metadata:
+  maintainer: "Oreon Project Team <packaging@oreonproject.org>"
+  section: "libraries"
+  priority: "important"
+  provides:
+    - "libsepol"
+    - "libsepol.so.2"
+  conflicts: []
+  replaces: []
+  breaks: []
+

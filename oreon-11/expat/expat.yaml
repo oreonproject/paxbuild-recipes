@@ -1,0 +1,114 @@
+name: expat
+version: "2.6.4"
+description: "Fast streaming XML parser written in C"
+author: "Expat development team"
+license: "MIT"
+homepage: "https://libexpat.github.io/"
+repository: "https://github.com/libexpat/libexpat"
+source_url: "https://github.com/libexpat/libexpat/releases/download/R_2_6_4/expat-2.6.4.tar.xz"
+keywords:
+  - xml
+  - parser
+  - library
+categories:
+  - libraries
+  - parsers
+
+dependencies:
+  build_dependencies:
+    - name: "gcc"
+      version_constraint: ">=4.0"
+      optional: false
+    - name: "make"
+      version_constraint: ">=3.0"
+      optional: false
+  runtime_dependencies:
+    - name: "glibc"
+      version_constraint: ">=2.30"
+      optional: false
+  optional_dependencies: []
+  conflicts: []
+
+build:
+  build_system: Make
+  build_commands:
+    - "./configure --prefix=/usr --libdir=/usr/lib --disable-static --without-docbook"
+    - "make -j$(nproc)"
+  build_dependencies:
+    - "gcc"
+    - "make"
+  build_flags:
+    - "-O2"
+    - "-pipe"
+  environment:
+    CFLAGS: "-O2 -pipe -Wall"
+    LDFLAGS: "-Wl,-z,relro -Wl,-z,now"
+  working_directory: null
+  target_architectures:
+    - X86_64v1
+    - X86_64v3
+    - Aarch64
+  cross_compiler_prefix: null
+  target_sysroot: null
+
+install:
+  install_method: RunCommands
+  install_commands:
+    - "make install DESTDIR=$DESTDIR"
+  install_directories:
+    - "/usr/lib"
+    - "/usr/include"
+    - "/usr/bin"
+  install_files: []
+  post_install_commands:
+    - "ldconfig -n $DESTDIR/usr/lib"
+
+files:
+  include_patterns:
+    - "lib/**/*.c"
+    - "lib/**/*.h"
+    - "configure"
+    - "Makefile.in"
+  exclude_patterns:
+    - "**/*.o"
+    - "**/*.lo"
+    - "**/.libs/**"
+    - ".git/**/*"
+    - "doc/**/*"
+    - "**/*.pyc"
+  binary_files:
+    - "usr/lib/libexpat.so*"
+    - "usr/bin/xmlwf"
+  config_files: []
+  documentation_files:
+    - "usr/share/man/**/*"
+    - "usr/share/doc/expat/**/*"
+  license_files:
+    - "COPYING"
+
+scripts:
+  pre_install: |
+    echo "Installing expat..."
+  post_install: |
+    echo "expat installed successfully"
+    ldconfig 2>/dev/null || true
+    echo "XML parser library is now available"
+  pre_uninstall: |
+    echo "Removing expat..."
+  post_uninstall: |
+    echo "expat removed successfully"
+    ldconfig 2>/dev/null || true
+  pre_upgrade: null
+  post_upgrade: |
+    echo "expat upgraded successfully"
+    ldconfig 2>/dev/null || true
+
+metadata:
+  maintainer: "Oreon Project Team <packaging@oreonproject.org>"
+  section: "libraries"
+  priority: "required"
+  provides:
+    - "expat"
+    - "libexpat.so.1"
+  conflicts: []
+

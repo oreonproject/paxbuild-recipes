@@ -1,0 +1,76 @@
+name: pcre2
+version: "10.44"
+description: "Perl-compatible regular expression library (version 2)"
+author: "Philip Hazel"
+license: "BSD-3-Clause"
+homepage: "https://www.pcre.org/"
+repository: "https://github.com/PCRE2Project/pcre2"
+source_url: "https://github.com/PCRE2Project/pcre2/releases/download/pcre2-10.44/pcre2-10.44.tar.bz2"
+keywords: [pcre2, regex, pattern-matching, perl]
+categories: [libraries, development]
+
+dependencies:
+  build_dependencies:
+    - {name: "gcc", version_constraint: ">=4.0", optional: false}
+    - {name: "zlib", version_constraint: ">=1.2", optional: false}
+    - {name: "bzip2", version_constraint: ">=1.0", optional: false}
+  runtime_dependencies:
+    - {name: "glibc", version_constraint: ">=2.30", optional: false}
+    - {name: "zlib", version_constraint: ">=1.2", optional: false}
+    - {name: "bzip2", version_constraint: ">=1.0", optional: false}
+  optional_dependencies: []
+  conflicts: []
+
+build:
+  build_system: Make
+  build_commands:
+    - "./configure --prefix=/usr --enable-unicode --enable-jit --enable-pcre2-16 --enable-pcre2-32 --enable-pcre2grep-libz --enable-pcre2grep-libbz2 --disable-static"
+    - "make -j$(nproc)"
+  build_dependencies: ["gcc", "make", "zlib-devel", "bzip2-devel"]
+  build_flags: ["-O2"]
+  environment:
+    CFLAGS: "-O2 -fPIC"
+  working_directory: null
+  target_architectures: [X86_64v1, X86_64v3, Aarch64]
+  cross_compiler_prefix: null
+  target_sysroot: null
+
+install:
+  install_method: RunCommands
+  install_commands:
+    - "make install DESTDIR=$DESTDIR"
+  install_directories: ["/usr/bin", "/usr/lib", "/usr/include"]
+  install_files: []
+  post_install_commands:
+    - "ldconfig -n $DESTDIR/usr/lib || true"
+
+files:
+  include_patterns: ["**/*.c", "**/*.h", "configure"]
+  exclude_patterns: ["**/*.o", "**/test/**"]
+  binary_files:
+    - "usr/bin/pcre2-config"
+    - "usr/bin/pcre2grep"
+    - "usr/bin/pcre2test"
+    - "usr/lib/libpcre2-8.so*"
+    - "usr/lib/libpcre2-16.so*"
+    - "usr/lib/libpcre2-32.so*"
+    - "usr/lib/libpcre2-posix.so*"
+  config_files: []
+  documentation_files: []
+  license_files: ["LICENCE", "COPYING"]
+
+scripts:
+  pre_install: "echo 'Installing PCRE2...'"
+  post_install: "echo 'PCRE2 installed successfully'"
+  pre_uninstall: null
+  post_uninstall: null
+  pre_upgrade: null
+  post_upgrade: null
+
+metadata:
+  maintainer: "Oreon Project Team <packaging@oreonproject.org>"
+  section: "libs"
+  priority: "important"
+  provides: ["pcre2", "libpcre2"]
+  conflicts: []
+

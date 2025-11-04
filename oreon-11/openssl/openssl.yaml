@@ -1,0 +1,78 @@
+name: openssl
+version: "3.4.2"
+description: "Cryptography and SSL/TLS toolkit"
+author: "OpenSSL Software Foundation"
+license: "Apache-2.0"
+homepage: "https://www.openssl.org/"
+repository: "https://github.com/openssl/openssl"
+source_url: "https://www.openssl.org/source/openssl-3.4.2.tar.gz"
+keywords: [openssl, ssl, tls, crypto, security]
+categories: [security, libraries]
+
+dependencies:
+  build_dependencies:
+    - {name: "gcc", version_constraint: ">=4.0", optional: false}
+    - {name: "perl", version_constraint: ">=5.10", optional: false}
+    - {name: "zlib", version_constraint: ">=1.2", optional: false}
+  runtime_dependencies:
+    - {name: "glibc", version_constraint: ">=2.30", optional: false}
+    - {name: "zlib", version_constraint: ">=1.2", optional: false}
+  optional_dependencies: []
+  conflicts: []
+
+build:
+  build_system: Make
+  build_commands:
+    - "./config --prefix=/usr --openssldir=/etc/ssl --libdir=lib shared zlib-dynamic no-ssl3 no-ssl3-method enable-ec_nistp_64_gcc_128"
+    - "make -j$(nproc)"
+  build_dependencies: ["gcc", "make", "perl", "zlib-devel"]
+  build_flags: ["-O2"]
+  environment:
+    CFLAGS: "-O2 -fPIC"
+  working_directory: null
+  target_architectures: [X86_64v1, X86_64v3, Aarch64]
+  cross_compiler_prefix: null
+  target_sysroot: null
+
+install:
+  install_method: RunCommands
+  install_commands:
+    - "make install DESTDIR=$DESTDIR MANSUFFIX=ssl"
+    - "mkdir -p $DESTDIR/etc/ssl/certs"
+    - "mkdir -p $DESTDIR/etc/ssl/private"
+    - "chmod 700 $DESTDIR/etc/ssl/private"
+  install_directories: ["/usr/bin", "/usr/lib", "/etc/ssl"]
+  install_files: []
+  post_install_commands:
+    - "ldconfig -n $DESTDIR/usr/lib || true"
+
+files:
+  include_patterns: ["**/*.c", "**/*.h", "Configure"]
+  exclude_patterns: ["**/*.o", "**/test/**"]
+  binary_files:
+    - "usr/bin/openssl"
+    - "usr/lib/libssl.so*"
+    - "usr/lib/libcrypto.so*"
+  config_files:
+    - "/etc/ssl/openssl.cnf"
+  documentation_files: []
+  license_files: ["LICENSE.txt", "AUTHORS.md"]
+
+scripts:
+  pre_install: "echo 'Installing OpenSSL...'"
+  post_install: |
+    echo "OpenSSL installed successfully"
+    echo "Certificates directory: /etc/ssl/certs"
+    echo "Private keys directory: /etc/ssl/private"
+  pre_uninstall: null
+  post_uninstall: null
+  pre_upgrade: null
+  post_upgrade: null
+
+metadata:
+  maintainer: "Oreon Project Team <packaging@oreonproject.org>"
+  section: "libs"
+  priority: "required"
+  provides: ["openssl", "libssl", "libcrypto"]
+  conflicts: []
+

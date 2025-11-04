@@ -1,24 +1,20 @@
 name: glibc
-version: "2.38"
-description: "GNU C library"
-author: "Various"
-license: "Various"
-homepage: ""
-repository: ""
-source_url: "https://ftp.gnu.org/gnu/glibc/glibc-2.38.tar.xz"
-keywords:
-  - glibc
-categories:
-  - packages
+version: "2.39"
+description: "GNU C Library - the standard C library"
+author: "GNU Project"
+license: "LGPL-2.1-or-later"
+homepage: "https://www.gnu.org/software/libc/"
+repository: "https://sourceware.org/git/glibc.git"
+source_url: "https://ftp.gnu.org/gnu/glibc/glibc-2.39.tar.xz"
+keywords: [glibc, libc, C-library, system]
+categories: [system, libraries]
 
 dependencies:
   build_dependencies:
-    - name: "gcc"
-      version_constraint: ">=4.0"
-      optional: false
-    - name: "make"
-      version_constraint: ">=3.0"
-      optional: false
+    - {name: "gcc", version_constraint: ">=6.2", optional: false}
+    - {name: "make", version_constraint: ">=4.0", optional: false}
+    - {name: "bison", version_constraint: ">=2.7", optional: false}
+    - {name: "python3", version_constraint: ">=3.4", optional: false}
   runtime_dependencies: []
   optional_dependencies: []
   conflicts: []
@@ -26,76 +22,69 @@ dependencies:
 build:
   build_system: Make
   build_commands:
-    - "mkdir -p build && cd build && unset LD_LIBRARY_PATH && ../configure --prefix=/usr --disable-werror --disable-profile --enable-kernel=3.2"
-    - "cd build && make"
-  build_dependencies:
-    - "gcc"
-    - "make"
-    - "bison"
-    - "gawk"
-    - "sed"
-    - "bash"
-    - "python3"
+    - "unset LD_LIBRARY_PATH"
+    - "mkdir -p build && cd build"
+    - "cd build && ../configure --prefix=/usr --enable-kernel=3.2 --enable-stack-protector=strong --with-headers=/usr/include --enable-bind-now --disable-werror libc_cv_slibdir=/usr/lib"
+    - "cd build && make -j$(nproc)"
+  build_dependencies: ["gcc", "make", "bison", "gawk", "python3"]
   build_flags: []
   environment:
-    CFLAGS: "-O2"
+    CFLAGS: "-O2 -fPIC"
+    LD_LIBRARY_PATH: ""
   working_directory: null
-  target_architectures:
-    - X86_64v1
-    - X86_64v3
-    - Aarch64
+  target_architectures: [X86_64v1, X86_64v3, Aarch64]
   cross_compiler_prefix: null
   target_sysroot: null
 
 install:
   install_method: RunCommands
   install_commands:
-    - "cd build && unset LD_LIBRARY_PATH && install_root=/buildroot make -j1 install"
-  install_directories:
-    - "/usr/bin"
-    - "/usr/lib"
-    - "/usr/lib64"
-    - "/usr/include"
-    - "/usr/sbin"
-    - "/lib"
-    - "/lib64"
-    - "/etc"
-    - "/sbin"
+    - "cd build && make install DESTDIR=$DESTDIR install_root=$DESTDIR"
+    - "mkdir -p $DESTDIR/etc"
+    - "cp $DESTDIR/usr/share/i18n/SUPPORTED $DESTDIR/etc/locale.gen || true"
+    - "mkdir -p $DESTDIR/usr/lib/locale"
+  install_directories: ["/usr/lib", "/usr/bin", "/usr/sbin", "/usr/include"]
   install_files: []
-  post_install_commands: []
+  post_install_commands:
+    - "ldconfig -r $DESTDIR || true"
 
 files:
-  include_patterns:
-    - "*.c"
-    - "*.h"
-    - "configure"
-    - "Makefile.in"
-  exclude_patterns:
-    - "**/*.o"
-    - "**/*.a"
-    - "tests/**/*"
-    - ".git/**/*"
-  binary_files: []
-  config_files: []
+  include_patterns: ["**/*.c", "**/*.h", "configure"]
+  exclude_patterns: ["**/*.o", "build/**/*.o"]
+  binary_files:
+    - "usr/lib/libc.so*"
+    - "usr/lib/libm.so*"
+    - "usr/lib/libpthread.so*"
+    - "usr/lib/libdl.so*"
+    - "usr/lib/librt.so*"
+    - "usr/lib/libresolv.so*"
+    - "usr/lib/libutil.so*"
+    - "usr/lib/libnss_*.so*"
+    - "usr/lib/ld-*.so*"
+    - "usr/bin/ldd"
+    - "usr/bin/locale"
+    - "usr/sbin/ldconfig"
+  config_files:
+    - "/etc/ld.so.conf"
+    - "/etc/nsswitch.conf"
   documentation_files: []
-  license_files: []
+  license_files: ["COPYING", "COPYING.LIB", "LICENSES"]
 
 scripts:
-  pre_install: |
-    echo "Installing glibc..."
+  pre_install: "echo 'Installing glibc (GNU C Library)...'"
   post_install: |
     echo "glibc installed successfully"
-  pre_uninstall: |
-    echo "Removing glibc..."
-  post_uninstall: |
-    echo "glibc removed successfully"
+    echo "Creating locale data..."
+    mkdir -p /usr/lib/locale
+    echo "System C library is now available"
+  pre_uninstall: null
+  post_uninstall: null
   pre_upgrade: null
   post_upgrade: null
 
 metadata:
   maintainer: "Oreon Project Team <packaging@oreonproject.org>"
-  section: "packages"
-  priority: "optional"
-  provides:
-    - "glibc"
+  section: "libs"
+  priority: "required"
+  provides: ["glibc", "libc", "libc6"]
   conflicts: []

@@ -1,0 +1,70 @@
+name: sudo
+version: "1.9.16"
+description: "Allows users to run programs with security privileges of another user"
+author: "Todd C. Miller"
+license: "ISC"
+homepage: "https://www.sudo.ws/"
+repository: "https://github.com/sudo-project/sudo"
+source_url: "https://www.sudo.ws/dist/sudo-1.9.16.tar.gz"
+keywords: [sudo, privilege, security, admin]
+categories: [security, admin]
+
+dependencies:
+  build_dependencies:
+    - {name: "gcc", version_constraint: ">=4.0", optional: false}
+    - {name: "pam", version_constraint: ">=1.0", optional: false}
+  runtime_dependencies:
+    - {name: "glibc", version_constraint: ">=2.30", optional: false}
+    - {name: "pam", version_constraint: ">=1.0", optional: false}
+  optional_dependencies: []
+  conflicts: []
+
+build:
+  build_system: Make
+  build_commands:
+    - "./configure --prefix=/usr --libexecdir=/usr/lib --with-rundir=/run/sudo --with-vardir=/var/db/sudo --with-secure-path=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin --with-all-insults --with-env-editor --with-pam --with-passprompt='[sudo] password for %p: '"
+    - "make -j$(nproc)"
+  build_dependencies: ["gcc", "make", "pam-devel"]
+  build_flags: ["-O2"]
+  environment: {CFLAGS: "-O2"}
+  working_directory: null
+  target_architectures: [X86_64v1, X86_64v3, Aarch64]
+  cross_compiler_prefix: null
+  target_sysroot: null
+
+install:
+  install_method: RunCommands
+  install_commands:
+    - "make install DESTDIR=$DESTDIR INSTALL_OWNER=''"
+    - "mkdir -p $DESTDIR/etc/sudoers.d"
+    - "chmod 440 $DESTDIR/etc/sudoers || true"
+    - "chmod 750 $DESTDIR/etc/sudoers.d || true"
+  install_directories: ["/usr/bin", "/usr/sbin", "/etc/sudoers.d"]
+  install_files: []
+  post_install_commands: []
+
+files:
+  include_patterns: ["**/*.c", "configure"]
+  exclude_patterns: ["**/*.o"]
+  binary_files: ["usr/bin/sudo", "usr/bin/sudoedit", "usr/sbin/visudo"]
+  config_files: ["/etc/sudoers", "/etc/sudoers.d/*"]
+  documentation_files: []
+  license_files: ["LICENSE.md"]
+
+scripts:
+  pre_install: "echo 'Installing sudo...'"
+  post_install: |
+    echo "sudo installed successfully"
+    echo "Configure /etc/sudoers for user privileges"
+  pre_uninstall: null
+  post_uninstall: null
+  pre_upgrade: null
+  post_upgrade: null
+
+metadata:
+  maintainer: "Oreon Project Team <packaging@oreonproject.org>"
+  section: "admin"
+  priority: "important"
+  provides: ["sudo"]
+  conflicts: []
+

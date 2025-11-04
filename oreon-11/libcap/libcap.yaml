@@ -1,0 +1,129 @@
+name: libcap
+version: "2.70"
+description: "POSIX 1003.1e capabilities library and utilities"
+author: "Andrew G. Morgan"
+license: "BSD-3-Clause OR GPL-2.0"
+homepage: "https://sites.google.com/site/fullycapable/"
+repository: "https://git.kernel.org/pub/scm/libs/libcap/libcap.git"
+source_url: "https://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2/libcap-2.70.tar.xz"
+keywords:
+  - capabilities
+  - security
+  - posix
+  - privileges
+  - library
+categories:
+  - security
+  - libraries
+
+dependencies:
+  build_dependencies:
+    - name: "gcc"
+      version_constraint: ">=4.0"
+      optional: false
+    - name: "make"
+      version_constraint: ">=3.0"
+      optional: false
+    - name: "pkg-config"
+      version_constraint: ">=0.20"
+      optional: false
+  runtime_dependencies:
+    - name: "glibc"
+      version_constraint: ">=2.30"
+      optional: false
+  optional_dependencies: []
+  conflicts: []
+
+build:
+  build_system: Make
+  build_commands:
+    - "make -C libcap BUILD_CC=gcc CC=gcc CFLAGS=\"-O2 -pipe -Wall -fPIC\" LDFLAGS=\"-Wl,-z,relro -Wl,-z,now\" lib=lib prefix=/usr SBINDIR=/usr/sbin INCDIR=/usr/include MANDIR=/usr/share/man PKGCONFIGDIR=/usr/lib/pkgconfig GOLANG=no PAM_CAP=no"
+    - "make -C progs BUILD_CC=gcc CC=gcc CFLAGS=\"-O2 -pipe -Wall\" LDFLAGS=\"-Wl,-z,relro -Wl,-z,now -L../libcap\" lib=lib prefix=/usr SBINDIR=/usr/sbin"
+  build_dependencies:
+    - "gcc"
+    - "make"
+    - "pkg-config"
+    - "pkgconf"
+  build_flags:
+    - "-O2"
+    - "-pipe"
+  environment:
+    BUILD_CC: "gcc"
+    CC: "gcc"
+    lib: "lib"
+    prefix: "/usr"
+  working_directory: null
+  target_architectures:
+    - X86_64v1
+    - X86_64v3
+    - Aarch64
+  cross_compiler_prefix: null
+  target_sysroot: null
+
+install:
+  install_method: RunCommands
+  install_commands:
+    - "mkdir -p $DESTDIR/usr/lib $DESTDIR/usr/include/sys $DESTDIR/usr/sbin $DESTDIR/usr/lib/pkgconfig $DESTDIR/usr/share/man/man1 $DESTDIR/usr/share/man/man3 $DESTDIR/usr/share/man/man8"
+    - "make -C libcap install DESTDIR=$DESTDIR FAKEROOT=$DESTDIR lib=lib prefix=/usr SBINDIR=/usr/sbin INCDIR=/usr/include MANDIR=/usr/share/man PKGCONFIGDIR=/usr/lib/pkgconfig RAISE_SETFCAP=no"
+    - "make -C progs install DESTDIR=$DESTDIR FAKEROOT=$DESTDIR lib=lib prefix=/usr SBINDIR=/usr/sbin MANDIR=/usr/share/man"
+  install_directories:
+    - "/usr/lib"
+    - "/usr/include/sys"
+    - "/usr/sbin"
+  install_files: []
+  post_install_commands:
+    - "ldconfig -n $DESTDIR/usr/lib"
+
+files:
+  include_patterns:
+    - "libcap/**/*.c"
+    - "libcap/**/*.h"
+    - "progs/**/*.c"
+    - "Makefile"
+    - "libcap/Makefile"
+    - "progs/Makefile"
+  exclude_patterns:
+    - "**/*.o"
+    - "**/.libs/**"
+    - ".git/**/*"
+    - "**/*.pyc"
+  binary_files:
+    - "usr/lib/libcap.so*"
+    - "usr/lib/libpsx.so*"
+    - "usr/sbin/capsh"
+    - "usr/sbin/getcap"
+    - "usr/sbin/getpcaps"
+    - "usr/sbin/setcap"
+  config_files: []
+  documentation_files:
+    - "usr/share/man/**/*"
+  license_files:
+    - "License"
+
+scripts:
+  pre_install: |
+    echo "Installing libcap..."
+  post_install: |
+    echo "libcap installed successfully"
+    echo "Capabilities utilities available: capsh, getcap, setcap, getpcaps"
+    ldconfig 2>/dev/null || true
+  pre_uninstall: |
+    echo "Removing libcap..."
+  post_uninstall: |
+    ldconfig 2>/dev/null || true
+    echo "libcap removed"
+  pre_upgrade: null
+  post_upgrade: |
+    echo "libcap upgraded successfully"
+    ldconfig 2>/dev/null || true
+
+metadata:
+  maintainer: "Oreon Project Team <packaging@oreonproject.org>"
+  section: "libraries"
+  priority: "optional"
+  provides:
+    - "libcap"
+    - "libcap.so.2"
+    - "libpsx.so.2"
+  conflicts: []
+

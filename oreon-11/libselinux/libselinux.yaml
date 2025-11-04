@@ -1,0 +1,162 @@
+name: libselinux
+version: "3.7"
+description: "SELinux library and simple utilities"
+author: "SELinux Project"
+license: "Public Domain"
+homepage: "https://github.com/SELinuxProject/selinux"
+repository: "https://github.com/SELinuxProject/selinux"
+source_url: "https://github.com/SELinuxProject/selinux/releases/download/3.7/libselinux-3.7.tar.gz"
+keywords:
+  - selinux
+  - security
+  - mandatory-access-control
+  - library
+categories:
+  - security
+  - libraries
+
+dependencies:
+  build_dependencies:
+    - name: "gcc"
+      version_constraint: ">=4.0"
+      optional: false
+    - name: "make"
+      version_constraint: ">=3.0"
+      optional: false
+    - name: "pkg-config"
+      version_constraint: ">=0.20"
+      optional: false
+    - name: "libsepol"
+      version_constraint: ">=3.7"
+      optional: false
+    - name: "pcre2"
+      version_constraint: ">=10.0"
+      optional: false
+  runtime_dependencies:
+    - name: "libsepol"
+      version_constraint: ">=3.7"
+      optional: false
+    - name: "pcre2"
+      version_constraint: ">=10.0"
+      optional: false
+  optional_dependencies: []
+  conflicts: []
+
+build:
+  build_system: Make
+  build_commands:
+    - "make -C src USE_PCRE2=y CFLAGS=\"-O2 -pipe -Wall -Werror -Wno-error=unused-function -Wno-error=unused-variable -DUSE_PCRE2 -DPCRE2_CODE_UNIT_WIDTH=8\" LDFLAGS=\"-Wl,-z,relro -Wl,-z,now -lpcre2-8\""
+    - "make -C utils USE_PCRE2=y CFLAGS=\"-O2 -pipe -Wall -DUSE_PCRE2 -DPCRE2_CODE_UNIT_WIDTH=8\" LDFLAGS=\"-Wl,-z,relro -Wl,-z,now -lpcre2-8\""
+  build_dependencies:
+    - "gcc"
+    - "make"
+    - "pkg-config"
+    - "pkgconf"
+    - "libsepol-devel"
+    - "pcre2-devel"
+    - "swig"
+    - "python3"
+    - "python3-devel"
+    - "ruby"
+    - "ruby-devel"
+  build_flags:
+    - "-O2"
+    - "-pipe"
+  environment:
+    USE_PCRE2: "y"
+    PCRE2CONFIG: "/usr/bin/pcre2-config"
+    LIBDIR: "/usr/lib64"
+    SHLIBDIR: "/usr/lib64"
+    BINDIR: "/usr/bin"
+    SBINDIR: "/usr/sbin"
+    MANDIR: "/usr/share/man"
+    INCDIR: "/usr/include"
+  working_directory: null
+  target_architectures:
+    - X86_64v1
+    - X86_64v3
+    - Aarch64
+  cross_compiler_prefix: null
+  target_sysroot: null
+
+install:
+  install_method: RunCommands
+  install_commands:
+    - "make -C src install DESTDIR=$DESTDIR PREFIX=/usr LIBDIR=/usr/lib64 SHLIBDIR=/usr/lib64"
+    - "make -C utils install DESTDIR=$DESTDIR PREFIX=/usr LIBDIR=/usr/lib64 SHLIBDIR=/usr/lib64"
+    - "mkdir -p $DESTDIR/etc/selinux"
+    - "mkdir -p $DESTDIR/usr/lib64/pkgconfig"
+    - "mkdir -p $DESTDIR/usr/include/selinux"
+  install_directories:
+    - "/usr/lib64"
+    - "/usr/include/selinux"
+    - "/usr/bin"
+    - "/usr/sbin"
+    - "/etc/selinux"
+  install_files: []
+  post_install_commands:
+    - "ldconfig -n $DESTDIR/usr/lib64"
+
+files:
+  include_patterns:
+    - "src/**/*.c"
+    - "src/**/*.h"
+    - "utils/**/*.c"
+    - "include/**/*.h"
+    - "Makefile"
+    - "src/Makefile"
+    - "utils/Makefile"
+  exclude_patterns:
+    - "**/*.o"
+    - "**/*.lo"
+    - "**/*.a"
+    - "**/.libs/**"
+    - ".git/**/*"
+    - "**/*.pyc"
+    - "**/__pycache__/**"
+  binary_files:
+    - "usr/lib64/libselinux.so*"
+    - "usr/bin/getenforce"
+    - "usr/bin/setenforce"
+    - "usr/sbin/setsebool"
+    - "usr/sbin/getsebool"
+    - "usr/sbin/selinuxenabled"
+    - "usr/sbin/selinuxexeccon"
+  config_files:
+    - "/etc/selinux/semanage.conf"
+  documentation_files:
+    - "usr/share/man/**/*"
+  license_files:
+    - "LICENSE"
+
+scripts:
+  pre_install: |
+    echo "Installing libselinux..."
+    if [ -d /usr/lib64 ]; then
+      echo "Target lib64 directory exists"
+    fi
+  post_install: |
+    echo "libselinux installed successfully"
+    ldconfig 2>/dev/null || true
+    echo "SELinux library and utilities are now available"
+  pre_uninstall: |
+    echo "Removing libselinux..."
+  post_uninstall: |
+    echo "libselinux removed successfully"
+    ldconfig 2>/dev/null || true
+  pre_upgrade: null
+  post_upgrade: |
+    echo "libselinux upgraded successfully"
+    ldconfig 2>/dev/null || true
+
+metadata:
+  maintainer: "Oreon Project Team <packaging@oreonproject.org>"
+  section: "libraries"
+  priority: "important"
+  provides:
+    - "libselinux"
+    - "libselinux.so.1"
+  conflicts: []
+  replaces: []
+  breaks: []
+

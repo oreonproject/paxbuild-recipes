@@ -26,7 +26,7 @@ dependencies:
 build:
   build_system: Meson
   build_commands:
-    - "meson setup build -Dprefix=/usr -Dman=false -Dtests=false"
+    - "meson setup build --prefix=/usr --sysconfdir=/etc --localstatedir=/var -Dman=disabled -Dtests=false -Dinstall-tests=false -Dmode=release -Dselinux=true -Dacl=true -Dpam=true -Dlibcryptsetup=auto"
     - "ninja -C build"
   build_dependencies:
     - "gcc"
@@ -46,6 +46,8 @@ build:
     - "zlib-devel"
     - "bzip2-devel"
     - "xz-devel"
+    - "pam-devel"
+    - "libblkid-devel"
   build_flags: []
   environment:
     CFLAGS: "-O2"
@@ -60,11 +62,16 @@ build:
 install:
   install_method: RunCommands
   install_commands:
-    - "ninja -C build install"
+    - "DESTDIR=$DESTDIR ninja -C build install"
   install_directories:
     - "/usr/bin"
+    - "/usr/lib/systemd"
+    - "/etc/systemd"
   install_files: []
-  post_install_commands: []
+  post_install_commands:
+    - "echo 'Verifying systemd-user-sessions installation...'"
+    - "ls -la $DESTDIR/usr/lib/systemd/systemd-user-sessions || echo 'WARNING: systemd-user-sessions not found'"
+    - "ls -la $DESTDIR/usr/lib/systemd/system/systemd-user-sessions.service || echo 'WARNING: systemd-user-sessions.service not found'"
 
 files:
   include_patterns:

@@ -1,0 +1,66 @@
+name: acl
+version: "2.3.2"
+description: "Access control list utilities, libraries and headers"
+author: "SGI"
+license: "LGPL-2.1-or-later"
+homepage: "https://savannah.nongnu.org/projects/acl"
+repository: "https://git.savannah.nongnu.org/git/acl.git"
+source_url: "https://download.savannah.gnu.org/releases/acl/acl-2.3.2.tar.xz"
+keywords: [acl, access-control, filesystem]
+categories: [system, utilities]
+
+dependencies:
+  build_dependencies:
+    - {name: "gcc", version_constraint: ">=4.0", optional: false}
+    - {name: "attr", version_constraint: ">=2.4", optional: false}
+  runtime_dependencies:
+    - {name: "glibc", version_constraint: ">=2.30", optional: false}
+    - {name: "attr", version_constraint: ">=2.4", optional: false}
+  optional_dependencies: []
+  conflicts: []
+
+build:
+  build_system: Make
+  build_commands:
+    - "./configure --prefix=/usr --libdir=/usr/lib --libexecdir=/usr/lib --disable-static"
+    - "make -j$(nproc)"
+  build_dependencies: ["gcc", "make", "attr-devel"]
+  build_flags: ["-O2"]
+  environment: {CFLAGS: "-O2"}
+  working_directory: null
+  target_architectures: [X86_64v1, X86_64v3, Aarch64]
+  cross_compiler_prefix: null
+  target_sysroot: null
+
+install:
+  install_method: RunCommands
+  install_commands: ["make install DESTDIR=$DESTDIR"]
+  install_directories: ["/usr/bin", "/usr/lib"]
+  install_files: []
+  post_install_commands: ["ldconfig -n $DESTDIR/usr/lib"]
+
+files:
+  include_patterns: ["**/*.c", "configure"]
+  exclude_patterns: ["**/*.o", "**/.libs/**"]
+  binary_files: ["usr/bin/chacl", "usr/bin/getfacl", "usr/bin/setfacl", "usr/lib/libacl.so*"]
+  config_files: []
+  documentation_files: []
+  license_files: ["COPYING", "COPYING.LGPL"]
+
+scripts:
+  pre_install: "echo 'Installing acl...'"
+  post_install: |
+    echo "acl installed"
+    ldconfig 2>/dev/null || true
+  pre_uninstall: null
+  post_uninstall: "ldconfig 2>/dev/null || true"
+  pre_upgrade: null
+  post_upgrade: "ldconfig 2>/dev/null || true"
+
+metadata:
+  maintainer: "Oreon Project Team <packaging@oreonproject.org>"
+  section: "system"
+  priority: "required"
+  provides: ["acl", "libacl.so.1"]
+  conflicts: []
+
