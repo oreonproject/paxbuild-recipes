@@ -1,0 +1,74 @@
+name: pax-rs
+version: "0.1.0"
+description: "Universal package manager developed by the Oreon Project"
+author: "Oreon Project"
+license: "GPL-3.0"
+homepage: "https://github.com/oreonproject/pax-rs"
+repository: "https://github.com/oreonproject/pax-rs"
+source_url: "https://github.com/oreonproject/pax-rs/archive/refs/tags/0.1.0.tar.gz"
+keywords: [package-manager, linux, rust, pax]
+categories: [system, package-management]
+
+dependencies:
+  build_dependencies:
+    - {name: "rust", version_constraint: ">=1.70", optional: false}
+    - {name: "cargo", version_constraint: ">=1.70", optional: false}
+    - {name: "gcc", version_constraint: ">=4.0", optional: false}
+  runtime_dependencies:
+    - {name: "glibc", version_constraint: ">=2.30", optional: false}
+    - {name: "gcc", version_constraint: ">=4.0", optional: false}
+  optional_dependencies: []
+  conflicts: []
+
+build:
+  build_system: Cargo
+  build_commands:
+    - "cargo build --release"
+  build_dependencies: ["rust", "cargo", "gcc"]
+  build_flags: []
+  environment:
+    CARGO_HOME: "/build/.cargo"
+    RUSTFLAGS: "-C opt-level=3 -C target-cpu=native"
+  working_directory: null
+  target_architectures: [X86_64v1, X86_64v3, Aarch64]
+  cross_compiler_prefix: null
+  target_sysroot: null
+
+install:
+  install_method: RunCommands
+  install_commands:
+    - "mkdir -p $DESTDIR/usr/bin"
+    - "find target -type f -name pax -path '*/release/pax' -exec install -m 755 {} $DESTDIR/usr/bin/pax \\;"
+    - "mkdir -p $DESTDIR/usr/share/licenses/pax-rs"
+    - "install -m 644 LICENSE $DESTDIR/usr/share/licenses/pax-rs/LICENSE"
+  install_directories: ["/usr/bin", "/usr/share/licenses/pax-rs"]
+  install_files: []
+  post_install_commands:
+    - "echo 'pax-rs installed to /usr/bin/pax'"
+
+files:
+  include_patterns: ["**/*.rs", "Cargo.toml", "Cargo.lock"]
+  exclude_patterns: ["**/target/**", "**/*.o", ".git/**"]
+  binary_files:
+    - "usr/bin/pax"
+  config_files: []
+  documentation_files: ["README.md"]
+  license_files: ["LICENSE"]
+
+scripts:
+  pre_install: "echo 'Installing pax-rs package manager...'"
+  post_install: |
+    echo "pax-rs installed successfully"
+    echo "Universal package manager is now available as 'pax'"
+  pre_uninstall: null
+  post_uninstall: null
+  pre_upgrade: null
+  post_upgrade: null
+
+metadata:
+  maintainer: "Oreon Project Team <packaging@oreonproject.org>"
+  section: "admin"
+  priority: "optional"
+  provides: ["pax-rs", "pax"]
+  conflicts: []
+

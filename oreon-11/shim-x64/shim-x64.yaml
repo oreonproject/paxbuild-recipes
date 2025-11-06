@@ -1,0 +1,111 @@
+name: shim-x64
+version: "15.8"
+description: "shim bootloader for Secure Boot (x86_64)"
+author: "Various"
+license: "BSD-3-Clause"
+homepage: "https://github.com/rhboot/shim"
+repository: "https://github.com/rhboot/shim.git"
+source_url: "https://github.com/rhboot/shim/releases/download/15.8/shim-15.8.tar.bz2"
+keywords:
+  - shim
+  - secure-boot
+  - uefi
+  - efi
+  - bootloader
+categories:
+  - packages
+  - boot
+
+dependencies:
+  build_dependencies:
+    - name: "gcc"
+      version_constraint: ">=4.0"
+      optional: false
+    - name: "make"
+      version_constraint: ">=3.0"
+      optional: false
+  runtime_dependencies: []
+  optional_dependencies: []
+  conflicts: []
+
+build:
+  build_system: Make
+  build_commands:
+    - "make clean || true"
+    - "make EFIDIR=BOOT VENDOR_CERT_FILE= -j1 || make EFIDIR=BOOT -j1"
+  build_dependencies:
+    - "gcc"
+    - "make"
+    - "binutils"
+    - "gnu-efi-devel"
+    - "openssl-devel"
+    - "pesign"
+  build_flags: []
+  environment:
+    CFLAGS: "-O2 -fPIC"
+    AS: "gcc"
+  working_directory: null
+  target_architectures:
+    - X86_64v1
+    - X86_64v3
+  cross_compiler_prefix: null
+  target_sysroot: null
+
+install:
+  install_method: RunCommands
+  install_commands:
+    - "mkdir -p $DESTDIR/boot/efi/EFI/BOOT"
+    - "if [ -f shimx64.efi ]; then cp shimx64.efi $DESTDIR/boot/efi/EFI/BOOT/; fi"
+    - "if [ -f shimx64.efi ]; then cp shimx64.efi $DESTDIR/boot/efi/EFI/BOOT/BOOTX64.EFI; fi"
+    - "mkdir -p $DESTDIR/usr/share/shim/x64"
+    - "if [ -f shimx64.efi ]; then cp shimx64.efi $DESTDIR/usr/share/shim/x64/; fi"
+    - "if [ -f mmx64.efi ]; then cp mmx64.efi $DESTDIR/boot/efi/EFI/BOOT/; fi"
+    - "if [ -f mmx64.efi ]; then cp mmx64.efi $DESTDIR/usr/share/shim/x64/; fi"
+  install_directories:
+    - "/boot/efi/EFI/BOOT"
+    - "/usr/share/shim/x64"
+  install_files: []
+  post_install_commands: []
+
+files:
+  include_patterns:
+    - "*.c"
+    - "*.h"
+    - "Makefile"
+  exclude_patterns:
+    - "**/*.o"
+    - "**/*.a"
+    - "tests/**/*"
+    - ".git/**/*"
+    - "*.efi"
+  binary_files:
+    - "boot/efi/EFI/BOOT/shimx64.efi"
+    - "boot/efi/EFI/BOOT/BOOTX64.EFI"
+    - "boot/efi/EFI/BOOT/mmx64.efi"
+    - "usr/share/shim/x64/shimx64.efi"
+    - "usr/share/shim/x64/mmx64.efi"
+  config_files: []
+  documentation_files: []
+  license_files: []
+
+scripts:
+  pre_install: |
+    echo "Installing shim-x64 (Secure Boot bootloader)..."
+  post_install: |
+    echo "shim-x64 installed successfully"
+  pre_uninstall: |
+    echo "Removing shim-x64..."
+  post_uninstall: |
+    echo "shim-x64 removed successfully"
+  pre_upgrade: null
+  post_upgrade: null
+
+metadata:
+  maintainer: "Oreon Project Team <packaging@oreonproject.org>"
+  section: "packages"
+  priority: "optional"
+  provides:
+    - "shim-x64"
+    - "shim"
+  conflicts: []
+

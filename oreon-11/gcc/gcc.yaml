@@ -1,0 +1,85 @@
+name: gcc
+version: "13.2.0"
+description: "GNU Compiler Collection - C, C++, and other language compilers"
+author: "GNU Project"
+license: "GPL-3.0-or-later WITH GCC-exception-3.1"
+homepage: "https://gcc.gnu.org/"
+repository: "https://gcc.gnu.org/git/gcc.git"
+source_url: "https://sourceware.org/pub/gcc/releases/gcc-13.2.0/gcc-13.2.0.tar.xz"
+keywords: [gcc, compiler, c, c++, gnu]
+categories: [development, system]
+
+dependencies:
+  build_dependencies:
+    - {name: "gcc", version_constraint: ">=4.0", optional: true}
+    - {name: "make", version_constraint: ">=3.0", optional: true}
+    - {name: "gawk", version_constraint: ">=3.0", optional: true}
+    - {name: "bison", version_constraint: ">=2.0", optional: true}
+    - {name: "flex", version_constraint: ">=2.5", optional: true}
+    - {name: "texinfo", version_constraint: ">=4.0", optional: true}
+  runtime_dependencies:
+    - {name: "glibc", version_constraint: ">=2.30", optional: false}
+    - {name: "binutils", version_constraint: ">=2.25", optional: false}
+  optional_dependencies: []
+  conflicts: []
+
+build:
+  build_system: Make
+  build_commands:
+    - "GCC_DIR=$(find . -maxdepth 1 -type d -name 'gcc-*' | head -1) && cd \"$GCC_DIR\" && sed -i 's|http://gcc.gnu.org/pub/gcc/infrastructure/|https://ftp.gnu.org/gnu/|g; s|http://isl.gforge.inria.fr/|https://libisl.sourceforge.io/|g' contrib/download_prerequisites && ./contrib/download_prerequisites || echo 'Prerequisites download failed, GCC will build them from source'"
+    - "GCC_DIR=$(find . -maxdepth 1 -type d -name 'gcc-*' | head -1) && GCC_DIR=$(cd \"$GCC_DIR\" && pwd) && mkdir -p \"$GCC_DIR/build\" && cd \"$GCC_DIR/build\" && \"$GCC_DIR/configure\" --prefix=/usr --enable-languages=c,c++ --disable-multilib --enable-threads=posix --enable-shared --enable-__cxa_atexit --with-system-zlib --with-default-libstdcxx-abi=gcc4-compatible --enable-libstdcxx-filesystem-ts"
+    - "GCC_DIR=$(find . -maxdepth 1 -type d -name 'gcc-*' | head -1) && GCC_DIR=$(cd \"$GCC_DIR\" && pwd) && cd \"$GCC_DIR/build\" && make -j$(nproc)"
+  build_dependencies: ["make", "gawk", "bison", "flex", "texinfo", "zlib-devel"]
+  build_flags: []
+  environment:
+    CFLAGS: "-O2"
+    CXXFLAGS: "-O2"
+  working_directory: null
+  target_architectures: [X86_64v1, X86_64v3, Aarch64]
+  cross_compiler_prefix: null
+  target_sysroot: null
+
+install:
+  install_method: RunCommands
+  install_commands:
+    - "cd build && make install DESTDIR=$DESTDIR"
+    - "mkdir -p $DESTDIR/usr/lib/gcc"
+    - "ldconfig -r $DESTDIR || true"
+  install_directories: ["/usr/bin", "/usr/lib", "/usr/lib64", "/usr/include", "/usr/share"]
+  install_files: []
+  post_install_commands:
+    - "echo 'GCC installed successfully'"
+    - "echo 'Creating gcc symlinks...'"
+
+files:
+  include_patterns: ["**/*.c", "**/*.h", "**/*.cpp", "configure"]
+  exclude_patterns: ["**/*.o", "build/**/*.o", "**/tests/**"]
+  binary_files:
+    - "usr/bin/gcc"
+    - "usr/bin/g++"
+    - "usr/bin/cpp"
+    - "usr/lib/libgcc_s.so*"
+    - "usr/lib64/libgcc_s.so*"
+    - "usr/lib/libstdc++.so*"
+    - "usr/lib64/libstdc++.so*"
+  config_files: []
+  documentation_files: []
+  license_files: ["COPYING", "COPYING3", "COPYING.LIB", "COPYING.RUNTIME"]
+
+scripts:
+  pre_install: "echo 'Installing GCC (GNU Compiler Collection)...'"
+  post_install: |
+    echo "GCC installed successfully"
+    echo "C and C++ compilers are now available"
+  pre_uninstall: null
+  post_uninstall: null
+  pre_upgrade: null
+  post_upgrade: null
+
+metadata:
+  maintainer: "Oreon Project Team <packaging@oreonproject.org>"
+  section: "devel"
+  priority: "optional"
+  provides: ["gcc", "g++", "cpp", "libgcc", "libgcc_s", "libstdc++"]
+  conflicts: []
+

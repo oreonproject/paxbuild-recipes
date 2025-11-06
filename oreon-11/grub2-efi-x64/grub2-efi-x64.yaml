@@ -1,0 +1,116 @@
+name: grub2-efi-x64
+version: "2.12"
+description: "GRUB2 bootloader for UEFI x86_64 (x86_64-efi target)"
+author: "Various"
+license: "GPL-3.0-or-later"
+homepage: "https://www.gnu.org/software/grub/"
+repository: "https://git.savannah.gnu.org/git/grub.git"
+source_url: "https://ftp.gnu.org/gnu/grub/grub-2.12.tar.xz"
+keywords:
+  - grub
+  - grub2
+  - bootloader
+  - uefi
+  - efi
+categories:
+  - packages
+  - boot
+
+dependencies:
+  build_dependencies:
+    - name: "gcc"
+      version_constraint: ">=4.0"
+      optional: false
+    - name: "make"
+      version_constraint: ">=3.0"
+      optional: false
+  runtime_dependencies: []
+  optional_dependencies: []
+  conflicts: []
+
+build:
+  build_system: Make
+  build_commands:
+    - "./configure --prefix=/usr --target=x86_64 --with-platform=efi --disable-werror"
+    - "touch grub-core/extra_deps.lst || true"
+    - "make -j1"
+  build_dependencies:
+    - "gcc"
+    - "make"
+    - "flex"
+    - "bison"
+    - "gettext-devel"
+    - "freetype-devel"
+    - "xorg-x11-fonts-Type1"
+  build_flags: []
+  environment:
+    CFLAGS: "-O2"
+  working_directory: null
+  target_architectures:
+    - X86_64v1
+    - X86_64v3
+  cross_compiler_prefix: null
+  target_sysroot: null
+
+install:
+  install_method: RunCommands
+  install_commands:
+    - "make install DESTDIR=$DESTDIR"
+    - "mkdir -p $DESTDIR/boot/efi/EFI/BOOT"
+    - "mkdir -p $DESTDIR/usr/lib/grub/x86_64-efi"
+    - "if [ -d grub-core ]; then cp -r grub-core/*.mod $DESTDIR/usr/lib/grub/x86_64-efi/ 2>/dev/null || true; fi"
+    - "if [ -d grub-core ]; then cp -r grub-core/*.lst $DESTDIR/usr/lib/grub/x86_64-efi/ 2>/dev/null || true; fi"
+    - "if [ -f grub-core/grubx64.efi ]; then cp grub-core/grubx64.efi $DESTDIR/boot/efi/EFI/BOOT/BOOTX64.EFI; elif [ -f $DESTDIR/usr/lib/grub/x86_64-efi/grubx64.efi ]; then cp $DESTDIR/usr/lib/grub/x86_64-efi/grubx64.efi $DESTDIR/boot/efi/EFI/BOOT/BOOTX64.EFI; fi"
+    - "if [ -f grub-core/kernel.img ]; then cp grub-core/kernel.img $DESTDIR/usr/lib/grub/x86_64-efi/; fi"
+  install_directories:
+    - "/usr/bin"
+    - "/usr/sbin"
+    - "/usr/lib/grub/x86_64-efi"
+    - "/boot/efi/EFI/BOOT"
+    - "/usr/share/grub"
+  install_files: []
+  post_install_commands: []
+
+files:
+  include_patterns:
+    - "*.c"
+    - "*.h"
+    - "configure"
+    - "Makefile.in"
+  exclude_patterns:
+    - "**/*.o"
+    - "**/*.a"
+    - "tests/**/*"
+    - ".git/**/*"
+  binary_files:
+    - "usr/bin/grub-*"
+    - "usr/sbin/grub-*"
+    - "usr/lib/grub/x86_64-efi/*.mod"
+    - "usr/lib/grub/x86_64-efi/*.lst"
+    - "usr/lib/grub/x86_64-efi/*.img"
+    - "boot/efi/EFI/BOOT/BOOTX64.EFI"
+  config_files: []
+  documentation_files: []
+  license_files: []
+
+scripts:
+  pre_install: |
+    echo "Installing grub2-efi-x64 (UEFI bootloader)..."
+  post_install: |
+    echo "grub2-efi-x64 installed successfully"
+  pre_uninstall: |
+    echo "Removing grub2-efi-x64..."
+  post_uninstall: |
+    echo "grub2-efi-x64 removed successfully"
+  pre_upgrade: null
+  post_upgrade: null
+
+metadata:
+  maintainer: "Oreon Project Team <packaging@oreonproject.org>"
+  section: "packages"
+  priority: "optional"
+  provides:
+    - "grub2-efi-x64"
+    - "grub-efi-x64"
+  conflicts: []
+

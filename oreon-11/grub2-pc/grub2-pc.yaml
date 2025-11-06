@@ -1,0 +1,112 @@
+name: grub2-pc
+version: "2.12"
+description: "GRUB2 bootloader for BIOS (i386-pc target)"
+author: "Various"
+license: "GPL-3.0-or-later"
+homepage: "https://www.gnu.org/software/grub/"
+repository: "https://git.savannah.gnu.org/git/grub.git"
+source_url: "https://ftp.gnu.org/gnu/grub/grub-2.12.tar.xz"
+keywords:
+  - grub
+  - grub2
+  - bootloader
+  - bios
+categories:
+  - packages
+  - boot
+
+dependencies:
+  build_dependencies:
+    - name: "gcc"
+      version_constraint: ">=4.0"
+      optional: false
+    - name: "make"
+      version_constraint: ">=3.0"
+      optional: false
+  runtime_dependencies: []
+  optional_dependencies: []
+  conflicts: []
+
+build:
+  build_system: Make
+  build_commands:
+    - "./configure --prefix=/usr --target=i386 --with-platform=pc --disable-werror"
+    - "touch grub-core/extra_deps.lst || true"
+    - "make -j1"
+  build_dependencies:
+    - "gcc"
+    - "make"
+    - "flex"
+    - "bison"
+    - "gettext-devel"
+    - "freetype-devel"
+    - "xorg-x11-fonts-Type1"
+  build_flags: []
+  environment:
+    CFLAGS: "-O2"
+  working_directory: null
+  target_architectures:
+    - X86_64v1
+    - X86_64v3
+  cross_compiler_prefix: null
+  target_sysroot: null
+
+install:
+  install_method: RunCommands
+  install_commands:
+    - "make install DESTDIR=$DESTDIR"
+    - "mkdir -p $DESTDIR/usr/lib/grub/i386-pc"
+    - "cp -r grub-core/*.mod $DESTDIR/usr/lib/grub/i386-pc/ || true"
+    - "cp -r grub-core/*.lst $DESTDIR/usr/lib/grub/i386-pc/ || true"
+    - "cp grub-core/grub-core.img $DESTDIR/usr/lib/grub/i386-pc/ || true"
+    - "cp grub-core/kernel.img $DESTDIR/usr/lib/grub/i386-pc/ || true"
+  install_directories:
+    - "/usr/bin"
+    - "/usr/sbin"
+    - "/usr/lib/grub/i386-pc"
+    - "/usr/share/grub"
+  install_files: []
+  post_install_commands: []
+
+files:
+  include_patterns:
+    - "*.c"
+    - "*.h"
+    - "configure"
+    - "Makefile.in"
+  exclude_patterns:
+    - "**/*.o"
+    - "**/*.a"
+    - "tests/**/*"
+    - ".git/**/*"
+  binary_files:
+    - "usr/bin/grub-*"
+    - "usr/sbin/grub-*"
+    - "usr/lib/grub/i386-pc/*.mod"
+    - "usr/lib/grub/i386-pc/*.lst"
+    - "usr/lib/grub/i386-pc/*.img"
+  config_files: []
+  documentation_files: []
+  license_files: []
+
+scripts:
+  pre_install: |
+    echo "Installing grub2-pc (BIOS bootloader)..."
+  post_install: |
+    echo "grub2-pc installed successfully"
+  pre_uninstall: |
+    echo "Removing grub2-pc..."
+  post_uninstall: |
+    echo "grub2-pc removed successfully"
+  pre_upgrade: null
+  post_upgrade: null
+
+metadata:
+  maintainer: "Oreon Project Team <packaging@oreonproject.org>"
+  section: "packages"
+  priority: "optional"
+  provides:
+    - "grub2-pc"
+    - "grub-pc"
+  conflicts: []
+
