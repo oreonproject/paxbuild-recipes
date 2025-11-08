@@ -1,0 +1,79 @@
+name: pax-config
+version: "1.0"
+description: "PAX package manager configuration file"
+author: "Oreon Project"
+license: "GPL-3.0-or-later"
+homepage: ""
+repository: ""
+source_url: ""
+keywords:
+  - pax
+  - config
+  - configuration
+categories:
+  - packages
+  - config
+
+dependencies:
+  build_dependencies: []
+  runtime_dependencies: []
+  optional_dependencies: []
+  conflicts: []
+
+build:
+  build_system: Make
+  build_commands:
+    - "mkdir -p etc/pax || true"
+    - "echo 'sourcetype=repo url=\"https://repo.almalinux.org/almalinux/10.0/AppStream/x86_64/os/\" provider=\"rpm\"' > etc/pax/sources.conf || true"
+    - "echo 'sourcetype=repo url=\"https://repo.almalinux.org/almalinux/10.0/devel/x86_64/os/\" provider=\"rpm\"' >> etc/pax/sources.conf || true"
+  build_dependencies: []
+  build_flags: []
+  environment: {}
+  working_directory: null
+  target_architectures:
+    - X86_64v1
+    - X86_64v3
+    - Aarch64
+  cross_compiler_prefix: null
+  target_sysroot: null
+
+install:
+  install_method: RunCommands
+  install_commands:
+    - "mkdir -p $DESTDIR/etc/pax"
+    - "echo 'sourcetype=repo url=\"https://repo.almalinux.org/almalinux/10.0/AppStream/x86_64/os/\" provider=\"rpm\"' > $DESTDIR/etc/pax/sources.conf"
+    - "echo 'sourcetype=repo url=\"https://repo.almalinux.org/almalinux/10.0/devel/x86_64/os/\" provider=\"rpm\"' >> $DESTDIR/etc/pax/sources.conf"
+  install_directories:
+    - "/etc/pax"
+  install_files: []
+  post_install_commands: []
+
+files:
+  include_patterns: []
+  exclude_patterns: []
+  binary_files: []
+  config_files:
+    - "etc/pax/sources.conf"
+  documentation_files: []
+  license_files: []
+
+scripts:
+  pre_install: |
+    echo "Installing pax-config..."
+  post_install: |
+    echo "pax-config installed successfully"
+  pre_uninstall: |
+    echo "Removing pax-config..."
+  post_uninstall: |
+    echo "pax-config removed successfully"
+  pre_upgrade: null
+  post_upgrade: null
+
+metadata:
+  maintainer: "Oreon Project Team <packaging@oreonproject.org>"
+  section: "packages"
+  priority: "optional"
+  provides:
+    - "pax-config"
+  conflicts: []
+

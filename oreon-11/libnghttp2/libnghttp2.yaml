@@ -1,0 +1,98 @@
+name: libnghttp2
+version: "1.61.0"
+description: "HTTP/2 C library"
+author: "Tatsuhiro Tsujikawa"
+license: "MIT"
+homepage: "https://nghttp2.org/"
+repository: "https://github.com/nghttp2/nghttp2.git"
+source_url: "https://github.com/nghttp2/nghttp2/releases/download/v1.61.0/nghttp2-1.61.0.tar.xz"
+keywords:
+  - nghttp2
+  - http2
+categories:
+  - libraries
+
+dependencies:
+  build_dependencies:
+    - name: "gcc"
+      version_constraint: ">=4.0"
+      optional: false
+    - name: "make"
+      version_constraint: ">=3.0"
+      optional: false
+    - name: "zlib"
+      version_constraint: ">=1.2"
+      optional: false
+  runtime_dependencies: []
+  optional_dependencies: []
+  conflicts: []
+
+build:
+  build_system: Make
+  build_commands:
+    - "./configure --prefix=/usr --enable-lib-only"
+    - "make"
+  build_dependencies:
+    - "gcc"
+    - "make"
+    - "zlib-devel"
+  build_flags: []
+  environment:
+    CFLAGS: "-O2"
+  working_directory: null
+  target_architectures:
+    - X86_64v1
+    - X86_64v3
+    - Aarch64
+  cross_compiler_prefix: null
+  target_sysroot: null
+
+install:
+  install_method: RunCommands
+  install_commands:
+    - "make install DESTDIR=$DESTDIR"
+  install_directories:
+    - "/usr/lib"
+    - "/usr/include"
+    - "/usr/lib/pkgconfig"
+  install_files: []
+  post_install_commands: []
+
+files:
+  include_patterns:
+    - "lib/**/*.c"
+    - "lib/**/*.h"
+    - "configure"
+    - "Makefile.in"
+  exclude_patterns:
+    - "**/*.o"
+    - "**/*.a"
+    - "tests/**/*"
+    - ".git/**/*"
+  binary_files:
+    - "usr/lib/libnghttp2.so*"
+  config_files: []
+  documentation_files: []
+  license_files: []
+
+scripts:
+  pre_install: |
+    echo "Installing libnghttp2..."
+  post_install: |
+    echo "libnghttp2 installed successfully"
+  pre_uninstall: |
+    echo "Removing libnghttp2..."
+  post_uninstall: |
+    echo "libnghttp2 removed successfully"
+  pre_upgrade: null
+  post_upgrade: null
+
+metadata:
+  maintainer: "Oreon Project Team <packaging@oreonproject.org>"
+  section: "libs"
+  priority: "optional"
+  provides:
+    - "libnghttp2"
+  conflicts: []
+
+

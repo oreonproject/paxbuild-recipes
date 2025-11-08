@@ -1,0 +1,106 @@
+name: curl
+version: "8.9.1"
+description: "Command line tool and library for transferring data with URLs"
+author: "Daniel Stenberg"
+license: "curl"
+homepage: "https://curl.se/"
+repository: "https://github.com/curl/curl.git"
+source_url: "https://curl.se/download/curl-8.9.1.tar.xz"
+keywords:
+  - curl
+  - download
+  - http
+  - https
+  - ftp
+  - networking
+categories:
+  - packages
+  - networking
+
+dependencies:
+  build_dependencies:
+    - name: "gcc"
+      version_constraint: ">=4.0"
+      optional: false
+    - name: "make"
+      version_constraint: ">=3.0"
+      optional: false
+  runtime_dependencies: 
+    - name: "libnghttp2"
+      version_constraint: ">=1.40"
+      optional: false
+  optional_dependencies: []
+  conflicts: []
+
+build:
+  build_system: Make
+  build_commands:
+    - "./configure --prefix=/usr --with-openssl --with-zlib --with-nghttp2"
+    - "make"
+  build_dependencies:
+    - "gcc"
+    - "make"
+    - "openssl-devel"
+    - "zlib-devel"
+    - "libnghttp2"
+  build_flags: []
+  environment:
+    CFLAGS: "-O2"
+  working_directory: null
+  target_architectures:
+    - X86_64v1
+    - X86_64v3
+    - Aarch64
+  cross_compiler_prefix: null
+  target_sysroot: null
+
+install:
+  install_method: RunCommands
+  install_commands:
+    - "make install DESTDIR=$DESTDIR"
+  install_directories:
+    - "/usr/bin"
+    - "/usr/lib"
+    - "/usr/share/man"
+    - "/usr/share/doc"
+  install_files: []
+  post_install_commands: []
+
+files:
+  include_patterns:
+    - "*.c"
+    - "*.h"
+    - "configure"
+    - "Makefile.in"
+  exclude_patterns:
+    - "**/*.o"
+    - "**/*.a"
+    - "tests/**/*"
+    - ".git/**/*"
+  binary_files:
+    - "usr/bin/curl"
+    - "usr/lib/libcurl.so*"
+  config_files: []
+  documentation_files: []
+  license_files: []
+
+scripts:
+  pre_install: |
+    echo "Installing curl..."
+  post_install: |
+    echo "curl installed successfully"
+  pre_uninstall: |
+    echo "Removing curl..."
+  post_uninstall: |
+    echo "curl removed successfully"
+  pre_upgrade: null
+  post_upgrade: null
+
+metadata:
+  maintainer: "Oreon Project Team <packaging@oreonproject.org>"
+  section: "packages"
+  priority: "optional"
+  provides:
+    - "curl"
+  conflicts: []
+
