@@ -14,10 +14,40 @@ categories:
 dependencies:
   build_dependencies:
     - name: "gcc"
-      version_constraint: ">=4.0"
+      version_constraint: ">=11"
       optional: false
     - name: "make"
-      version_constraint: ">=3.0"
+      version_constraint: ">=4.3"
+      optional: false
+    - name: "autoconf"
+      version_constraint: ">=2.71"
+      optional: false
+    - name: "automake"
+      version_constraint: ">=1.16"
+      optional: false
+    - name: "libtool"
+      version_constraint: ">=2.4"
+      optional: false
+    - name: "gettext-devel"
+      version_constraint: ">=0.21"
+      optional: false
+    - name: "ncurses-devel"
+      version_constraint: ">=6.5"
+      optional: false
+    - name: "systemd-devel"
+      version_constraint: ">=254"
+      optional: false
+    - name: "git"
+      version_constraint: ">=2.39"
+      optional: false
+    - name: "po4a"
+      version_constraint: ">=0.69"
+      optional: false
+    - name: "dejagnu"
+      version_constraint: ">=1.6"
+      optional: false
+    - name: "gnupg2"
+      version_constraint: ">=2.4"
       optional: false
   runtime_dependencies: []
   optional_dependencies: []
@@ -26,11 +56,21 @@ dependencies:
 build:
   build_system: Make
   build_commands:
-    - "./configure --prefix=/usr --disable-nls --disable-static --without-ncurses"
+    - "./configure --prefix=/usr --libdir=/usr/lib --disable-static --enable-w-from"
     - "make"
   build_dependencies:
     - "gcc"
     - "make"
+    - "autoconf"
+    - "automake"
+    - "libtool"
+    - "gettext-devel"
+    - "ncurses-devel"
+    - "systemd-devel"
+    - "git"
+    - "po4a"
+    - "dejagnu"
+    - "gnupg2"
   build_flags: []
   environment:
     CFLAGS: "-O2"

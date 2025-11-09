@@ -15,13 +15,34 @@ categories:
 dependencies:
   build_dependencies:
     - name: "gcc"
-      version_constraint: ">=4.0"
+      version_constraint: ">=11"
+      optional: false
+    - name: "gcc-c++"
+      version_constraint: ">=11"
       optional: false
     - name: "make"
+      version_constraint: ">=4.3"
+      optional: false
+    - name: "pkgconf"
+      version_constraint: ">=1.7"
+      optional: false
+    - name: "zlib-devel"
+      version_constraint: ">=1.2"
+      optional: false
+    - name: "c-ares-devel"
+      version_constraint: ">=1.19"
+      optional: false
+    - name: "libev-devel"
+      version_constraint: ">=4.33"
+      optional: false
+    - name: "libxml2-devel"
+      version_constraint: ">=2.9"
+      optional: false
+    - name: "openssl-devel"
       version_constraint: ">=3.0"
       optional: false
-    - name: "zlib"
-      version_constraint: ">=1.2"
+    - name: "python3-devel"
+      version_constraint: ">=3.11"
       optional: false
   runtime_dependencies: []
   optional_dependencies: []
@@ -34,8 +55,15 @@ build:
     - "make"
   build_dependencies:
     - "gcc"
+    - "gcc-c++"
     - "make"
+    - "pkgconf"
     - "zlib-devel"
+    - "c-ares-devel"
+    - "libev-devel"
+    - "libxml2-devel"
+    - "openssl-devel"
+    - "python3-devel"
   build_flags: []
   environment:
     CFLAGS: "-O2"

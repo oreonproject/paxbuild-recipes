@@ -15,10 +15,10 @@ categories:
 dependencies:
   build_dependencies:
     - name: "gcc"
-      version_constraint: ">=4.0"
+      version_constraint: ">=11"
       optional: false
     - name: "make"
-      version_constraint: ">=3.0"
+      version_constraint: ">=4.3"
       optional: false
   runtime_dependencies: []
   optional_dependencies: []

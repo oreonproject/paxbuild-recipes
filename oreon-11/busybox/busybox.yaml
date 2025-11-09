@@ -14,11 +14,41 @@ categories:
 dependencies:
   build_dependencies:
     - name: "gcc"
-      version_constraint: ">=4.0"
+      version_constraint: ">=11"
       optional: false
     - name: "make"
-      version_constraint: ">=3.0"
+      version_constraint: ">=4.3"
       optional: false
+    - name: "kernel-headers"
+      version_constraint: ">=6.0"
+      optional: false
+    - name: "libselinux-devel"
+      version_constraint: ">=3.7"
+      optional: false
+    - name: "libsepol-devel"
+      version_constraint: ">=3.7"
+      optional: false
+    - name: "libselinux-static"
+      version_constraint: ">=3.7"
+      optional: false
+    - name: "libsepol-static"
+      version_constraint: ">=3.7"
+      optional: false
+    - name: "glibc-static"
+      version_constraint: ">=2.38"
+      optional: false
+    - name: "musl-libc-static"
+      version_constraint: null
+      optional: true
+    - name: "musl-devel"
+      version_constraint: null
+      optional: true
+    - name: "musl-gcc"
+      version_constraint: null
+      optional: true
+    - name: "uClibc-static"
+      version_constraint: null
+      optional: true
   runtime_dependencies: []
   optional_dependencies: []
   conflicts: []
@@ -35,7 +65,12 @@ build:
   build_dependencies:
     - "gcc"
     - "make"
-    - "perl"
+    - "kernel-headers"
+    - "libselinux-devel"
+    - "libsepol-devel"
+    - "libselinux-static"
+    - "libsepol-static"
+    - "glibc-static"
   build_flags: []
   environment:
     CFLAGS: "-O2"

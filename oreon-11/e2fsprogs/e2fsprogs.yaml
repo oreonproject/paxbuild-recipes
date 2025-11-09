@@ -14,10 +14,43 @@ categories:
 dependencies:
   build_dependencies:
     - name: "gcc"
-      version_constraint: ">=4.0"
+      version_constraint: ">=11"
       optional: false
     - name: "make"
-      version_constraint: ">=3.0"
+      version_constraint: ">=4.3"
+      optional: false
+    - name: "pkgconf"
+      version_constraint: ">=1.7"
+      optional: false
+    - name: "gettext"
+      version_constraint: ">=0.21"
+      optional: false
+    - name: "libselinux-devel"
+      version_constraint: ">=3.7"
+      optional: false
+    - name: "libsepol-devel"
+      version_constraint: ">=3.7"
+      optional: false
+    - name: "libblkid-devel"
+      version_constraint: ">=2.40"
+      optional: false
+    - name: "libuuid-devel"
+      version_constraint: ">=2.40"
+      optional: false
+    - name: "fuse3-devel"
+      version_constraint: ">=3.14"
+      optional: false
+    - name: "systemd"
+      version_constraint: ">=254"
+      optional: false
+    - name: "gnupg2"
+      version_constraint: ">=2.4"
+      optional: false
+    - name: "xz"
+      version_constraint: ">=5.4"
+      optional: false
+    - name: "gawk"
+      version_constraint: ">=5.1"
       optional: false
   runtime_dependencies: []
   optional_dependencies: []
@@ -31,6 +64,17 @@ build:
   build_dependencies:
     - "gcc"
     - "make"
+    - "pkgconf"
+    - "gettext"
+    - "libselinux-devel"
+    - "libsepol-devel"
+    - "libblkid-devel"
+    - "libuuid-devel"
+    - "fuse3-devel"
+    - "systemd"
+    - "gnupg2"
+    - "xz"
+    - "gawk"
   build_flags: []
   environment:
     CFLAGS: "-O2"

@@ -14,10 +14,31 @@ categories:
 dependencies:
   build_dependencies:
     - name: "gcc"
-      version_constraint: ">=4.0"
+      version_constraint: ">=11"
       optional: false
     - name: "make"
-      version_constraint: ">=3.0"
+      version_constraint: ">=4.3"
+      optional: false
+    - name: "autoconf"
+      version_constraint: ">=2.71"
+      optional: false
+    - name: "automake"
+      version_constraint: ">=1.16"
+      optional: false
+    - name: "libtool"
+      version_constraint: ">=2.4"
+      optional: false
+    - name: "zlib-devel"
+      version_constraint: ">=1.2"
+      optional: false
+    - name: "gnupg2"
+      version_constraint: ">=2.4"
+      optional: false
+    - name: "python3-devel"
+      version_constraint: ">=3.11"
+      optional: false
+    - name: "python3-setuptools"
+      version_constraint: ">=71"
       optional: false
   runtime_dependencies: []
   optional_dependencies: []
@@ -31,6 +52,13 @@ build:
   build_dependencies:
     - "gcc"
     - "make"
+    - "autoconf"
+    - "automake"
+    - "libtool"
+    - "zlib-devel"
+    - "gnupg2"
+    - "python3-devel"
+    - "python3-setuptools"
   build_flags: []
   environment:
     CFLAGS: "-O2"
@@ -45,7 +73,7 @@ build:
 install:
   install_method: RunCommands
   install_commands:
-    - "make install"
+    - "make install DESTDIR=$DESTDIR"
   install_directories:
     - "/usr/bin"
   install_files: []

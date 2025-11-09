@@ -11,9 +11,16 @@ categories: [security, libraries]
 
 dependencies:
   build_dependencies:
-    - {name: "gcc", version_constraint: ">=4.0", optional: false}
-    - {name: "perl", version_constraint: ">=5.10", optional: false}
-    - {name: "zlib", version_constraint: ">=1.2", optional: false}
+    - {name: "gcc", version_constraint: ">=11", optional: false}
+    - {name: "gcc-c++", version_constraint: ">=11", optional: false}
+    - {name: "perl", version_constraint: ">=5.32", optional: false}
+    - {name: "perl(IPC::Cmd)", version_constraint: null, optional: false}
+    - {name: "coreutils", version_constraint: ">=8.32", optional: false}
+    - {name: "sed", version_constraint: ">=4.8", optional: false}
+    - {name: "git-core", version_constraint: ">=2.39", optional: false}
+    - {name: "pkgconf", version_constraint: ">=1.7", optional: false}
+    - {name: "zlib-devel", version_constraint: ">=1.2", optional: false}
+    - {name: "lksctp-tools-devel", version_constraint: ">=1.0", optional: false}
   runtime_dependencies:
     - {name: "glibc", version_constraint: ">=2.30", optional: false}
     - {name: "zlib", version_constraint: ">=1.2", optional: false}
@@ -23,9 +30,23 @@ dependencies:
 build:
   build_system: Make
   build_commands:
-    - "./config --prefix=/usr --openssldir=/etc/ssl --libdir=lib shared zlib-dynamic no-ssl3 no-ssl3-method enable-ec_nistp_64_gcc_128"
+    - "mkdir -p vendor_perl vendor_perl/IPC"
+    - "cat <<'EOF' > vendor_perl/FindBin.pm\npackage FindBin;\n\nuse strict;\nuse warnings;\n\nour $VERSION = '1.51';\n\nuse Cwd qw(abs_path getcwd);\nuse File::Basename qw(dirname basename);\n\nour ($Dir, $Bin, $Script, $RealDir, $RealBin, $RealScript);\n\nsub init {\n    return if defined $RealBin;\n\n    my $script = $0;\n\n    if (!defined $script || $script eq '') {\n        # perl -e '...'\n        require Config;\n        $script = $Config::Config{perlpath};\n    }\n\n    my $real_script = abs_path($script);\n    if (!defined $real_script) {\n        my $cwd = getcwd;\n        $real_script = abs_path(\"$cwd/$script\");\n    }\n\n    $RealScript = $real_script;\n    $RealBin    = dirname($real_script);\n    $RealDir    = $RealBin;\n    $Script     = basename($script);\n\n    my $cwd = getcwd;\n    if (defined $cwd) {\n        my $abs = abs_path($cwd);\n        if (defined $abs && index($RealBin, $abs) == 0) {\n            $Bin = substr($RealBin, length($abs));\n            $Bin =~ s{^/}{};\n            $Dir = $Bin;\n        }\n    }\n\n    $Bin ||= $RealBin;\n    $Dir ||= $Bin;\n\n    1;\n}\n\ninit();\n\n1;\n\n__END__\n\n=pod\n\n=head1 NAME\n\nFindBin - Locate directory of original perl script\n\n=head1 SYNOPSIS\n\n  use FindBin;\n  print \"Script located in $FindBin::Bin\\n\";\n\n=head1 DESCRIPTION\n\nMinimal reimplementation bundled for isolated build environments.\n\n=cut\nEOF"
+    - "cat <<'EOF' > vendor_perl/IPC/Cmd.pm\npackage IPC::Cmd;\n\nuse strict;\nuse warnings;\nuse File::Spec;\n\nour $VERSION = '0.01';\n\nsub can_run {\n    my ($cmd) = @_;\n    return unless defined $cmd && length $cmd;\n\n    if (File::Spec->file_name_is_absolute($cmd)) {\n        return $cmd if -x $cmd;\n        return;\n    }\n\n    for my $dir (File::Spec->path()) {\n        next unless defined $dir && length $dir;\n        my $full = File::Spec->catfile($dir, $cmd);\n        return $full if -x $full;\n    }\n\n    return;\n}\n\n1;\nEOF"
+    - "PERL5LIB=\"$PWD/vendor_perl:${PERL5LIB:-}\" ./config --prefix=/usr --openssldir=/etc/ssl --libdir=lib shared zlib-dynamic no-ssl3 no-ssl3-method enable-ec_nistp_64_gcc_128"
     - "make -j$(nproc)"
-  build_dependencies: ["gcc", "make", "perl", "zlib-devel"]
+  build_dependencies:
+    - "gcc"
+    - "gcc-c++"
+    - "make"
+    - "perl"
+    - "perl(IPC::Cmd)"
+    - "coreutils"
+    - "sed"
+    - "pkgconf"
+    - "git-core"
+    - "zlib-devel"
+    - "lksctp-tools-devel"
   build_flags: ["-O2"]
   environment:
     CFLAGS: "-O2 -fPIC"

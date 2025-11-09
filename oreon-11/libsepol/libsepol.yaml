@@ -18,10 +18,16 @@ categories:
 dependencies:
   build_dependencies:
     - name: "gcc"
-      version_constraint: ">=4.0"
+      version_constraint: ">=11"
       optional: false
     - name: "make"
-      version_constraint: ">=3.0"
+      version_constraint: ">=4.3"
+      optional: false
+    - name: "flex"
+      version_constraint: ">=2.6"
+      optional: false
+    - name: "gnupg2"
+      version_constraint: ">=2.4"
       optional: false
   runtime_dependencies: []
   optional_dependencies: []
@@ -35,6 +41,7 @@ build:
     - "gcc"
     - "make"
     - "flex"
+    - "gnupg2"
   build_flags:
     - "-O2"
     - "-pipe"

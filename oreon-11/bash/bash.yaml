@@ -14,10 +14,37 @@ categories:
 dependencies:
   build_dependencies:
     - name: "gcc"
-      version_constraint: ">=4.0"
+      version_constraint: ">=11"
       optional: false
     - name: "make"
-      version_constraint: ">=3.0"
+      version_constraint: ">=4.3"
+      optional: false
+    - name: "autoconf"
+      version_constraint: ">=2.71"
+      optional: false
+    - name: "gettext"
+      version_constraint: ">=0.21"
+      optional: false
+    - name: "texinfo"
+      version_constraint: ">=7.0"
+      optional: false
+    - name: "bison"
+      version_constraint: ">=3.8"
+      optional: false
+    - name: "ncurses-devel"
+      version_constraint: ">=6.5"
+      optional: false
+    - name: "readline-devel"
+      version_constraint: ">=8.2"
+      optional: false
+    - name: "audit-libs-devel"
+      version_constraint: ">=3.1"
+      optional: false
+    - name: "glibc-all-langpacks"
+      version_constraint: ">=2.38"
+      optional: false
+    - name: "gnupg2"
+      version_constraint: ">=2.4"
       optional: false
   runtime_dependencies: []
   optional_dependencies: []
@@ -31,8 +58,15 @@ build:
   build_dependencies:
     - "gcc"
     - "make"
+    - "autoconf"
+    - "gettext"
+    - "texinfo"
+    - "bison"
     - "readline-devel"
     - "ncurses-devel"
+    - "audit-libs-devel"
+    - "glibc-all-langpacks"
+    - "gnupg2"
   build_flags: []
   environment:
     CFLAGS: "-O2"
@@ -47,7 +81,7 @@ build:
 install:
   install_method: RunCommands
   install_commands:
-    - "make install DESTDIR=/buildroot"
+    - "make install DESTDIR=$DESTDIR"
   install_directories:
     - "/usr/bin"
   install_files: []

@@ -13,12 +13,18 @@ categories:
 
 dependencies:
   build_dependencies:
-    - name: "gcc"
-      version_constraint: ">=4.0"
-      optional: false
-    - name: "make"
-      version_constraint: ">=3.0"
-      optional: false
+    - {name: "gcc", version_constraint: ">=11", optional: false}
+    - {name: "make", version_constraint: ">=4.3", optional: false}
+    - {name: "bison", version_constraint: ">=3.8", optional: false}
+    - {name: "flex", version_constraint: ">=2.6", optional: false}
+    - {name: "libbpf-devel", version_constraint: ">=1.2", optional: false}
+    - {name: "libcap-devel", version_constraint: ">=2.70", optional: false}
+    - {name: "libmnl-devel", version_constraint: ">=1.0", optional: false}
+    - {name: "libselinux-devel", version_constraint: ">=3.7", optional: false}
+    - {name: "iptables-devel", version_constraint: ">=1.4.5", optional: false}
+    - {name: "elfutils-libelf-devel", version_constraint: ">=0.188", optional: false}
+    - {name: "pkgconf", version_constraint: ">=1.7", optional: false}
+    - {name: "linux-atm-libs-devel", version_constraint: null, optional: true}
   runtime_dependencies: []
   optional_dependencies: []
   conflicts: []
@@ -26,11 +32,7 @@ dependencies:
 build:
   build_system: Make
   build_commands:
-    - "make"
-    - "make"
-  build_dependencies:
-    - "gcc"
-    - "make"
+    - "make V=1"
   build_flags: []
   environment:
     CFLAGS: "-O2"
@@ -45,7 +47,7 @@ build:
 install:
   install_method: RunCommands
   install_commands:
-    - "make install"
+    - "make install DESTDIR=$DESTDIR"
   install_directories:
     - "/usr/bin"
   install_files: []

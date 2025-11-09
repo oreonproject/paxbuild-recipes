@@ -14,10 +14,94 @@ categories:
 dependencies:
   build_dependencies:
     - name: "gcc"
-      version_constraint: ">=4.0"
+      version_constraint: ">=11"
       optional: false
     - name: "make"
+      version_constraint: ">=4.3"
+      optional: false
+    - name: "autoconf"
+      version_constraint: ">=2.71"
+      optional: false
+    - name: "automake"
+      version_constraint: ">=1.16"
+      optional: false
+    - name: "gettext-devel"
+      version_constraint: ">=0.21"
+      optional: false
+    - name: "gmp-devel"
+      version_constraint: ">=6.3"
+      optional: false
+    - name: "hostname"
+      version_constraint: ">=3.23"
+      optional: false
+    - name: "libacl-devel"
+      version_constraint: ">=2.3"
+      optional: false
+    - name: "libattr-devel"
+      version_constraint: ">=2.5"
+      optional: false
+    - name: "libcap-devel"
+      version_constraint: ">=2.70"
+      optional: false
+    - name: "libselinux-devel"
+      version_constraint: ">=3.7"
+      optional: false
+    - name: "libselinux-utils"
+      version_constraint: ">=3.7"
+      optional: false
+    - name: "openssl-devel"
       version_constraint: ">=3.0"
+      optional: false
+    - name: "strace"
+      version_constraint: ">=6.5"
+      optional: false
+    - name: "systemd-devel"
+      version_constraint: ">=254"
+      optional: false
+    - name: "texinfo"
+      version_constraint: ">=7.0"
+      optional: false
+    - name: "gnupg2"
+      version_constraint: ">=2.4"
+      optional: false
+    - name: "attr"
+      version_constraint: ">=2.5"
+      optional: false
+    - name: "gdb"
+      version_constraint: ">=14"
+      optional: false
+    - name: "perl-interpreter"
+      version_constraint: ">=5.32"
+      optional: false
+    - name: "perl-FileHandle"
+      version_constraint: ">=2.03"
+      optional: false
+    - name: "perl-Expect"
+      version_constraint: ">=1.35"
+      optional: false
+    - name: "python3"
+      version_constraint: ">=3.11"
+      optional: false
+    - name: "python3-inotify"
+      version_constraint: ">=0.9"
+      optional: false
+    - name: "tzdata"
+      version_constraint: ">=2024a"
+      optional: false
+    - name: "valgrind"
+      version_constraint: ">=3.23"
+      optional: false
+    - name: "glibc-langpack-en"
+      version_constraint: ">=2.38"
+      optional: false
+    - name: "glibc-langpack-fr"
+      version_constraint: ">=2.38"
+      optional: false
+    - name: "glibc-langpack-ko"
+      version_constraint: ">=2.38"
+      optional: false
+    - name: "glibc-langpack-sv"
+      version_constraint: ">=2.38"
       optional: false
   runtime_dependencies: []
   optional_dependencies: []
@@ -31,6 +115,34 @@ build:
   build_dependencies:
     - "gcc"
     - "make"
+    - "autoconf"
+    - "automake"
+    - "gettext-devel"
+    - "gmp-devel"
+    - "hostname"
+    - "libacl-devel"
+    - "libattr-devel"
+    - "libcap-devel"
+    - "libselinux-devel"
+    - "libselinux-utils"
+    - "openssl-devel"
+    - "strace"
+    - "systemd-devel"
+    - "texinfo"
+    - "gnupg2"
+    - "attr"
+    - "gdb"
+    - "perl-interpreter"
+    - "perl-FileHandle"
+    - "perl-Expect"
+    - "python3"
+    - "python3-inotify"
+    - "tzdata"
+    - "valgrind"
+    - "glibc-langpack-en"
+    - "glibc-langpack-fr"
+    - "glibc-langpack-ko"
+    - "glibc-langpack-sv"
   build_flags: []
   environment:
     CFLAGS: "-O2"
@@ -45,7 +157,7 @@ build:
 install:
   install_method: RunCommands
   install_commands:
-    - "make install"
+    - "make install DESTDIR=$DESTDIR"
   install_directories:
     - "/usr/bin"
   install_files: []

@@ -20,9 +20,51 @@ categories:
 dependencies:
   build_dependencies:
     - name: "gcc"
-      version_constraint: ">=4.0"
+      version_constraint: ">=11"
       optional: false
     - name: "make"
+      version_constraint: ">=4.3"
+      optional: false
+    - name: "automake"
+      version_constraint: ">=1.16"
+      optional: false
+    - name: "cmake"
+      version_constraint: ">=3.26"
+      optional: false
+    - name: "libtool"
+      version_constraint: ">=2.4"
+      optional: false
+    - name: "pkgconf"
+      version_constraint: ">=1.7"
+      optional: false
+    - name: "perl"
+      version_constraint: ">=5.32"
+      optional: false
+    - name: "zlib-devel"
+      version_constraint: ">=1.2"
+      optional: false
+    - name: "brotli-devel"
+      version_constraint: ">=1.0"
+      optional: false
+    - name: "libidn2-devel"
+      version_constraint: ">=2.3"
+      optional: false
+    - name: "libnghttp2-devel"
+      version_constraint: ">=1.45"
+      optional: false
+    - name: "libpsl-devel"
+      version_constraint: ">=0.21"
+      optional: false
+    - name: "libssh-devel"
+      version_constraint: ">=0.10"
+      optional: false
+    - name: "krb5-devel"
+      version_constraint: ">=1.20"
+      optional: false
+    - name: "openldap-devel"
+      version_constraint: ">=2.6"
+      optional: false
+    - name: "openssl-devel"
       version_constraint: ">=3.0"
       optional: false
   runtime_dependencies: 
@@ -40,9 +82,20 @@ build:
   build_dependencies:
     - "gcc"
     - "make"
+    - "automake"
+    - "cmake"
+    - "libtool"
+    - "pkgconf"
+    - "perl"
     - "openssl-devel"
     - "zlib-devel"
-    - "libnghttp2"
+    - "brotli-devel"
+    - "libidn2-devel"
+    - "libnghttp2-devel"
+    - "libpsl-devel"
+    - "libssh-devel"
+    - "krb5-devel"
+    - "openldap-devel"
   build_flags: []
   environment:
     CFLAGS: "-O2"

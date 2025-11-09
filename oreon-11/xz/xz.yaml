@@ -11,7 +11,14 @@ categories: [utilities, libraries]
 
 dependencies:
   build_dependencies:
-    - {name: "gcc", version_constraint: ">=4.0", optional: false}
+    - {name: "gcc", version_constraint: ">=11", optional: false}
+    - {name: "make", version_constraint: ">=4.3", optional: false}
+    - {name: "autoconf", version_constraint: ">=2.71", optional: false}
+    - {name: "automake", version_constraint: ">=1.16", optional: false}
+    - {name: "libtool", version_constraint: ">=2.4", optional: false}
+    - {name: "gettext-devel", version_constraint: ">=0.21", optional: false}
+    - {name: "gnupg2", version_constraint: ">=2.4", optional: false}
+    - {name: "perl-interpreter", version_constraint: ">=5.32", optional: false}
   runtime_dependencies:
     - {name: "glibc", version_constraint: ">=2.30", optional: false}
   optional_dependencies: []
@@ -22,7 +29,15 @@ build:
   build_commands:
     - "./configure --prefix=/usr --libdir=/usr/lib --disable-static --disable-doc"
     - "make -j$(nproc)"
-  build_dependencies: ["gcc", "make"]
+  build_dependencies:
+    - "gcc"
+    - "make"
+    - "autoconf"
+    - "automake"
+    - "libtool"
+    - "gettext-devel"
+    - "gnupg2"
+    - "perl-interpreter"
   build_flags: ["-O2"]
   environment:
     CFLAGS: "-O2 -fPIC"

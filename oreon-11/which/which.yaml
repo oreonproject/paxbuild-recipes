@@ -11,7 +11,10 @@ categories: [utilities]
 
 dependencies:
   build_dependencies:
-    - {name: "gcc", version_constraint: ">=4.0", optional: false}
+    - {name: "gcc", version_constraint: ">=11", optional: false}
+    - {name: "gcc-c++", version_constraint: ">=11", optional: false}
+    - {name: "make", version_constraint: ">=4.3", optional: false}
+    - {name: "readline-devel", version_constraint: ">=8.2", optional: false}
   runtime_dependencies:
     - {name: "glibc", version_constraint: ">=2.30", optional: false}
   optional_dependencies: []
@@ -22,7 +25,11 @@ build:
   build_commands:
     - "./configure --prefix=/usr"
     - "make -j$(nproc)"
-  build_dependencies: ["gcc", "make"]
+  build_dependencies:
+    - "gcc"
+    - "gcc-c++"
+    - "make"
+    - "readline-devel"
   build_flags: ["-O2"]
   environment: {CFLAGS: "-O2"}
   working_directory: null

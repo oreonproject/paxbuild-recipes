@@ -19,16 +19,73 @@ categories:
 dependencies:
   build_dependencies:
     - name: "gcc"
-      version_constraint: ">=4.0"
+      version_constraint: ">=11"
       optional: false
-    - name: "make"
-      version_constraint: ">=3.0"
+    - name: "meson"
+      version_constraint: ">=0.62"
       optional: false
-    - name: "pkg-config"
-      version_constraint: ">=0.20"
+    - name: "cmake"
+      version_constraint: ">=3.20"
       optional: false
-    - name: "expat"
+    - name: "pkgconf"
+      version_constraint: ">=1.7"
+      optional: false
+    - name: "gettext"
+      version_constraint: ">=0.21"
+      optional: false
+    - name: "audit-libs-devel"
+      version_constraint: ">=0.9"
+      optional: false
+    - name: "libselinux-devel"
+      version_constraint: ">=3.7"
+      optional: false
+    - name: "libsepol-devel"
+      version_constraint: ">=3.7"
+      optional: false
+    - name: "libselinux-static"
+      version_constraint: ">=3.7"
+      optional: false
+    - name: "libselinux-devel"
+      version_constraint: ">=3.7"
+      optional: false
+    - name: "libcap-ng-devel"
+      version_constraint: ">=0.8"
+      optional: false
+    - name: "libX11-devel"
+      version_constraint: ">=1.8"
+      optional: false
+    - name: "expat-devel"
       version_constraint: ">=2.0"
+      optional: false
+    - name: "systemd-devel"
+      version_constraint: ">=254"
+      optional: false
+    - name: "python3-dbus"
+      version_constraint: null
+      optional: false
+    - name: "python3-gobject"
+      version_constraint: null
+      optional: false
+    - name: "ducky"
+      version_constraint: null
+      optional: false
+    - name: "yelp-tools"
+      version_constraint: null
+      optional: false
+    - name: "xsltproc"
+      version_constraint: null
+      optional: false
+    - name: "xmlto"
+      version_constraint: null
+      optional: false
+    - name: "doxygen"
+      version_constraint: null
+      optional: false
+    - name: "git-core"
+      version_constraint: ">=2.39"
+      optional: false
+    - name: "glib2-devel"
+      version_constraint: ">=2.74"
       optional: false
   runtime_dependencies:
     - name: "glibc"
@@ -44,17 +101,31 @@ dependencies:
   conflicts: []
 
 build:
-  build_system: Make
+  build_system: Meson
   build_commands:
-    - "./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --libexecdir=/usr/lib/dbus-1.0 --with-dbus-user=messagebus --with-system-pid-file=/run/dbus/pid --with-system-socket=/run/dbus/system_bus_socket --enable-user-session --disable-static --disable-doxygen-docs --disable-xml-docs --with-systemdsystemunitdir=/usr/lib/systemd/system --with-systemduserunitdir=/usr/lib/systemd/user"
-    - "make -j$(nproc)"
+    - "meson setup builddir --prefix=/usr --sysconfdir=/etc --localstatedir=/var --libexecdir=/usr/lib/dbus-1.0 --buildtype=release -Dsystem-socket=/run/dbus/system_bus_socket -Dsystem-pid-file=/run/dbus/pid -Duser-session=true -Dxml-docs=false -Ddoxygen-docs=false"
+    - "meson compile -C builddir"
   build_dependencies:
     - "gcc"
-    - "make"
-    - "pkg-config"
+    - "meson"
+    - "cmake"
     - "pkgconf"
+    - "gettext"
+    - "audit-libs-devel"
+    - "libselinux-devel"
+    - "libsepol-devel"
+    - "libcap-ng-devel"
+    - "libX11-devel"
     - "expat-devel"
     - "systemd-devel"
+    - "python3-dbus"
+    - "python3-gobject"
+    - "doxygen"
+    - "xmlto"
+    - "xsltproc"
+    - "yelp-tools"
+    - "ducky"
+    - "git-core"
   build_flags:
     - "-O2"
     - "-pipe"
@@ -72,7 +143,7 @@ build:
 install:
   install_method: RunCommands
   install_commands:
-    - "make install DESTDIR=$DESTDIR"
+    - "meson install -C builddir --destdir $DESTDIR"
     - "mkdir -p $DESTDIR/etc/dbus-1/session.d"
     - "mkdir -p $DESTDIR/etc/dbus-1/system.d"
     - "mkdir -p $DESTDIR/usr/share/dbus-1/services"

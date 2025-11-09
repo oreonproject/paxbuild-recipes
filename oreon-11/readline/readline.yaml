@@ -14,10 +14,16 @@ categories:
 dependencies:
   build_dependencies:
     - name: "gcc"
-      version_constraint: ">=4.0"
+      version_constraint: ">=11"
       optional: false
     - name: "make"
-      version_constraint: ">=3.0"
+      version_constraint: ">=4.3"
+      optional: false
+    - name: "ncurses-devel"
+      version_constraint: ">=6.5"
+      optional: false
+    - name: "gnupg2"
+      version_constraint: ">=2.4"
       optional: false
   runtime_dependencies: []
   optional_dependencies: []
@@ -31,6 +37,8 @@ build:
   build_dependencies:
     - "gcc"
     - "make"
+    - "ncurses-devel"
+    - "gnupg2"
   build_flags: []
   environment:
     CFLAGS: "-O2"
@@ -45,7 +53,7 @@ build:
 install:
   install_method: RunCommands
   install_commands:
-    - "make install DESTDIR=/buildroot"
+    - "make install DESTDIR=$DESTDIR"
   install_directories:
     - "/usr/bin"
   install_files: []

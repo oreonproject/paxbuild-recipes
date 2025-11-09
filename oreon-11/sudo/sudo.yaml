@@ -11,8 +11,22 @@ categories: [security, admin]
 
 dependencies:
   build_dependencies:
-    - {name: "gcc", version_constraint: ">=4.0", optional: false}
-    - {name: "pam", version_constraint: ">=1.0", optional: false}
+    - {name: "gcc", version_constraint: ">=11", optional: false}
+    - {name: "make", version_constraint: ">=4.3", optional: false}
+    - {name: "pam-devel", version_constraint: ">=1.5", optional: false}
+    - {name: "groff", version_constraint: ">=1.22", optional: false}
+    - {name: "openldap-devel", version_constraint: ">=2.6", optional: false}
+    - {name: "flex", version_constraint: ">=2.6", optional: false}
+    - {name: "bison", version_constraint: ">=3.8", optional: false}
+    - {name: "libtool", version_constraint: ">=2.4", optional: false}
+    - {name: "audit-libs-devel", version_constraint: ">=3.1", optional: false}
+    - {name: "libcap-devel", version_constraint: ">=2.70", optional: false}
+    - {name: "libselinux-devel", version_constraint: ">=3.7", optional: false}
+    - {name: "systemd-rpm-macros", version_constraint: null, optional: false}
+    - {name: "gettext", version_constraint: ">=0.21", optional: false}
+    - {name: "zlib-devel", version_constraint: ">=1.2", optional: false}
+    - {name: "openssl-devel", version_constraint: ">=3.0", optional: false}
+    - {name: "python3-devel", version_constraint: ">=3.11", optional: false}
   runtime_dependencies:
     - {name: "glibc", version_constraint: ">=2.30", optional: false}
     - {name: "pam", version_constraint: ">=1.0", optional: false}
@@ -24,7 +38,23 @@ build:
   build_commands:
     - "./configure --prefix=/usr --libexecdir=/usr/lib --with-rundir=/run/sudo --with-vardir=/var/db/sudo --with-secure-path=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin --with-all-insults --with-env-editor --with-pam --with-passprompt='[sudo] password for %p: '"
     - "make -j$(nproc)"
-  build_dependencies: ["gcc", "make", "pam-devel"]
+  build_dependencies:
+    - "gcc"
+    - "make"
+    - "pam-devel"
+    - "groff"
+    - "openldap-devel"
+    - "flex"
+    - "bison"
+    - "libtool"
+    - "audit-libs-devel"
+    - "libcap-devel"
+    - "libselinux-devel"
+    - "systemd-rpm-macros"
+    - "gettext"
+    - "zlib-devel"
+    - "openssl-devel"
+    - "python3-devel"
   build_flags: ["-O2"]
   environment: {CFLAGS: "-O2"}
   working_directory: null

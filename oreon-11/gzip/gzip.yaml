@@ -1,17 +1,24 @@
 name: gzip
-version: "1.13"
+version: "1.14"
 description: "GNU compression utility"
 author: "GNU Project"
 license: "GPL-3.0-or-later"
 homepage: "https://www.gnu.org/software/gzip/"
 repository: "https://git.savannah.gnu.org/git/gzip.git"
-source_url: "https://ftp.gnu.org/gnu/gzip/gzip-1.13.tar.xz"
+source_url: "https://ftp.gnu.org/gnu/gzip/gzip-1.14.tar.xz"
 keywords: [gzip, compression]
 categories: [utilities]
 
 dependencies:
   build_dependencies:
-    - {name: "gcc", version_constraint: ">=4.0", optional: false}
+    - {name: "gcc", version_constraint: ">=11", optional: false}
+    - {name: "make", version_constraint: ">=4.3", optional: false}
+    - {name: "autoconf", version_constraint: ">=2.71", optional: false}
+    - {name: "automake", version_constraint: ">=1.16", optional: false}
+    - {name: "libtool", version_constraint: ">=2.4", optional: false}
+    - {name: "texinfo", version_constraint: ">=7.0", optional: false}
+    - {name: "less", version_constraint: ">=643", optional: false}
+    - {name: "gnupg2", version_constraint: ">=2.4", optional: false}
   runtime_dependencies:
     - {name: "glibc", version_constraint: ">=2.30", optional: false}
   optional_dependencies: []
@@ -22,7 +29,15 @@ build:
   build_commands:
     - "./configure --prefix=/usr"
     - "make -j$(nproc)"
-  build_dependencies: ["gcc", "make"]
+  build_dependencies:
+    - "gcc"
+    - "make"
+    - "autoconf"
+    - "automake"
+    - "libtool"
+    - "texinfo"
+    - "less"
+    - "gnupg2"
   build_flags: ["-O2"]
   environment: {CFLAGS: "-O2"}
   working_directory: null

@@ -19,13 +19,40 @@ categories:
 dependencies:
   build_dependencies:
     - name: "gcc"
-      version_constraint: ">=4.0"
+      version_constraint: ">=11"
       optional: false
     - name: "make"
-      version_constraint: ">=3.0"
+      version_constraint: ">=4.3"
       optional: false
-    - name: "pkg-config"
-      version_constraint: ">=0.20"
+    - name: "autoconf"
+      version_constraint: ">=2.71"
+      optional: false
+    - name: "automake"
+      version_constraint: ">=1.16"
+      optional: false
+    - name: "libtool"
+      version_constraint: ">=2.4"
+      optional: false
+    - name: "pkgconf"
+      version_constraint: ">=1.7"
+      optional: false
+    - name: "coreutils"
+      version_constraint: ">=8.32"
+      optional: false
+    - name: "glibc-devel"
+      version_constraint: ">=2.38"
+      optional: false
+    - name: "perl"
+      version_constraint: ">=5.32"
+      optional: false
+    - name: "gnupg2"
+      version_constraint: ">=2.4"
+      optional: false
+    - name: "fipscheck"
+      version_constraint: ">=1.5"
+      optional: false
+    - name: "libxcrypt-compat"
+      version_constraint: ">=4.4.36"
       optional: false
   runtime_dependencies:
     - name: "glibc"
@@ -42,10 +69,16 @@ build:
   build_dependencies:
     - "gcc"
     - "make"
-    - "pkg-config"
+    - "autoconf"
+    - "automake"
+    - "libtool"
     - "pkgconf"
+    - "coreutils"
+    - "glibc-devel"
     - "perl"
-    - "perl-core"
+    - "gnupg2"
+    - "fipscheck"
+    - "libxcrypt-compat"
   build_flags:
     - "-O2"
     - "-pipe"

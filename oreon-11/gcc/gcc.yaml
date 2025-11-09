@@ -1,22 +1,60 @@
 name: gcc
-version: "13.2.0"
+version: "14.2.0"
 description: "GNU Compiler Collection - C, C++, and other language compilers"
 author: "GNU Project"
 license: "GPL-3.0-or-later WITH GCC-exception-3.1"
 homepage: "https://gcc.gnu.org/"
 repository: "https://gcc.gnu.org/git/gcc.git"
-source_url: "https://sourceware.org/pub/gcc/releases/gcc-13.2.0/gcc-13.2.0.tar.xz"
+source_url: "https://sourceware.org/pub/gcc/releases/gcc-14.2.0/gcc-14.2.0.tar.xz"
 keywords: [gcc, compiler, c, c++, gnu]
 categories: [development, system]
 
 dependencies:
   build_dependencies:
-    - {name: "gcc", version_constraint: ">=4.0", optional: true}
-    - {name: "make", version_constraint: ">=3.0", optional: true}
-    - {name: "gawk", version_constraint: ">=3.0", optional: true}
-    - {name: "bison", version_constraint: ">=2.0", optional: true}
-    - {name: "flex", version_constraint: ">=2.5", optional: true}
-    - {name: "texinfo", version_constraint: ">=4.0", optional: true}
+    - {name: "gcc", version_constraint: ">=11", optional: false}
+    - {name: "gcc-c++", version_constraint: ">=11", optional: false}
+    - {name: "make", version_constraint: ">=4.3", optional: false}
+    - {name: "gawk", version_constraint: ">=5.1", optional: false}
+    - {name: "bison", version_constraint: ">=3.8", optional: false}
+    - {name: "flex", version_constraint: ">=2.6", optional: false}
+    - {name: "texinfo", version_constraint: ">=7.0", optional: false}
+    - {name: "texinfo-tex", version_constraint: ">=7.0", optional: false}
+    - {name: "gettext", version_constraint: ">=0.21", optional: false}
+    - {name: "zlib-devel", version_constraint: ">=1.2", optional: false}
+    - {name: "gmp-devel", version_constraint: ">=6.2", optional: false}
+    - {name: "mpfr-devel", version_constraint: ">=4.2", optional: false}
+    - {name: "libmpc-devel", version_constraint: ">=1.3", optional: false}
+    - {name: "libzstd-devel", version_constraint: ">=1.5", optional: false}
+    - {name: "libunwind-devel", version_constraint: ">=1.6", optional: false}
+    - {name: "systemtap-sdt-devel", version_constraint: ">=1.3", optional: false}
+    - {name: "elfutils-devel", version_constraint: ">=0.188", optional: false}
+    - {name: "elfutils-libelf-devel", version_constraint: ">=0.188", optional: false}
+    - {name: "binutils-devel", version_constraint: ">=2.43", optional: false}
+    - {name: "binutils", version_constraint: ">=2.43", optional: false}
+    - {name: "gdb", version_constraint: ">=14.2", optional: false}
+    - {name: "gcc-gnat", version_constraint: ">=14.2", optional: false}
+    - {name: "libgnat", version_constraint: ">=14.2", optional: false}
+    - {name: "gcc-gdc", version_constraint: ">=14.2", optional: false}
+    - {name: "libgphobos-static", version_constraint: ">=14.2", optional: false}
+    - {name: "python3-devel", version_constraint: ">=3.11", optional: false}
+    - {name: "python3", version_constraint: ">=3.11", optional: false}
+    - {name: "python3-sphinx", version_constraint: ">=5.3", optional: false}
+    - {name: "python-sphinx", version_constraint: ">=5.3", optional: false}
+    - {name: "hostname", version_constraint: null, optional: false}
+    - {name: "procps", version_constraint: null, optional: false}
+    - {name: "doxygen", version_constraint: ">=1.8", optional: false}
+    - {name: "graphviz", version_constraint: null, optional: false}
+    - {name: "dblatex", version_constraint: null, optional: false}
+    - {name: "texlive-collection-latex", version_constraint: null, optional: false}
+    - {name: "docbook5-style-xsl", version_constraint: null, optional: false}
+    - {name: "llvm", version_constraint: ">=15", optional: false}
+    - {name: "lld", version_constraint: ">=15", optional: false}
+    - {name: "annobin-plugin-gcc", version_constraint: ">=10.62", optional: false}
+    - {name: "rpm-devel", version_constraint: null, optional: false}
+    - {name: "glibc-devel", version_constraint: ">=2.38", optional: false}
+    - {name: "glibc-static", version_constraint: ">=2.38", optional: false}
+    - {name: "glibc", version_constraint: ">=2.38", optional: false}
+    - {name: "tzdata", version_constraint: ">=2024a", optional: false}
   runtime_dependencies:
     - {name: "glibc", version_constraint: ">=2.30", optional: false}
     - {name: "binutils", version_constraint: ">=2.25", optional: false}
@@ -27,9 +65,53 @@ build:
   build_system: Make
   build_commands:
     - "GCC_DIR=$(find . -maxdepth 1 -type d -name 'gcc-*' | head -1) && cd \"$GCC_DIR\" && sed -i 's|http://gcc.gnu.org/pub/gcc/infrastructure/|https://ftp.gnu.org/gnu/|g; s|http://isl.gforge.inria.fr/|https://libisl.sourceforge.io/|g' contrib/download_prerequisites && ./contrib/download_prerequisites || echo 'Prerequisites download failed, GCC will build them from source'"
-    - "GCC_DIR=$(find . -maxdepth 1 -type d -name 'gcc-*' | head -1) && GCC_DIR=$(cd \"$GCC_DIR\" && pwd) && mkdir -p \"$GCC_DIR/build\" && cd \"$GCC_DIR/build\" && \"$GCC_DIR/configure\" --prefix=/usr --enable-languages=c,c++ --disable-multilib --enable-threads=posix --enable-shared --enable-__cxa_atexit --with-system-zlib --with-default-libstdcxx-abi=gcc4-compatible --enable-libstdcxx-filesystem-ts"
+    - "GCC_DIR=$(find . -maxdepth 1 -type d -name 'gcc-*' | head -1) && GCC_DIR=$(cd \"$GCC_DIR\" && pwd) && mkdir -p \"$GCC_DIR/build\" && cd \"$GCC_DIR/build\" && \"$GCC_DIR/configure\" --prefix=/usr --enable-languages=c,c++,fortran,objc,obj-c++,ada,d --disable-multilib --enable-threads=posix --enable-shared --enable-__cxa_atexit --with-system-zlib --with-default-libstdcxx-abi=gcc4-compatible --enable-libstdcxx-filesystem-ts --enable-plugins --with-linker-hash-style=gnu"
     - "GCC_DIR=$(find . -maxdepth 1 -type d -name 'gcc-*' | head -1) && GCC_DIR=$(cd \"$GCC_DIR\" && pwd) && cd \"$GCC_DIR/build\" && make -j$(nproc)"
-  build_dependencies: ["make", "gawk", "bison", "flex", "texinfo", "zlib-devel"]
+  build_dependencies:
+    - "gcc"
+    - "gcc-c++"
+    - "make"
+    - "gawk"
+    - "bison"
+    - "flex"
+    - "texinfo"
+    - "texinfo-tex"
+    - "gettext"
+    - "zlib-devel"
+    - "gmp-devel"
+    - "mpfr-devel"
+    - "libmpc-devel"
+    - "libzstd-devel"
+    - "libunwind-devel"
+    - "systemtap-sdt-devel"
+    - "elfutils-devel"
+    - "elfutils-libelf-devel"
+    - "binutils-devel"
+    - "binutils"
+    - "gdb"
+    - "gcc-gnat"
+    - "libgnat"
+    - "gcc-gdc"
+    - "libgphobos-static"
+    - "python3-devel"
+    - "python3"
+    - "python3-sphinx"
+    - "python-sphinx"
+    - "hostname"
+    - "procps"
+    - "doxygen"
+    - "graphviz"
+    - "dblatex"
+    - "texlive-collection-latex"
+    - "docbook5-style-xsl"
+    - "llvm"
+    - "lld"
+    - "annobin-plugin-gcc"
+    - "rpm-devel"
+    - "glibc-devel"
+    - "glibc-static"
+    - "glibc"
+    - "tzdata"
   build_flags: []
   environment:
     CFLAGS: "-O2"

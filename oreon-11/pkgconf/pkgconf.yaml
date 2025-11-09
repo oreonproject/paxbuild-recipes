@@ -14,10 +14,25 @@ categories:
 dependencies:
   build_dependencies:
     - name: "gcc"
-      version_constraint: ">=4.0"
+      version_constraint: ">=11"
       optional: false
     - name: "make"
-      version_constraint: ">=3.0"
+      version_constraint: ">=4.3"
+      optional: false
+    - name: "autoconf"
+      version_constraint: ">=2.71"
+      optional: false
+    - name: "automake"
+      version_constraint: ">=1.16"
+      optional: false
+    - name: "libtool"
+      version_constraint: ">=2.4"
+      optional: false
+    - name: "kyua"
+      version_constraint: ">=0.13"
+      optional: false
+    - name: "atf-tests"
+      version_constraint: ">=0.21"
       optional: false
   runtime_dependencies: []
   optional_dependencies: []
@@ -31,6 +46,11 @@ build:
   build_dependencies:
     - "gcc"
     - "make"
+    - "autoconf"
+    - "automake"
+    - "libtool"
+    - "kyua"
+    - "atf-tests"
   build_flags: []
   environment:
     CFLAGS: "-O2"

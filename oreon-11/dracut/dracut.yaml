@@ -1,11 +1,11 @@
 name: dracut
-version: "108"
+version: "113"
 description: "Initramfs generator using udev"
 author: "dracut-ng team"
 license: "GPL-2.0-or-later AND LGPL-2.1-or-later AND GPL-2.0-only"
 homepage: "https://github.com/dracut-ng/dracut-ng"
 repository: "https://github.com/dracut-ng/dracut-ng"
-source_url: "https://github.com/dracut-ng/dracut-ng/archive/refs/tags/108.tar.gz"
+source_url: "https://github.com/dracut-ng/dracut-ng/archive/refs/tags/113.tar.gz"
 keywords:
   - dracut
   - initramfs
@@ -15,33 +15,20 @@ categories:
 
 dependencies:
   build_dependencies:
-    - name: "gcc"
-      version_constraint: ">=4.0"
-      optional: false
-    - name: "make"
-      version_constraint: ">=3.0"
-      optional: false
-    - name: "bash"
-      version_constraint: ">=4.0"
-      optional: false
-    - name: "pkg-config"
-      version_constraint: ">=0.1"
-      optional: false
-    - name: "kmod"
-      version_constraint: ">=23"
-      optional: false
-    - name: "systemd"
-      version_constraint: ">=219"
-      optional: false
-    - name: "asciidoctor"
-      version_constraint: ">=0.1"
-      optional: true
-    - name: "cargo"
-      version_constraint: ">=1.0"
-      optional: false
-    - name: "openssl-devel"
-      version_constraint: ">=1.0"
-      optional: false
+    - {name: "gcc", version_constraint: ">=11", optional: false}
+    - {name: "make", version_constraint: ">=4.3", optional: false}
+    - {name: "bash", version_constraint: ">=5.0", optional: false}
+    - {name: "pkgconf", version_constraint: ">=1.7", optional: false}
+    - {name: "pkgconfig(libkmod)", version_constraint: ">=23", optional: false}
+    - {name: "systemd", version_constraint: ">=254", optional: false}
+    - {name: "bash-completion", version_constraint: ">=2.11", optional: false}
+    - {name: "cargo", version_constraint: ">=1.74", optional: false}
+    - {name: "openssl-devel", version_constraint: ">=3.0", optional: false}
+    - {name: "git-core", version_constraint: ">=2.39", optional: false}
+    - {name: "docbook-style-xsl", version_constraint: null, optional: false}
+    - {name: "docbook-dtds", version_constraint: null, optional: false}
+    - {name: "libxslt", version_constraint: ">=1.1", optional: false}
+    - {name: "asciidoctor", version_constraint: ">=2.0", optional: false}
   runtime_dependencies:
     - name: "bash"
       version_constraint: ">=4.0"
@@ -103,19 +90,23 @@ dependencies:
 build:
   build_system: Make
   build_commands:
-    - './configure --prefix=/usr --sysconfdir=/etc --libdir=/usr/lib --disable-documentation --enable-dracut-cpio || (echo "Configure failed - checking for kmod..." && pkg-config --exists libkmod && echo "libkmod found" || echo "libkmod NOT found")'
-    - 'make -j$(nproc)'
+    - "./configure --prefix=/usr --sysconfdir=/etc --libdir=/usr/lib --enable-dracut-cpio --with-rootpw --with-initramfsdir=/boot/dracut"
+    - "make -j$(nproc)"
   build_dependencies:
     - "gcc"
     - "make"
     - "bash"
     - "pkgconf"
-    - "kmod"
+    - "pkgconfig(libkmod)"
     - "systemd"
     - "cargo"
     - "openssl-devel"
-    - "git"
-    - "which"
+    - "git-core"
+    - "bash-completion"
+    - "docbook-style-xsl"
+    - "docbook-dtds"
+    - "libxslt"
+    - "asciidoctor"
   build_flags: []
   environment:
     CFLAGS: "-O2"

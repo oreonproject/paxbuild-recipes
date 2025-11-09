@@ -11,9 +11,17 @@ categories: [libraries, development]
 
 dependencies:
   build_dependencies:
-    - {name: "gcc", version_constraint: ">=4.0", optional: false}
-    - {name: "zlib", version_constraint: ">=1.2", optional: false}
-    - {name: "bzip2", version_constraint: ">=1.0", optional: false}
+    - {name: "gcc", version_constraint: ">=11", optional: false}
+    - {name: "make", version_constraint: ">=4.3", optional: false}
+    - {name: "autoconf", version_constraint: ">=2.71", optional: false}
+    - {name: "automake", version_constraint: ">=1.16", optional: false}
+    - {name: "libtool", version_constraint: ">=2.4", optional: false}
+    - {name: "coreutils", version_constraint: ">=8.32", optional: false}
+    - {name: "sed", version_constraint: ">=4.8", optional: false}
+    - {name: "readline-devel", version_constraint: ">=8.2", optional: false}
+    - {name: "zlib-devel", version_constraint: ">=1.2", optional: false}
+    - {name: "bzip2-devel", version_constraint: ">=1.0", optional: false}
+    - {name: "gnupg2", version_constraint: ">=2.4", optional: false}
   runtime_dependencies:
     - {name: "glibc", version_constraint: ">=2.30", optional: false}
     - {name: "zlib", version_constraint: ">=1.2", optional: false}
@@ -26,7 +34,18 @@ build:
   build_commands:
     - "./configure --prefix=/usr --enable-unicode --enable-jit --enable-pcre2-16 --enable-pcre2-32 --enable-pcre2grep-libz --enable-pcre2grep-libbz2 --disable-static"
     - "make -j$(nproc)"
-  build_dependencies: ["gcc", "make", "zlib-devel", "bzip2-devel"]
+  build_dependencies:
+    - "gcc"
+    - "make"
+    - "autoconf"
+    - "automake"
+    - "libtool"
+    - "coreutils"
+    - "sed"
+    - "readline-devel"
+    - "zlib-devel"
+    - "bzip2-devel"
+    - "gnupg2"
   build_flags: ["-O2"]
   environment:
     CFLAGS: "-O2 -fPIC"

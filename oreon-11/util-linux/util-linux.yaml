@@ -14,10 +14,61 @@ categories:
 dependencies:
   build_dependencies:
     - name: "gcc"
-      version_constraint: ">=4.0"
+      version_constraint: ">=11"
       optional: false
     - name: "make"
-      version_constraint: ">=3.0"
+      version_constraint: ">=4.3"
+      optional: false
+    - name: "gettext-devel"
+      version_constraint: ">=0.21"
+      optional: false
+    - name: "libselinux-devel"
+      version_constraint: ">=3.7"
+      optional: false
+    - name: "libxcrypt-devel"
+      version_constraint: ">=4.4"
+      optional: false
+    - name: "ncurses-devel"
+      version_constraint: ">=6.5"
+      optional: false
+    - name: "readline-devel"
+      version_constraint: ">=8.2"
+      optional: false
+    - name: "pam-devel"
+      version_constraint: ">=1.5"
+      optional: false
+    - name: "zlib-devel"
+      version_constraint: ">=1.2"
+      optional: false
+    - name: "popt-devel"
+      version_constraint: ">=1.18"
+      optional: false
+    - name: "libutempter-devel"
+      version_constraint: ">=1.2"
+      optional: false
+    - name: "systemd-devel"
+      version_constraint: ">=254"
+      optional: false
+    - name: "systemd"
+      version_constraint: ">=254"
+      optional: false
+    - name: "libcap-ng-devel"
+      version_constraint: ">=0.8"
+      optional: false
+    - name: "python3-devel"
+      version_constraint: ">=3.11"
+      optional: false
+    - name: "sqlite-devel"
+      version_constraint: ">=3.44"
+      optional: false
+    - name: "rubygem-asciidoctor"
+      version_constraint: ">=2.0"
+      optional: false
+    - name: "po4a"
+      version_constraint: ">=0.69"
+      optional: false
+    - name: "gnupg2"
+      version_constraint: ">=2.4"
       optional: false
   runtime_dependencies: []
   optional_dependencies: []
@@ -26,11 +77,28 @@ dependencies:
 build:
   build_system: Make
   build_commands:
-    - "./configure --prefix=/usr --disable-makeinstall-chown --disable-makeinstall-setuid --without-systemd --disable-chfn-chsh --disable-login --disable-su --disable-mountpoint-setuid"
+    - "./configure --prefix=/usr --disable-static --enable-widechar --with-systemd --with-tcb --enable-libuuid --enable-libblkid"
     - "make"
   build_dependencies:
     - "gcc"
     - "make"
+    - "gettext-devel"
+    - "libselinux-devel"
+    - "libxcrypt-devel"
+    - "ncurses-devel"
+    - "readline-devel"
+    - "pam-devel"
+    - "zlib-devel"
+    - "popt-devel"
+    - "libutempter-devel"
+    - "systemd-devel"
+    - "systemd"
+    - "libcap-ng-devel"
+    - "python3-devel"
+    - "sqlite-devel"
+    - "rubygem-asciidoctor"
+    - "po4a"
+    - "gnupg2"
   build_flags: []
   environment:
     CFLAGS: "-O2"
@@ -45,7 +113,7 @@ build:
 install:
   install_method: RunCommands
   install_commands:
-    - "make install CHGRP=true CHOWN=true INSTALL='install -p'"
+    - "make install DESTDIR=$DESTDIR CHGRP=true CHOWN=true INSTALL='install -p'"
   install_directories:
     - "/usr/bin"
   install_files: []

@@ -1,20 +1,43 @@
 name: glibc
-version: "2.39"
+version: "2.40"
 description: "GNU C Library - the standard C library"
 author: "GNU Project"
 license: "LGPL-2.1-or-later"
 homepage: "https://www.gnu.org/software/libc/"
 repository: "https://sourceware.org/git/glibc.git"
-source_url: "https://ftp.gnu.org/gnu/glibc/glibc-2.39.tar.xz"
+source_url: "https://ftp.gnu.org/gnu/glibc/glibc-2.40.tar.xz"
 keywords: [glibc, libc, C-library, system]
 categories: [system, libraries]
 
 dependencies:
   build_dependencies:
-    - {name: "gcc", version_constraint: ">=6.2", optional: false}
-    - {name: "make", version_constraint: ">=4.0", optional: false}
-    - {name: "bison", version_constraint: ">=2.7", optional: false}
-    - {name: "python3", version_constraint: ">=3.4", optional: false}
+    - {name: "gcc", version_constraint: ">=11", optional: false}
+    - {name: "gcc-c++", version_constraint: ">=11", optional: false}
+    - {name: "make", version_constraint: ">=4.3", optional: false}
+    - {name: "bison", version_constraint: ">=3.8", optional: false}
+    - {name: "gawk", version_constraint: ">=5.1", optional: false}
+    - {name: "python3", version_constraint: ">=3.11", optional: false}
+    - {name: "python3-devel", version_constraint: ">=3.11", optional: false}
+    - {name: "texinfo", version_constraint: ">=7.0", optional: false}
+    - {name: "gd-devel", version_constraint: ">=2.3", optional: false}
+    - {name: "libpng-devel", version_constraint: ">=1.6", optional: false}
+    - {name: "zlib-devel", version_constraint: ">=1.2", optional: false}
+    - {name: "libselinux-devel", version_constraint: ">=3.7", optional: false}
+    - {name: "audit-libs-devel", version_constraint: ">=3.1", optional: false}
+    - {name: "libcap-devel", version_constraint: ">=2.70", optional: false}
+    - {name: "gettext", version_constraint: ">=0.21", optional: false}
+    - {name: "procps", version_constraint: null, optional: false}
+    - {name: "util-linux", version_constraint: null, optional: false}
+    - {name: "systemtap-sdt-devel", version_constraint: ">=1.3", optional: false}
+    - {name: "valgrind", version_constraint: ">=3.23", optional: false}
+    - {name: "binutils", version_constraint: ">=2.40", optional: false}
+    - {name: "diffutils", version_constraint: null, optional: false}
+    - {name: "libstdc++-static", version_constraint: ">=14.2.0", optional: false}
+    - {name: "glibc-static", version_constraint: ">=2.40", optional: false}
+    - {name: "libidn2", version_constraint: ">=2.3", optional: false}
+    - {name: "perl-interpreter", version_constraint: ">=5.32", optional: false}
+    - {name: "gzip", version_constraint: ">=1.14", optional: false}
+    - {name: "kernel-headers", version_constraint: ">=3.2", optional: false}
   runtime_dependencies: []
   optional_dependencies: []
   conflicts: []
@@ -24,9 +47,8 @@ build:
   build_commands:
     - "unset LD_LIBRARY_PATH"
     - "mkdir -p build && cd build"
-    - "cd build && ../configure --prefix=/usr --enable-kernel=3.2 --enable-stack-protector=strong --with-headers=/usr/include --enable-bind-now --disable-werror libc_cv_slibdir=/usr/lib"
-    - "cd build && make -j$(nproc)"
-  build_dependencies: ["gcc", "make", "bison", "gawk", "python3"]
+    - "../configure --prefix=/usr --enable-kernel=3.2 --enable-stack-protector=strong --with-headers=/usr/include --enable-bind-now --disable-werror --with-tls --with-__thread --with-bugurl='https://bugzilla.redhat.com/' libc_cv_slibdir=/usr/lib"
+    - "make -j$(nproc)"
   build_flags: []
   environment:
     CFLAGS: "-O2 -fPIC"

@@ -5,7 +5,7 @@ author: "GNU Project"
 license: "GPL-3.0-or-later"
 homepage: "https://www.gnu.org/software/libidn/#libidn2"
 repository: "https://gitlab.com/libidn/libidn2.git"
-source_url: "https://ftp.gnu.org/gnu/libidn/libidn2-2.3.7.tar.gz"
+source_url: "https://ftpmirror.gnu.org/libidn/libidn2-2.3.7.tar.gz"
 keywords:
   - idna
   - idn
@@ -15,13 +15,22 @@ categories:
 dependencies:
   build_dependencies:
     - name: "gcc"
-      version_constraint: ">=4.0"
+      version_constraint: ">=11"
       optional: false
     - name: "make"
-      version_constraint: ">=3.0"
+      version_constraint: ">=4.3"
       optional: false
-    - name: "libunistring"
+    - name: "gettext"
+      version_constraint: ">=0.21"
+      optional: false
+    - name: "texinfo"
+      version_constraint: ">=7.0"
+      optional: false
+    - name: "libunistring-devel"
       version_constraint: ">=1.0"
+      optional: false
+    - name: "gnupg2"
+      version_constraint: ">=2.4"
       optional: false
   runtime_dependencies:
     - name: "libunistring"
@@ -38,6 +47,10 @@ build:
   build_dependencies:
     - "gcc"
     - "make"
+    - "gettext"
+    - "texinfo"
+    - "libunistring-devel"
+    - "gnupg2"
   build_flags: []
   environment:
     CFLAGS: "-O2"

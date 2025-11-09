@@ -11,19 +11,31 @@ categories: [libraries, system]
 
 dependencies:
   build_dependencies:
-    - {name: "gcc", version_constraint: ">=4.0", optional: true}
-    - {name: "make", version_constraint: ">=3.0", optional: true}
+    - {name: "gcc", version_constraint: ">=11", optional: false}
+    - {name: "gcc-c++", version_constraint: ">=11", optional: false}
+    - {name: "make", version_constraint: ">=4.3", optional: false}
+    - {name: "cmake", version_constraint: ">=3.20", optional: false}
+    - {name: "pkgconf", version_constraint: ">=1.7", optional: false}
+    - {name: "gtest-devel", version_constraint: ">=1.10", optional: false}
+    - {name: "libabigail", version_constraint: ">=2.0", optional: false}
   runtime_dependencies:
     - {name: "glibc", version_constraint: ">=2.30", optional: false}
   optional_dependencies: []
   conflicts: []
 
 build:
-  build_system: Make
+  build_system: CMake
   build_commands:
-    - "./configure --prefix=/usr --libdir=/usr/lib"
-    - "make -j$(nproc)"
-  build_dependencies: ["gcc", "make"]
+    - "cmake -S . -B build -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX=/usr -DZLIB_INCLUDE_DIR=/usr/include"
+    - "cmake --build build"
+  build_dependencies:
+    - "gcc"
+    - "gcc-c++"
+    - "make"
+    - "cmake"
+    - "pkgconf"
+    - "gtest-devel"
+    - "libabigail"
   build_flags: ["-O2"]
   environment:
     CFLAGS: "-O2 -fPIC"
@@ -35,7 +47,7 @@ build:
 install:
   install_method: RunCommands
   install_commands:
-    - "make install DESTDIR=$DESTDIR"
+    - "DESTDIR=$DESTDIR cmake --install build"
   install_directories: ["/usr/lib", "/usr/include"]
   install_files: []
   post_install_commands:
