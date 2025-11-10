@@ -5,7 +5,7 @@ author: "Various"
 license: "GPL-2.0"
 homepage: ""
 repository: "https://gitlab.com/apparmor/apparmor.git"
-source_url: "https://gitlab.com/apparmor/apparmor/-/archive/v4.1.2/apparmor-v4.1.2.tar.gz"
+source_url: "https://gitlab.com/apparmor/apparmor/-/releases/v4.1.2/downloads/apparmor-4.1.2.tar.xz"
 keywords:
   - apparmor
   - security
@@ -80,7 +80,19 @@ build:
       export PYTHON_VERSION=3
       export PYTHON_VERSIONS=python3
       export PYTHONPATH=$(realpath libraries/libapparmor/swig/python 2>/dev/null || echo libraries/libapparmor/swig/python)
-    - "cd libraries/libapparmor && sh ./autogen.sh && ./configure --prefix=/usr --disable-man-pages && make"
+    - |
+      set -e
+      cd libraries/libapparmor
+      if [ ! -f ./configure ]; then
+        sh ./autogen.sh
+      fi
+      if [ ! -f ./configure ]; then
+        echo "libapparmor: configure script missing after autogen" >&2
+        exit 1
+      fi
+      chmod +x ./configure 2>/dev/null || true
+      ./configure --prefix=/usr --disable-man-pages
+      make
     - "cd binutils && make"
     - "cd parser && sed -i 's/-static-libstdc++//g' Makefile && sed -i 's|pod2html|true|g' ../common/Make.rules && make"
     - "cd utils && make"

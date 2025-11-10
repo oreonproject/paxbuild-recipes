@@ -5,7 +5,7 @@ author: "Oreon Project"
 license: "GPL-3.0-or-later"
 homepage: ""
 repository: ""
-source_url: ""
+source_url: null
 keywords:
   - pax
   - config

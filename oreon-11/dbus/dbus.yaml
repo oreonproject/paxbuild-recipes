@@ -101,14 +101,14 @@ dependencies:
   conflicts: []
 
 build:
-  build_system: Meson
+  build_system: Make
   build_commands:
-    - "meson setup builddir --prefix=/usr --sysconfdir=/etc --localstatedir=/var --libexecdir=/usr/lib/dbus-1.0 --buildtype=release -Dsystem-socket=/run/dbus/system_bus_socket -Dsystem-pid-file=/run/dbus/pid -Duser-session=true -Dxml-docs=false -Ddoxygen-docs=false"
-    - "meson compile -C builddir"
+    - "./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --libexecdir=/usr/lib/dbus-1.0 --enable-user-session --disable-xml-docs --disable-doxygen-docs"
+    - "make -j$(nproc)"
   build_dependencies:
     - "gcc"
-    - "meson"
-    - "cmake"
+    - "make"
+    - "libtool"
     - "pkgconf"
     - "gettext"
     - "audit-libs-devel"
@@ -120,12 +120,6 @@ build:
     - "systemd-devel"
     - "python3-dbus"
     - "python3-gobject"
-    - "doxygen"
-    - "xmlto"
-    - "xsltproc"
-    - "yelp-tools"
-    - "ducky"
-    - "git-core"
   build_flags:
     - "-O2"
     - "-pipe"
@@ -143,7 +137,7 @@ build:
 install:
   install_method: RunCommands
   install_commands:
-    - "meson install -C builddir --destdir $DESTDIR"
+    - "make install DESTDIR=$DESTDIR"
     - "mkdir -p $DESTDIR/etc/dbus-1/session.d"
     - "mkdir -p $DESTDIR/etc/dbus-1/system.d"
     - "mkdir -p $DESTDIR/usr/share/dbus-1/services"

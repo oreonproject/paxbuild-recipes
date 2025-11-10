@@ -85,7 +85,7 @@ build:
 install:
   install_method: RunCommands
   install_commands:
-    - "make CONFIG_PREFIX=/buildroot/usr install"
+    - "install -d ${DESTDIR}/usr && make CONFIG_PREFIX=${DESTDIR}/usr install"
   install_directories:
     - "/usr/bin"
   install_files: []
