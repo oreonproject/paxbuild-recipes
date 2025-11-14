@@ -159,9 +159,7 @@ build:
         echo "Unable to locate extracted GCC sources" >&2
         exit 1
       }
-      mkdir -p "$GCC_DIR/build"
-      cd "$GCC_DIR/build"
-      "$GCC_DIR/configure" \
+      mkdir -p "$GCC_DIR/build" && cd "$GCC_DIR/build" && "$GCC_DIR/configure" \
         --prefix=/usr \
         --enable-languages=c,c++,fortran,objc,obj-c++,ada,d \
         --disable-multilib \
@@ -194,8 +192,7 @@ build:
         echo "Unable to locate extracted GCC sources" >&2
         exit 1
       }
-      cd "$GCC_DIR/build"
-      make -j$(nproc)
+      cd "$GCC_DIR/build" && make -j$(nproc)
   build_dependencies:
     - "gcc"
     - "gcc-c++"
@@ -270,8 +267,7 @@ install:
         echo "Unable to locate extracted GCC sources during install" >&2
         exit 1
       }
-      cd "$GCC_DIR/build"
-      make install DESTDIR=$DESTDIR
+      cd "$GCC_DIR/build" && make install DESTDIR=$DESTDIR
     - "mkdir -p $DESTDIR/usr/lib/gcc"
     - "ldconfig -r $DESTDIR || true"
   install_directories: ["/usr/bin", "/usr/lib", "/usr/lib64", "/usr/include", "/usr/share"]

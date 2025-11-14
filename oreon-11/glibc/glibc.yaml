@@ -46,9 +46,9 @@ build:
   build_system: Make
   build_commands:
     - "unset LD_LIBRARY_PATH"
-    - "mkdir -p build && cd build"
-    - "../configure --prefix=/usr --enable-kernel=3.2 --enable-stack-protector=strong --with-headers=/usr/include --enable-bind-now --disable-werror --with-tls --with-__thread --with-bugurl='https://bugzilla.redhat.com/' libc_cv_slibdir=/usr/lib"
-    - "make -j$(nproc)"
+    - |
+      mkdir -p build && cd build && ../configure --prefix=/usr --enable-kernel=3.2 --enable-stack-protector=strong --with-headers=/usr/include --enable-bind-now --disable-werror --with-tls --with-__thread --with-bugurl='https://bugzilla.redhat.com/' libc_cv_slibdir=/usr/lib
+    - "cd build && make -j$(nproc)"
   build_flags: []
   environment:
     CFLAGS: "-O2 -fPIC"
