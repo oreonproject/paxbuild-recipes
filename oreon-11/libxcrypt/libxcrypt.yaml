@@ -61,7 +61,7 @@ dependencies:
 build:
   build_system: Make
   build_commands:
-    - "./configure --prefix=/usr --libdir=/usr/lib --disable-static --enable-obsolete-api=glibc --disable-failure-tokens"
+    - "./configure --prefix=/usr --libdir=/usr/lib --disable-static"
     - "make -j$(nproc)"
   build_dependencies:
     - "gcc"

@@ -1,11 +1,11 @@
 name: util-linux
-version: "2.40.4"
+version: "2.41.2"
 description: "Util-linux"
 author: "Various"
 license: "Various"
 homepage: ""
 repository: ""
-source_url: "https://www.kernel.org/pub/linux/utils/util-linux/v2.40/util-linux-2.40.4.tar.xz"
+source_url: "https://www.kernel.org/pub/linux/utils/util-linux/v2.41/util-linux-2.41.2.tar.xz"
 keywords:
   - util-linux
 categories:

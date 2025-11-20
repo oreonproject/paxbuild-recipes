@@ -1,11 +1,11 @@
 name: shim-x64
-version: "15.8"
+version: "16.1"
 description: "shim bootloader for Secure Boot (x86_64)"
 author: "Various"
 license: "BSD-3-Clause"
 homepage: "https://github.com/rhboot/shim"
 repository: "https://github.com/rhboot/shim.git"
-source_url: "https://github.com/rhboot/shim/releases/download/15.8/shim-15.8.tar.bz2"
+source_url: "https://github.com/rhboot/shim/releases/download/16.1/shim-16.1.tar.bz2"
 keywords:
   - shim
   - secure-boot

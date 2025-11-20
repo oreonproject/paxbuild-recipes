@@ -23,9 +23,9 @@ dependencies:
 build:
   build_system: Make
   build_commands:
-    - "mkdir -p etc/pax || true"
-    - "echo 'sourcetype=repo url=\"https://repo.almalinux.org/almalinux/10.0/AppStream/x86_64/os/\" provider=\"rpm\"' > etc/pax/sources.conf || true"
-    - "echo 'sourcetype=repo url=\"https://repo.almalinux.org/almalinux/10.0/devel/x86_64/os/\" provider=\"rpm\"' >> etc/pax/sources.conf || true"
+    - "mkdir -p etc/pax"
+    - "echo 'sourcetype=repo url=\"https://repo.almalinux.org/almalinux/10.0/AppStream/x86_64/os/\" provider=\"rpm\"' > etc/pax/sources.conf"
+    - "echo 'sourcetype=repo url=\"https://repo.almalinux.org/almalinux/10.0/devel/x86_64/os/\" provider=\"rpm\"' >> etc/pax/sources.conf"
   build_dependencies: []
   build_flags: []
   environment: {}

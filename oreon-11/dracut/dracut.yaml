@@ -19,7 +19,7 @@ dependencies:
     - {name: "make", version_constraint: ">=4.3", optional: false}
     - {name: "bash", version_constraint: ">=5.0", optional: false}
     - {name: "pkgconf", version_constraint: ">=1.7", optional: false}
-    - {name: "pkgconfig(libkmod)", version_constraint: ">=23", optional: false}
+    - {name: "libkmod-devel", version_constraint: ">=23", optional: false}
     - {name: "systemd", version_constraint: ">=254", optional: false}
     - {name: "bash-completion", version_constraint: ">=2.11", optional: false}
     - {name: "cargo", version_constraint: ">=1.74", optional: false}
@@ -90,14 +90,14 @@ dependencies:
 build:
   build_system: Make
   build_commands:
-    - "./configure --prefix=/usr --sysconfdir=/etc --libdir=/usr/lib --enable-dracut-cpio --with-rootpw --with-initramfsdir=/boot/dracut"
+    - "./configure --prefix=/usr --sysconfdir=/etc --libdir=/usr/lib --enable-dracut-cpio"
     - "make -j$(nproc)"
   build_dependencies:
     - "gcc"
     - "make"
     - "bash"
     - "pkgconf"
-    - "pkgconfig(libkmod)"
+    - "libkmod-devel"
     - "systemd"
     - "cargo"
     - "openssl-devel"

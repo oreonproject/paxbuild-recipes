@@ -1,11 +1,11 @@
 name: sudo
-version: "1.9.16"
+version: "1.9.17"
 description: "Allows users to run programs with security privileges of another user"
 author: "Todd C. Miller"
 license: "ISC"
 homepage: "https://www.sudo.ws/"
 repository: "https://github.com/sudo-project/sudo"
-source_url: "https://www.sudo.ws/dist/sudo-1.9.16.tar.gz"
+source_url: "https://www.sudo.ws/dist/sudo-1.9.17.tar.gz"
 keywords: [sudo, privilege, security, admin]
 categories: [security, admin]
 

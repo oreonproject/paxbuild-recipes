@@ -41,7 +41,7 @@ dependencies:
 build:
   build_system: Make
   build_commands:
-    - "./configure --prefix=/usr --sysconfdir=/etc --with-libpam --with-selinux --with-libeconf --enable-nls --with-acl --with-attr"
+    - "./configure --prefix=/usr --sysconfdir=/etc --enable-nls"
     - "make -j$(nproc)"
   build_dependencies:
     - "gcc"

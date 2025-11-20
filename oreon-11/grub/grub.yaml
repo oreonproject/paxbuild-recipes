@@ -20,23 +20,15 @@ dependencies:
     - {name: "binutils", version_constraint: ">=2.43", optional: false}
     - {name: "bison", version_constraint: ">=3.8", optional: false}
     - {name: "bzip2-devel", version_constraint: ">=1.0", optional: false}
-    - {name: "dejavu-sans-fonts", version_constraint: null, optional: false}
     - {name: "device-mapper-devel", version_constraint: ">=1.02", optional: false}
-    - {name: "efi-srpm-macros", version_constraint: null, optional: false}
     - {name: "flex", version_constraint: ">=2.6", optional: false}
     - {name: "freetype-devel", version_constraint: ">=2.10", optional: false}
     - {name: "fuse3-devel", version_constraint: ">=3.10", optional: false}
     - {name: "gettext-devel", version_constraint: ">=0.21", optional: false}
-    - {name: "git-core", version_constraint: ">=2.39", optional: false}
-    - {name: "help2man", version_constraint: null, optional: false}
     - {name: "ncurses-devel", version_constraint: ">=6.5", optional: false}
     - {name: "python3", version_constraint: ">=3.11", optional: false}
-    - {name: "rpm-devel", version_constraint: null, optional: false}
-    - {name: "rpm-libs", version_constraint: null, optional: false}
-    - {name: "squashfs-tools", version_constraint: ">=4.5", optional: false}
     - {name: "texinfo", version_constraint: ">=7.0", optional: false}
     - {name: "xz-devel", version_constraint: ">=5.6", optional: false}
-    - {name: "systemd-rpm-macros", version_constraint: null, optional: false}
     - {name: "pesign", version_constraint: ">=0.99", optional: false}
     - {name: "ccache", version_constraint: null, optional: false}
   runtime_dependencies: []
@@ -46,7 +38,7 @@ dependencies:
 build:
   build_system: Make
   build_commands:
-    - "./configure --prefix=/usr --sysconfdir=/etc --disable-werror"
+    - "./configure --prefix=/usr --sysconfdir=/etc --disable-werror --disable-grub-mount --disable-grub-emu --disable-grub-mkfont"
     - "make -j$(nproc)"
   build_flags: []
   environment:
