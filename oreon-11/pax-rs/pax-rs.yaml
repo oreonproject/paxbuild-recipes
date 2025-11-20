@@ -27,7 +27,6 @@ build:
   build_dependencies: ["rust", "cargo", "gcc"]
   build_flags: []
   environment:
-    CARGO_HOME: "/build/.cargo"
     RUSTFLAGS: "-C opt-level=3 -C target-cpu=native"
   working_directory: null
   target_architectures: [X86_64v1, X86_64v3, Aarch64]

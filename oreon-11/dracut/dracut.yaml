@@ -1,11 +1,11 @@
 name: dracut
-version: "113"
+version: "109"
 description: "Initramfs generator using udev"
 author: "dracut-ng team"
 license: "GPL-2.0-or-later AND LGPL-2.1-or-later AND GPL-2.0-only"
 homepage: "https://github.com/dracut-ng/dracut-ng"
 repository: "https://github.com/dracut-ng/dracut-ng"
-source_url: "https://github.com/dracut-ng/dracut-ng/archive/refs/tags/113.tar.gz"
+source_url: "https://github.com/dracut-ng/dracut-ng/archive/refs/tags/109.tar.gz"
 keywords:
   - dracut
   - initramfs
@@ -127,7 +127,7 @@ install:
     - "mkdir -p $DESTDIR/var/log"
     - "touch $DESTDIR/var/log/dracut.log"
     - "mkdir -p $DESTDIR/usr/lib/dracut/dracut.conf.d"
-    - "echo 'DRACUT_VERSION=108' > $DESTDIR/usr/lib/dracut/dracut-version.sh"
+    - "echo 'DRACUT_VERSION=109' > $DESTDIR/usr/lib/dracut/dracut-version.sh"
     - "rm -rf $DESTDIR/usr/lib/dracut/modules.d/10dash"
     - "rm -rf $DESTDIR/usr/lib/dracut/modules.d/00mksh"
     - "rm -rf $DESTDIR/usr/lib/dracut/modules.d/35network-legacy"

@@ -78,10 +78,19 @@ build:
   build_system: Make
   build_commands:
     - |
-      PKG_CONFIG_PATH="${PKG_CONFIG_PATH:-}:/usr/lib/pkgconfig:/usr/lib64/pkgconfig" \
-      LDFLAGS="${LDFLAGS:-} -L/usr/lib64 -L/usr/lib" \
-      CPPFLAGS="${CPPFLAGS:-} -I/usr/include" \
-      ./configure --prefix=/usr --with-openssl --with-zlib --with-nghttp2=/usr
+      # Ensure we use the correct libnghttp2 version
+      # Check if pkg-config can find libnghttp2 >= 1.61.0
+      if pkg-config --exists 'libnghttp2 >= 1.61.0'; then
+        NGHTTP2_PREFIX=$(pkg-config --variable=prefix libnghttp2 2>/dev/null || echo "/usr")
+        PKG_CONFIG_PATH="${PKG_CONFIG_PATH:-}:/usr/lib/pkgconfig:/usr/lib64/pkgconfig:${NGHTTP2_PREFIX}/lib/pkgconfig:${NGHTTP2_PREFIX}/lib64/pkgconfig" \
+        LDFLAGS="${LDFLAGS:-} -L${NGHTTP2_PREFIX}/lib64 -L${NGHTTP2_PREFIX}/lib -L/usr/lib64 -L/usr/lib" \
+        CPPFLAGS="${CPPFLAGS:-} -I${NGHTTP2_PREFIX}/include -I/usr/include" \
+        ./configure --prefix=/usr --with-openssl --with-zlib --with-nghttp2=${NGHTTP2_PREFIX}
+      else
+        # Fallback: try without nghttp2 if version is too old
+        echo "Warning: libnghttp2 >= 1.61.0 not found, building without HTTP/2 support"
+        ./configure --prefix=/usr --with-openssl --with-zlib --without-nghttp2
+      fi
     - "make"
   build_dependencies:
     - "gcc"

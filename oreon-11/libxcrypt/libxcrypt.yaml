@@ -1,11 +1,11 @@
 name: libxcrypt
-version: "4.4.36"
+version: "4.5.2"
 description: "Extended crypt library for password and passphrase hashing"
 author: "Björn Esser and Zack Weinberg"
 license: "LGPL-2.1-or-later"
 homepage: "https://github.com/besser82/libxcrypt"
 repository: "https://github.com/besser82/libxcrypt"
-source_url: "https://github.com/besser82/libxcrypt/releases/download/v4.4.36/libxcrypt-4.4.36.tar.xz"
+source_url: "https://github.com/besser82/libxcrypt/releases/download/v4.5.2/libxcrypt-4.5.2.tar.xz"
 keywords:
   - crypt
   - password
@@ -51,9 +51,6 @@ dependencies:
     - name: "fipscheck"
       version_constraint: ">=1.5"
       optional: false
-    - name: "libxcrypt-compat"
-      version_constraint: ">=4.4.36"
-      optional: false
   runtime_dependencies:
     - name: "glibc"
       version_constraint: ">=2.30"
@@ -78,7 +75,6 @@ build:
     - "perl"
     - "gnupg2"
     - "fipscheck"
-    - "libxcrypt-compat"
   build_flags:
     - "-O2"
     - "-pipe"

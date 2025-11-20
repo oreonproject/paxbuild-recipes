@@ -46,7 +46,7 @@ dependencies:
 build:
   build_system: Make
   build_commands:
-    - "./configure --prefix=/usr --sysconfdir=/etc --disable-werror --enable-device-mapper --enable-libzfs --enable-grub-mount --with-platform=efi --enable-boot-time --enable-cache-stats"
+    - "./configure --prefix=/usr --sysconfdir=/etc --disable-werror"
     - "make -j$(nproc)"
   build_flags: []
   environment:

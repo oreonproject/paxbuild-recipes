@@ -65,32 +65,11 @@ build:
   build_system: Make
   build_commands:
     - |
-      locate_gcc_src() {
-        if [ -f configure ] && [ -d contrib ]; then
-          pwd
-          return 0
-        fi
-        find . -maxdepth 1 -type f -name 'gcc-*.tar.*' -print -quit | while read -r archive; do
-          echo "Extracting ${archive##*/}..."
-          case "$archive" in
-            *.tar.xz) tar -xJf "$archive" ;;
-            *.tar.gz) tar -xzf "$archive" ;;
-            *.tar.bz2) tar -xjf "$archive" ;;
-            *.tar) tar -xf "$archive" ;;
-          esac
-        done
-        CANDIDATE=$(find . -maxdepth 1 -mindepth 1 -type d -name 'gcc-*' | head -1)
-        if [ -n "$CANDIDATE" ] && [ -f "$CANDIDATE/configure" ]; then
-          (cd "$CANDIDATE" && pwd)
-          return 0
-        fi
-        return 1
-      }
-      GCC_DIR=$(locate_gcc_src) || {
-        echo "Unable to locate extracted GCC sources" >&2
+      # GCC sources are already extracted by pax-builder
+      if [ ! -f configure ] || [ ! -d contrib ]; then
+        echo "GCC sources not found in current directory" >&2
         exit 1
-      }
-      cd "$GCC_DIR"
+      fi
       fetch_and_symlink() {
         local dest_name="$1"
         local archive="$2"
@@ -143,23 +122,12 @@ build:
         https://mirrors.kernel.org/gnu/gettext/gettext-0.22.tar.gz \
         https://ftp.gnu.org/gnu/gettext/gettext-0.22.tar.gz
     - |
-      locate_gcc_src() {
-        if [ -f configure ] && [ -d contrib ]; then
-          pwd
-          return 0
-        fi
-        CANDIDATE=$(find . -maxdepth 1 -mindepth 1 -type d -name 'gcc-*' | head -1)
-        if [ -n "$CANDIDATE" ] && [ -f "$CANDIDATE/configure" ]; then
-          (cd "$CANDIDATE" && pwd)
-          return 0
-        fi
-        return 1
-      }
-      GCC_DIR=$(locate_gcc_src) || {
-        echo "Unable to locate extracted GCC sources" >&2
+      # GCC sources are already extracted by pax-builder
+      if [ ! -f configure ] || [ ! -d contrib ]; then
+        echo "GCC sources not found in current directory" >&2
         exit 1
-      }
-      mkdir -p "$GCC_DIR/build" && cd "$GCC_DIR/build" && "$GCC_DIR/configure" \
+      fi
+      mkdir -p build && cd build && ../configure \
         --prefix=/usr \
         --enable-languages=c,c++,fortran,objc,obj-c++,ada,d \
         --disable-multilib \

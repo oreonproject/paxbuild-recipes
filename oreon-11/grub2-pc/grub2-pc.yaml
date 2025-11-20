@@ -48,7 +48,7 @@ dependencies:
 build:
   build_system: Make
   build_commands:
-    - "./configure --prefix=/usr --sysconfdir=/etc --target=i386 --with-platform=pc --disable-werror --enable-device-mapper --enable-grub-mount --enable-boot-time --enable-cache-stats"
+    - "./configure --prefix=/usr --sysconfdir=/etc --target=i386 --with-platform=pc --disable-werror"
     - "make -j$(nproc)"
   build_dependencies:
     - "gcc"

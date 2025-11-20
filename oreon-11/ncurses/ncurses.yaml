@@ -38,7 +38,7 @@ dependencies:
 build:
   build_system: Make
   build_commands:
-    - "./configure --prefix=/usr --with-shared --with-termlib --enable-widec --enable-pc-files --with-default-terminfo-dir=/usr/share/terminfo --with-termpath=/etc/terminfo:/usr/share/terminfo --disable-static"
+    - "./configure --prefix=/usr --with-shared --with-termlib --enable-widec --enable-pc-files --with-default-terminfo-dir=/usr/share/terminfo --with-termpath=/etc/terminfo:/usr/share/terminfo --disable-static --without-cxx-binding"
     - "make"
   build_dependencies:
     - "gcc"
