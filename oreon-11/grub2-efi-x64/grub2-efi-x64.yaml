@@ -76,6 +76,7 @@ build:
   build_flags: []
   environment:
     CFLAGS: "-O2"
+    LD_LIBRARY_PATH: "/lib64:/usr/lib64"
   working_directory: null
   target_architectures:
     - X86_64v1

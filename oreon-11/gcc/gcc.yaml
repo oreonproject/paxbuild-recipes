@@ -64,21 +64,8 @@ dependencies:
 build:
   build_system: Make
   build_commands:
-    - |
-      # GCC sources are already extracted by pax-builder
-      if [ ! -f configure ] || [ ! -d contrib ]; then
-        echo "GCC sources not found in current directory" >&2
-        exit 1
-      fi
-      mkdir -p build && cd build && ../configure \
-        --prefix=/usr \
-        --enable-languages=c,c++ \
-        --disable-multilib \
-        --enable-threads=posix \
-        --enable-shared \
-        --enable-__cxa_atexit \
-        --with-system-zlib \
-        --with-default-libstdcxx-abi=gcc4-compatible
+    - "mkdir -p build && cd build"
+    - "LD_LIBRARY_PATH=/lib64:/usr/lib64 ../configure --prefix=/usr --enable-languages=c,c++ --disable-multilib --with-build-sysroot=/"
     - "make -j$(nproc)"
   build_dependencies:
     - "gcc"
