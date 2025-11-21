@@ -81,7 +81,6 @@ build:
       export PYTHON_VERSIONS=python3
       export PYTHONPATH=$(realpath libraries/libapparmor/swig/python 2>/dev/null || echo libraries/libapparmor/swig/python)
     - |
-      export LD_LIBRARY_PATH=/lib64:/usr/lib64
       set -e
       cd libraries/libapparmor
       if [ ! -f ./configure ]; then

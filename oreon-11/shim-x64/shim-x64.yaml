@@ -31,12 +31,8 @@ dependencies:
 build:
   build_system: Make
   build_commands:
-    - |
-      export LD_LIBRARY_PATH=/lib64:/usr/lib64
-      make clean || true
-    - |
-      export LD_LIBRARY_PATH=/lib64:/usr/lib64
-      make EFIDIR=BOOT VENDOR_CERT_FILE= -j1 || make EFIDIR=BOOT -j1
+    - "make clean || true"
+    - "make EFIDIR=BOOT VENDOR_CERT_FILE= -j1 || make EFIDIR=BOOT -j1"
   build_dependencies:
     - "gcc"
     - "make"

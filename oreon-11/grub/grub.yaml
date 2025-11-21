@@ -38,12 +38,8 @@ dependencies:
 build:
   build_system: Make
   build_commands:
-    - |
-      export LD_LIBRARY_PATH=/lib64:/usr/lib64
-      ./configure --prefix=/usr --sysconfdir=/etc --disable-werror --disable-grub-mount --disable-grub-emu --disable-grub-mkfont
-    - |
-      export LD_LIBRARY_PATH=/lib64:/usr/lib64
-      make -j$(nproc)
+    - "./configure --prefix=/usr --sysconfdir=/etc --disable-werror --disable-grub-mount --disable-grub-emu --disable-grub-mkfont"
+    - "make -j$(nproc)"
   build_flags: []
   environment:
     CFLAGS: "-O2"

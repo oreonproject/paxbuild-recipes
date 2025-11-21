@@ -61,12 +61,8 @@ dependencies:
 build:
   build_system: Make
   build_commands:
-    - |
-      export LD_LIBRARY_PATH=/lib64:/usr/lib64
-      ./configure --prefix=/usr --libdir=/usr/lib --disable-static
-    - |
-      export LD_LIBRARY_PATH=/lib64:/usr/lib64
-      make -j$(nproc)
+    - "./configure --prefix=/usr --libdir=/usr/lib --disable-static"
+    - "make -j$(nproc)"
   build_dependencies:
     - "gcc"
     - "make"

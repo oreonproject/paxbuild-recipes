@@ -64,13 +64,8 @@ dependencies:
 build:
   build_system: Make
   build_commands:
-    - |
-      export LD_LIBRARY_PATH=/lib64:/usr/lib64
-      mkdir -p build && cd build
-      ../configure --prefix=/usr --enable-languages=c,c++ --disable-multilib --with-build-sysroot=/
-    - |
-      export LD_LIBRARY_PATH=/lib64:/usr/lib64
-      cd build && make -j$(nproc)
+    - "mkdir -p build && cd build && ../configure --prefix=/usr --enable-languages=c,c++ --disable-multilib --with-build-sysroot=/"
+    - "cd build && make -j$(nproc)"
   build_dependencies:
     - "gcc"
     - "gcc-c++"
