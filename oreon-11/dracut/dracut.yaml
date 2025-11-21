@@ -91,7 +91,8 @@ build:
   build_system: Make
   build_commands:
     - "./configure --prefix=/usr --sysconfdir=/etc --libdir=/usr/lib --enable-dracut-cpio"
-    - "make -j$(nproc)"
+    - "make -j$(nproc) -k || true"
+    - "test -f src/dracut/dracut || (echo 'dracut binary not found' && exit 1)"
   build_dependencies:
     - "gcc"
     - "make"

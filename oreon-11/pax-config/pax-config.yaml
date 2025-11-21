@@ -49,9 +49,10 @@ install:
   post_install_commands: []
 
 files:
-  include_patterns:
-    - "etc/pax/sources.conf"
-  exclude_patterns: []
+  include_patterns: []
+  exclude_patterns:
+    - "src-package/**"
+    - "**/src-package/**"
   binary_files: []
   config_files:
     - "etc/pax/sources.conf"

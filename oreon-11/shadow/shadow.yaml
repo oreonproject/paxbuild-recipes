@@ -41,8 +41,12 @@ dependencies:
 build:
   build_system: Make
   build_commands:
-    - "./configure --prefix=/usr --sysconfdir=/etc --enable-nls"
-    - "make -j$(nproc)"
+    - |
+      export LD_LIBRARY_PATH=/lib64:/usr/lib64
+      ./configure --prefix=/usr --sysconfdir=/etc --enable-nls
+    - |
+      export LD_LIBRARY_PATH=/lib64:/usr/lib64
+      make -j$(nproc)
   build_dependencies:
     - "gcc"
     - "make"
