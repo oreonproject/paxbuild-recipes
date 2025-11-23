@@ -152,7 +152,6 @@ build:
   environment:
     KCFLAGS: "-O2 -pipe -Wall"
     HOSTCFLAGS: "-O2 -pipe"
-    LD_LIBRARY_PATH: "/lib64:/usr/lib64"
   working_directory: null
   target_architectures:
     - X86_64v1

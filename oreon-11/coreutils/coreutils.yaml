@@ -1,13 +1,15 @@
 name: coreutils
-version: "9.8"
-description: "Core GNU utilities"
-author: "Various"
-license: "Various"
-homepage: ""
-repository: ""
-source_url: "https://ftp.gnu.org/gnu/coreutils/coreutils-9.8.tar.xz"
+version: "9.9"
+description: "GNU core utilities"
+author: "GNU Project"
+license: "GPL-3.0-or-later"
+homepage: "https://www.gnu.org/software/coreutils/"
+repository: "https://git.savannah.gnu.org/git/coreutils.git"
+source_url: "https://ftp.gnu.org/gnu/coreutils/coreutils-9.9.tar.xz"
 keywords:
   - coreutils
+  - gnu
+  - utilities
 categories:
   - packages
 
@@ -25,83 +27,35 @@ dependencies:
     - name: "automake"
       version_constraint: ">=1.16"
       optional: false
-    - name: "gettext-devel"
+    - name: "libtool"
+      version_constraint: ">=2.4"
+      optional: false
+    - name: "gettext"
       version_constraint: ">=0.21"
-      optional: false
-    - name: "gmp-devel"
-      version_constraint: ">=6.3"
-      optional: false
-    - name: "hostname"
-      version_constraint: ">=3.23"
-      optional: false
-    - name: "libacl-devel"
-      version_constraint: ">=2.3"
-      optional: false
-    - name: "libattr-devel"
-      version_constraint: ">=2.5"
-      optional: false
-    - name: "libcap-devel"
-      version_constraint: ">=2.70"
-      optional: false
-    - name: "libselinux-devel"
-      version_constraint: ">=3.7"
-      optional: false
-    - name: "libselinux-utils"
-      version_constraint: ">=3.7"
-      optional: false
-    - name: "openssl-devel"
-      version_constraint: ">=3.0"
-      optional: false
-    - name: "strace"
-      version_constraint: ">=6.5"
-      optional: false
-    - name: "systemd-devel"
-      version_constraint: ">=254"
       optional: false
     - name: "texinfo"
       version_constraint: ">=7.0"
       optional: false
-    - name: "gnupg2"
-      version_constraint: ">=2.4"
+    - name: "gperf"
+      version_constraint: ">=3.1"
       optional: false
-    - name: "attr"
+    - name: "attr-devel"
       version_constraint: ">=2.5"
       optional: false
-    - name: "gdb"
-      version_constraint: ">=14"
+    - name: "libcap-devel"
+      version_constraint: ">=2.69"
       optional: false
-    - name: "perl-interpreter"
-      version_constraint: ">=5.32"
+    - name: "libselinux-devel"
+      version_constraint: ">=3.7"
       optional: false
-    - name: "perl-FileHandle"
-      version_constraint: ">=2.03"
+    - name: "acl-devel"
+      version_constraint: ">=2.3"
       optional: false
-    - name: "perl-Expect"
-      version_constraint: ">=1.35"
+    - name: "gmp-devel"
+      version_constraint: ">=6.2"
       optional: false
-    - name: "python3"
-      version_constraint: ">=3.11"
-      optional: false
-    - name: "python3-inotify"
-      version_constraint: ">=0.9"
-      optional: false
-    - name: "tzdata"
-      version_constraint: ">=2024a"
-      optional: false
-    - name: "valgrind"
-      version_constraint: ">=3.23"
-      optional: false
-    - name: "glibc-langpack-en"
-      version_constraint: ">=2.38"
-      optional: false
-    - name: "glibc-langpack-fr"
-      version_constraint: ">=2.38"
-      optional: false
-    - name: "glibc-langpack-ko"
-      version_constraint: ">=2.38"
-      optional: false
-    - name: "glibc-langpack-sv"
-      version_constraint: ">=2.38"
+    - name: "openssl-devel"
+      version_constraint: ">=3.0"
       optional: false
   runtime_dependencies: []
   optional_dependencies: []
@@ -110,39 +64,23 @@ dependencies:
 build:
   build_system: Make
   build_commands:
-    - "./configure --prefix=/usr"
+    - "./configure --prefix=/usr --enable-no-install-program=kill,uptime"
     - "make"
   build_dependencies:
     - "gcc"
     - "make"
     - "autoconf"
     - "automake"
-    - "gettext-devel"
-    - "gmp-devel"
-    - "hostname"
-    - "libacl-devel"
-    - "libattr-devel"
+    - "libtool"
+    - "gettext"
+    - "texinfo"
+    - "gperf"
+    - "attr-devel"
     - "libcap-devel"
     - "libselinux-devel"
-    - "libselinux-utils"
+    - "acl-devel"
+    - "gmp-devel"
     - "openssl-devel"
-    - "strace"
-    - "systemd-devel"
-    - "texinfo"
-    - "gnupg2"
-    - "attr"
-    - "gdb"
-    - "perl-interpreter"
-    - "perl-FileHandle"
-    - "perl-Expect"
-    - "python3"
-    - "python3-inotify"
-    - "tzdata"
-    - "valgrind"
-    - "glibc-langpack-en"
-    - "glibc-langpack-fr"
-    - "glibc-langpack-ko"
-    - "glibc-langpack-sv"
   build_flags: []
   environment:
     CFLAGS: "-O2"
@@ -160,6 +98,7 @@ install:
     - "make install DESTDIR=$DESTDIR"
   install_directories:
     - "/usr/bin"
+    - "/usr/libexec"
   install_files: []
   post_install_commands: []
 
@@ -169,6 +108,7 @@ files:
     - "*.h"
     - "configure"
     - "Makefile.in"
+    - "src/**/*"
   exclude_patterns:
     - "**/*.o"
     - "**/*.a"
@@ -194,7 +134,7 @@ scripts:
 metadata:
   maintainer: "Oreon Project Team <packaging@oreonproject.org>"
   section: "packages"
-  priority: "optional"
+  priority: "standard"
   provides:
     - "coreutils"
   conflicts: []

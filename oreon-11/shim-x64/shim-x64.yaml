@@ -32,7 +32,8 @@ build:
   build_system: Make
   build_commands:
     - "make clean || true"
-    - "make EFIDIR=BOOT VENDOR_CERT_FILE= -j1 || make EFIDIR=BOOT -j1"
+    - "if [ -f cert.S ]; then sed -i 's|include.*\\./|include cert.h|g' cert.S || sed -i '42s|.*|include cert.h|g' cert.S || true; fi"
+    - "make EFIDIR=BOOT VENDOR_CERT_FILE= -j1"
   build_dependencies:
     - "gcc"
     - "make"
@@ -44,7 +45,6 @@ build:
   environment:
     CFLAGS: "-O2 -fPIC"
     AS: "gcc"
-    LD_LIBRARY_PATH: "/lib64:/usr/lib64"
   working_directory: null
   target_architectures:
     - X86_64v1

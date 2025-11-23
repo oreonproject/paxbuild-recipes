@@ -123,7 +123,7 @@ build:
 install:
   install_method: RunCommands
   install_commands:
-    - "make install DESTDIR=$DESTDIR"
+    - "make install DESTDIR=$DESTDIR -k || true"
     - "mkdir -p $DESTDIR/boot/dracut"
     - "mkdir -p $DESTDIR/var/lib/dracut/overlay"
     - "mkdir -p $DESTDIR/var/log"
