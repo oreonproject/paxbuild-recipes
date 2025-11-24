@@ -1,0 +1,46 @@
+[package]
+name = "pax-builder"
+version = "0.1.0"
+edition = "2021"
+description = "PAX Package Builder - Build .pax packages for PAX repositories"
+authors = ["PAX Team"]
+license = "MIT"
+repository = "https://github.com/your-org/pax-rs"
+
+[[bin]]
+name = "pax-builder"
+path = "src/main.rs"
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+serde_norway = "0.9.42"
+tokio = { version = "1.0", features = ["full"] }
+sha2 = "0.10"
+reqwest = { version = "0.11", features = ["json", "blocking"] }
+futures = "0.3"
+clap = { version = "4.0", features = ["derive"] }
+sqlx = { version = "0.7", features = ["runtime-tokio-rustls", "sqlite"] }
+axum = { version = "0.7", features = ["macros"] }
+tower = { version = "0.4", features = ["util"] }
+tower-http = { version = "0.5", features = ["fs"] }
+chrono = { version = "0.4", features = ["serde"] }
+mime_guess = "2.0"
+serde_yaml = "0.9"
+walkdir = "2.5"
+
+[dev-dependencies]
+tempfile = "3.0"
+assert_fs = "1.0"
+
+[[bin]]
+name = "pax-build-infra"
+path = "src/cli.rs"
+
+[[bin]]
+name = "obs-dashboard"
+path = "src/obs_dashboard.rs"
+
+[[bin]]
+name = "osad-dashboard"
+path = "src/osad_dashboard.rs"

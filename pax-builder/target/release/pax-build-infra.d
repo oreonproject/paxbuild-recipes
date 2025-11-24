@@ -1,0 +1,1 @@
+/home/adminuser/obs/pax-builder/target/release/pax-build-infra: /home/adminuser/obs/pax-builder/src/cli.rs /home/adminuser/obs/pax-builder/src/lib.rs /home/adminuser/obs/pax-builder/src/version_checker.rs /home/adminuser/obs/pax-builder/src/worker.rs

@@ -1,0 +1,1 @@
+/home/adminuser/obs/pax-builder/target/release/obs-dashboard: /home/adminuser/obs/pax-builder/src/lib.rs /home/adminuser/obs/pax-builder/src/obs_dashboard.rs /home/adminuser/obs/pax-builder/src/static/obs_public.html
