@@ -1,0 +1,203 @@
+pipeline:
+  build-x86:
+    image: registry.fedoraproject.org/fedora:rawhide
+    when:
+      event: push
+      agent:
+        include: x86_64
+    commands:
+      - if command -v dnf5 >/dev/null 2>&1; then PM=dnf5; else PM=dnf; fi
+      - $PM -y install --skip-unavailable \
+          gcc gcc-c++ gcc-gfortran clang llvm \
+          glibc-headers glibc-devel libstdc++-devel libstdc++-static \
+          make cmake meson ninja-build \
+          autoconf automake libtool autoconf-archive pkgconf pkgconf-pkg-config \
+          binutils gdb patch diffutils \
+          kernel-core kernel-devel kernel-headers \
+          python3 python3-pip python3-jinja2 python3-setuptools python3-wheel \
+          perl perl-core perl-devel \
+          ruby rubygems \
+          golang \
+          java-latest-openjdk java-latest-openjdk-devel maven ant \
+          nodejs npm yarnpkg \
+          git git-core curl wget rsync subversion mercurial \
+          openssl openssl-devel \
+          zlib zlib-devel bzip2 bzip2-devel xz xz-devel \
+          lz4 lz4-devel zstd libzstd-devel \
+          tar gzip zip unzip cpio file \
+          libxcrypt-devel libbsd libbsd-devel \
+          ncurses ncurses-compat-libs ncurses-devel \
+          readline readline-devel \
+          pcre pcre-devel pcre2 pcre2-devel \
+          e2fsprogs e2fsprogs-devel \
+          libmount-devel libblkid-devel libuuid-devel \
+          fuse fuse-libs fuse-devel fuse3 fuse3-libs fuse3-devel \
+          libcap libcap-devel libcap-ng libcap-ng-devel \
+          libacl libacl-devel libattr libattr-devel \
+          libselinux libselinux-devel libsepol libsepol-devel \
+          selinux-policy selinux-policy-devel checkpolicy \
+          policycoreutils policycoreutils-python-utils \
+          dbus dbus-daemon dbus-libs dbus-devel dbus-glib dbus-glib-devel \
+          systemd systemd-libs systemd-devel \
+          pam pam-devel \
+          gmp gmp-devel libffi libffi-devel \
+          libxml2 libxml2-devel libxslt libxslt-devel xsltproc \
+          sqlite sqlite-devel gdbm gdbm-devel \
+          mariadb-connector-c-devel \
+          postgresql-libs postgresql-devel \
+          asciidoctor rubygem-asciidoctor \
+          asciidoc xmlto \
+          docbook-dtds docbook-style-xsl \
+          help2man groff man-db man-pages \
+          doxygen graphviz \
+          texinfo gettext gettext-devel \
+          bison flex which gperf gawk \
+          elfutils elfutils-devel elfutils-libelf-devel \
+          libX11 libX11-devel libXext libXext-devel libXrender libXrender-devel \
+          libXrandr libXrandr-devel libXfixes libXfixes-devel \
+          libXcursor libXcursor-devel libXi libXi-devel \
+          libXinerama libXinerama-devel libXdamage libXdamage-devel \
+          libXcomposite libXcomposite-devel \
+          mesa-libGL mesa-libGL-devel mesa-libEGL mesa-libEGL-devel \
+          wayland wayland-devel wayland-protocols-devel \
+          cairo cairo-devel pango pango-devel \
+          gtk2 gtk2-devel gtk3 gtk3-devel gtk4 gtk4-devel \
+          qt5-qtbase qt5-qtbase-devel qt5-qtsvg qt5-qtsvg-devel qt5-qttools qt5-qttools-devel \
+          qt6-qtbase qt6-qtbase-devel qt6-qtsvg qt6-qtsvg-devel qt6-qttools qt6-qttools-devel \
+          alsa-lib alsa-lib-devel pulseaudio-libs pulseaudio-libs-devel pipewire pipewire-devel \
+          libdrm libdrm-devel \
+          vulkan-loader vulkan-headers vulkan-tools \
+          rpm rpm-build rpm-sign redhat-rpm-config \
+          rust cargo \
+          ninja-build \
+          ccache \
+          openldap openldap-devel \
+          krb5-libs krb5-devel \
+          libcurl libcurl-devel \
+          libarchive libarchive-devel \
+          samba-libs \
+          bluez-libs bluez-libs-devel \
+          libusb libusb1-devel \
+          libevdev libevdev-devel \
+          libinput libinput-devel \
+          libnotify libnotify-devel \
+          libpng libpng-devel \
+          libjpeg-turbo libjpeg-turbo-devel \
+          libtiff libtiff-devel \
+          libwebp libwebp-devel \
+          freetype freetype-devel \
+          harfbuzz harfbuzz-devel \
+          cairo-gobject \
+          && $PM clean all
+
+      - chmod +x pax-builder/target/release/pax-builder
+
+      - |
+        for yml in oreon-11/*/*.yaml; do
+          pax-builder/target/release/pax-builder build "$yml" --verbose
+        done
+
+      - rsync -avz -e "ssh -o StrictHostKeyChecking=accept-new" \
+          out/x86_64/ adminuser@192.168.0.141:/home/adminuser/pax-results/x86_64/
+
+
+  build-aarch64:
+    image: registry.fedoraproject.org/fedora:rawhide
+    when:
+      event: push
+      agent:
+        include: aarch64
+    commands:
+      - if command -v dnf5 >/dev/null 2>&1; then PM=dnf5; else PM=dnf; fi
+      - $PM -y install --skip-unavailable \
+          gcc gcc-c++ gcc-gfortran clang llvm \
+          glibc-headers glibc-devel libstdc++-devel libstdc++-static \
+          make cmake meson ninja-build \
+          autoconf automake libtool autoconf-archive pkgconf pkgconf-pkg-config \
+          binutils gdb patch diffutils \
+          kernel-core kernel-devel kernel-headers \
+          python3 python3-pip python3-jinja2 python3-setuptools python3-wheel \
+          perl perl-core perl-devel \
+          ruby rubygems \
+          golang \
+          java-latest-openjdk java-latest-openjdk-devel maven ant \
+          nodejs npm yarnpkg \
+          git git-core curl wget rsync subversion mercurial \
+          openssl openssl-devel \
+          zlib zlib-devel bzip2 bzip2-devel xz xz-devel \
+          lz4 lz4-devel zstd libzstd-devel \
+          tar gzip zip unzip cpio file \
+          libxcrypt-devel libbsd libbsd-devel \
+          ncurses ncurses-compat-libs ncurses-devel \
+          readline readline-devel \
+          pcre pcre-devel pcre2 pcre2-devel \
+          e2fsprogs e2fsprogs-devel \
+          libmount-devel libblkid-devel libuuid-devel \
+          fuse fuse-libs fuse-devel fuse3 fuse3-libs fuse3-devel \
+          libcap libcap-devel libcap-ng libcap-ng-devel \
+          libacl libacl-devel libattr libattr-devel \
+          libselinux libselinux-devel libsepol libsepol-devel \
+          selinux-policy selinux-policy-devel checkpolicy \
+          policycoreutils policycoreutils-python-utils \
+          dbus dbus-daemon dbus-libs dbus-devel dbus-glib dbus-glib-devel \
+          systemd systemd-libs systemd-devel \
+          pam pam-devel \
+          gmp gmp-devel libffi libffi-devel \
+          libxml2 libxml2-devel libxslt libxslt-devel xsltproc \
+          sqlite sqlite-devel gdbm gdbm-devel \
+          mariadb-connector-c-devel \
+          postgresql-libs postgresql-devel \
+          asciidoctor rubygem-asciidoctor \
+          asciidoc xmlto \
+          docbook-dtds docbook-style-xsl \
+          help2man groff man-db man-pages \
+          doxygen graphviz \
+          texinfo gettext gettext-devel \
+          bison flex which gperf gawk \
+          elfutils elfutils-devel elfutils-libelf-devel \
+          libX11 libX11-devel libXext libXext-devel libXrender libXrender-devel \
+          libXrandr libXrandr-devel libXfixes libXfixes-devel \
+          libXcursor libXcursor-devel libXi libXi-devel \
+          libXinerama libXinerama-devel libXdamage libXdamage-devel \
+          libXcomposite libXcomposite-devel \
+          mesa-libGL mesa-libGL-devel mesa-libEGL mesa-libEGL-devel \
+          wayland wayland-devel wayland-protocols-devel \
+          cairo cairo-devel pango pango-devel \
+          gtk2 gtk2-devel gtk3 gtk3-devel gtk4 gtk4-devel \
+          qt5-qtbase qt5-qtbase-devel qt5-qtsvg qt5-qtsvg-devel qt5-qttools qt5-qttools-devel \
+          qt6-qtbase qt6-qtbase-devel qt6-qtsvg qt6-qtsvg-devel qt6-qttools qt6-qttools-devel \
+          alsa-lib alsa-lib-devel pulseaudio-libs pulseaudio-libs-devel pipewire pipewire-devel \
+          libdrm libdrm-devel \
+          vulkan-loader vulkan-headers vulkan-tools \
+          rpm rpm-build rpm-sign redhat-rpm-config \
+          rust cargo \
+          ninja-build \
+          ccache \
+          openldap openldap-devel \
+          krb5-libs krb5-devel \
+          libcurl libcurl-devel \
+          libarchive libarchive-devel \
+          samba-libs \
+          bluez-libs bluez-libs-devel \
+          libusb libusb1-devel \
+          libevdev libevdev-devel \
+          libinput libinput-devel \
+          libnotify libnotify-devel \
+          libpng libpng-devel \
+          libjpeg-turbo libjpeg-turbo-devel \
+          libtiff libtiff-devel \
+          libwebp libwebp-devel \
+          freetype freetype-devel \
+          harfbuzz harfbuzz-devel \
+          cairo-gobject \
+          && $PM clean all
+
+      - chmod +x pax-builder/target/release/pax-builder
+
+      - |
+        for yml in oreon-11/*/*.yaml; do
+          pax-builder/target/release/pax-builder build "$yml" --verbose
+        done
+
+      - rsync -avz -e "ssh -o StrictHostKeyChecking=accept-new" \
+          out/aarch64/ adminuser@192.168.0.141:/home/adminuser/pax-results/aarch64/
