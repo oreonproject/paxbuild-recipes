@@ -2,7 +2,9 @@ steps:
   - name: build-x86
     image: registry.fedoraproject.org/fedora:rawhide
     when:
-      event: push
+      event:
+      - push
+      - manual
       agent:
         include: x86_64
     commands:
