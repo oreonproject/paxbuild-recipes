@@ -32,8 +32,9 @@ build:
   build_system: Make
   build_commands:
     - "make clean || true"
+    - "CERT_STUB=\"$PWD/vendor_cert_stub.der\"; rm -f \"$CERT_STUB\"; touch \"$CERT_STUB\""
     - "if [ -f cert.S ]; then sed -i 's|include.*\\./|include cert.h|g' cert.S || sed -i '42s|.*|include cert.h|g' cert.S || true; fi"
-    - "make EFIDIR=BOOT VENDOR_CERT_FILE= -j1"
+    - "make EFIDIR=BOOT VENDOR_CERT_FILE=\"$PWD/vendor_cert_stub.der\" -j1"
   build_dependencies:
     - "gcc"
     - "make"
@@ -109,4 +110,3 @@ metadata:
     - "shim-x64"
     - "shim"
   conflicts: []
-

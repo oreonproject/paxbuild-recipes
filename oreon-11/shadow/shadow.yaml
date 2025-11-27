@@ -41,7 +41,7 @@ dependencies:
 build:
   build_system: Make
   build_commands:
-    - "./configure --prefix=/usr --sysconfdir=/etc --enable-nls"
+    - "./configure --prefix=/usr --sysconfdir=/etc --enable-nls --without-libbsd"
     - "make -j$(nproc)"
   build_dependencies:
     - "gcc"

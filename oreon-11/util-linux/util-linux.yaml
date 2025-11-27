@@ -113,7 +113,7 @@ build:
 install:
   install_method: RunCommands
   install_commands:
-    - "make install DESTDIR=$DESTDIR CHGRP=true CHOWN=true INSTALL='install -p'"
+    - "sh -c 'FAKEBIN=\"$PWD/.pax-fakebin\"; rm -rf \"$FAKEBIN\"; mkdir -p \"$FAKEBIN\"; printf \"#!/bin/sh\\nexit 0\\n\" > \"$FAKEBIN/chgrp\"; chmod +x \"$FAKEBIN/chgrp\"; PATH=\"$FAKEBIN:$PATH\" make install DESTDIR=$DESTDIR CHGRP=true CHOWN=true INSTALL=\\'install -p\\'; rm -rf \"$FAKEBIN\"'"
   install_directories:
     - "/usr/bin"
   install_files: []

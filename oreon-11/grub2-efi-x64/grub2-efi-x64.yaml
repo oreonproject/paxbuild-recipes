@@ -45,6 +45,7 @@ build:
   build_system: Make
   build_commands:
     - "./configure --prefix=/usr --sysconfdir=/etc --target=x86_64 --with-platform=efi --disable-werror --disable-grub-mount --disable-grub-emu --disable-grub-mkfont"
+    - "make -C grub-core extra_deps.lst || touch grub-core/extra_deps.lst"
     - "make -j$(nproc)"
   build_dependencies:
     - "gcc"

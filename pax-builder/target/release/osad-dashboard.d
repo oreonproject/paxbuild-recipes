@@ -1,1 +1,0 @@
-/home/adminuser/obs/pax-builder/target/release/osad-dashboard: /home/adminuser/obs/pax-builder/src/lib.rs /home/adminuser/obs/pax-builder/src/osad_dashboard.rs /home/adminuser/obs/pax-builder/src/static/osad_public.html
