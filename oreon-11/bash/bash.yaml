@@ -82,8 +82,10 @@ install:
   install_method: RunCommands
   install_commands:
     - "make install DESTDIR=$DESTDIR"
+  install_directories:
+    - "/usr/bin"
   post_install_commands:
-    - "if [ -n \"$STRIP\" ] && command -v \"$STRIP\" >/dev/null 2>&1; then find $DESTDIR/usr/bin $DESTDIR/usr/lib -type f -executable -exec file {} \\; | grep -q ELF && find $DESTDIR/usr/bin $DESTDIR/usr/lib -type f -executable -exec \"$STRIP\" {} \\; 2>/dev/null || true; fi"
+    - "[ -n \"$STRIP\" ] && find $DESTDIR/usr/bin -type f -executable -exec \"$STRIP\" {} \\; 2>/dev/null || true"
 
 files:
   include_patterns:
