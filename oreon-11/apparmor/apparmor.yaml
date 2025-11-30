@@ -69,8 +69,10 @@ dependencies:
       version_constraint: ">=5.32"
       optional: false
     - name: "gawk"
+      version_constraint: ">=1.0"
       optional: false
     - name: "gawk-devel"
+      version_constraint: ">=1.0"
       optional: false
   runtime_dependencies: []
   optional_dependencies: []
