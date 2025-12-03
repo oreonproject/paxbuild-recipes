@@ -140,17 +140,9 @@ install:
   install_commands:
     - "cd libraries/libapparmor && make install DESTDIR=${DESTDIR}"
     - "cd binutils && sed -i 's| DESTDIR=/| |g' po/Makefile ../common/Make-po.rules 2>/dev/null || true && make install DESTDIR=${DESTDIR}"
-    - "cd parser && sed -i 's| DESTDIR=/| |g' po/Makefile ../common/Make-po.rules 2>/dev/null || true && make install DESTDIR=${DESTDIR}"
-    - "cd utils && sed -i 's| DESTDIR=/| |g' po/Makefile ../common/Make-po.rules 2>/dev/null || true && make install DESTDIR=${DESTDIR}"
-  install_directories:
-    - "/usr/bin"
-    - "/usr/sbin"
-    - "/usr/lib"
-    - "/usr/include"
-    - "/usr/share"
-  install_files: []
-  post_install_commands: []
-
+    - "cd parser && sed -i 's| DESTDIR=/| |g' po/Makefile ../common/Make-po.rules 2>/dev/null || true && make install DESTDIR=${DESTDIR} DISTRO="
+    - "cd utils && sed -i 's| DESTDIR=/| |g' po/Makefile ../common/Make-po.rules 2>/dev/null || true && make install DESTDIR=${DESTDIR} DISTRO="
+    
 files:
   include_patterns:
     - "*.c"
