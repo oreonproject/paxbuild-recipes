@@ -39,7 +39,7 @@ dependencies:
     - name: "gperf"
       version_constraint: ">=3.1"
       optional: false
-    - name: "attr-devel"
+    - name: "libattr-devel"
       version_constraint: ">=2.5"
       optional: false
     - name: "libcap-devel"
@@ -48,7 +48,7 @@ dependencies:
     - name: "libselinux-devel"
       version_constraint: ">=3.7"
       optional: false
-    - name: "acl-devel"
+    - name: "libacl-devel"
       version_constraint: ">=2.3"
       optional: false
     - name: "gmp-devel"
