@@ -17,7 +17,8 @@ categories:
 dependencies:
   build_dependencies: []
   runtime_dependencies:
-    - {name: "glibc", version_constraint: ">=2.30", optional: false}
+    - {name: "glibc", version_constraint: null, optional: false}
+
   optional_dependencies: []
   conflicts: []
 

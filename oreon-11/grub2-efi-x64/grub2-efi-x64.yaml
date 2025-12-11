@@ -37,7 +37,9 @@ dependencies:
     - {name: "xz-devel", version_constraint: ">=5.6", optional: false}
     - {name: "systemd-rpm-macros", version_constraint: null, optional: false}
     - {name: "ccache", version_constraint: null, optional: false}
-  runtime_dependencies: []
+  runtime_dependencies:
+    - {name: "grub", version_constraint: null, optional: false}
+
   optional_dependencies: []
   conflicts: []
 

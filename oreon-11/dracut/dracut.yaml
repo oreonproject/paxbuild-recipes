@@ -30,48 +30,13 @@ dependencies:
     - {name: "libxslt", version_constraint: ">=1.1", optional: false}
     - {name: "asciidoctor", version_constraint: ">=2.0", optional: false}
   runtime_dependencies:
-    - name: "bash"
-      version_constraint: ">=4.0"
-      optional: false
-    - name: "coreutils"
-      version_constraint: ">=8.0"
-      optional: false
-    - name: "cpio"
-      version_constraint: ">=2.0"
-      optional: false
-    - name: "filesystem"
-      version_constraint: ">=2.1.0"
-      optional: false
-    - name: "findutils"
-      version_constraint: ">=4.0"
-      optional: false
-    - name: "grep"
-      version_constraint: ">=2.0"
-      optional: false
-    - name: "kmod"
-      version_constraint: ">=23"
-      optional: false
-    - name: "sed"
-      version_constraint: ">=4.0"
-      optional: false
-    - name: "zstd"
-      version_constraint: ">=1.0"
-      optional: false
-    - name: "xz"
-      version_constraint: ">=5.0"
-      optional: false
-    - name: "util-linux"
-      version_constraint: ">=2.21"
-      optional: false
-    - name: "systemd"
-      version_constraint: ">=219"
-      optional: false
-    - name: "systemd-udev"
-      version_constraint: ">=219"
-      optional: false
-    - name: "procps-ng"
-      version_constraint: ">=3.0"
-      optional: false
+    - {name: "glibc", version_constraint: null, optional: false}
+    - {name: "bash", version_constraint: null, optional: false}
+    - {name: "coreutils", version_constraint: null, optional: false}
+    - {name: "util-linux", version_constraint: null, optional: false}
+    - {name: "e2fsprogs", version_constraint: null, optional: false}
+    - {name: "kmod", version_constraint: null, optional: false}
+
   optional_dependencies:
     - name: "memstrack"
       version_constraint: ">=0.1"

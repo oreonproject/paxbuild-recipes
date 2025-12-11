@@ -19,7 +19,17 @@ dependencies:
     - name: "make"
       version_constraint: ">=3.0"
       optional: false
-  runtime_dependencies: []
+  runtime_dependencies:
+    - {name: "glibc", version_constraint: null, optional: false}
+    - {name: "libcap", version_constraint: null, optional: false}
+    - {name: "libselinux", version_constraint: null, optional: false}
+    - {name: "libsepol", version_constraint: null, optional: false}
+    - {name: "kmod", version_constraint: null, optional: false}
+    - {name: "util-linux", version_constraint: null, optional: false}
+    - {name: "dbus", version_constraint: null, optional: false}
+    - {name: "pam", version_constraint: null, optional: false}
+    - {name: "acl", version_constraint: null, optional: false}
+
   optional_dependencies: []
   conflicts: []
 

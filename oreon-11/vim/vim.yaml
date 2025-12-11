@@ -17,8 +17,9 @@ dependencies:
     - {name: "python3-devel", version_constraint: ">=3.7", optional: false}
     - {name: "perl-devel", version_constraint: ">=5.32", optional: false}
   runtime_dependencies:
-    - {name: "glibc", version_constraint: ">=2.30", optional: false}
-    - {name: "ncurses", version_constraint: ">=6.0", optional: false}
+    - {name: "glibc", version_constraint: null, optional: false}
+    - {name: "ncurses", version_constraint: null, optional: false}
+
   optional_dependencies: []
   conflicts: []
 

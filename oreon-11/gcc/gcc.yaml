@@ -56,8 +56,9 @@ dependencies:
     - {name: "glibc", version_constraint: ">=2.38", optional: false}
     - {name: "tzdata", version_constraint: ">=2024a", optional: false}
   runtime_dependencies:
-    - {name: "glibc", version_constraint: ">=2.30", optional: false}
-    - {name: "binutils", version_constraint: ">=2.25", optional: false}
+    - {name: "glibc", version_constraint: null, optional: false}
+    - {name: "binutils", version_constraint: null, optional: false}
+
   optional_dependencies: []
   conflicts: []
 

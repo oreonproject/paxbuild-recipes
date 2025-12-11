@@ -16,9 +16,9 @@ dependencies:
     - {name: "gmp-devel", version_constraint: ">=6.0", optional: false}
     - {name: "mpfr-devel", version_constraint: ">=4.0", optional: false}
   runtime_dependencies:
-    - {name: "glibc", version_constraint: ">=2.30", optional: false}
-    - {name: "gmp", version_constraint: ">=6.0", optional: false}
-    - {name: "mpfr", version_constraint: ">=4.0", optional: false}
+    - {name: "glibc", version_constraint: null, optional: false}
+    - {name: "readline", version_constraint: null, optional: false}
+
   optional_dependencies: []
   conflicts: []
 

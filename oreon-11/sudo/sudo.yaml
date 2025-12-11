@@ -28,8 +28,10 @@ dependencies:
     - {name: "openssl-devel", version_constraint: ">=3.0", optional: false}
     - {name: "python3-devel", version_constraint: ">=3.11", optional: false}
   runtime_dependencies:
-    - {name: "glibc", version_constraint: ">=2.30", optional: false}
-    - {name: "pam", version_constraint: ">=1.0", optional: false}
+    - {name: "glibc", version_constraint: null, optional: false}
+    - {name: "pam", version_constraint: null, optional: false}
+    - {name: "shadow", version_constraint: null, optional: false}
+
   optional_dependencies: []
   conflicts: []
 

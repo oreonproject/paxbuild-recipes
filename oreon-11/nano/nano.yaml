@@ -15,8 +15,9 @@ dependencies:
     - {name: "make", version_constraint: ">=4.3", optional: false}
     - {name: "ncurses-devel", version_constraint: ">=6.0", optional: false}
   runtime_dependencies:
-    - {name: "glibc", version_constraint: ">=2.30", optional: false}
-    - {name: "ncurses", version_constraint: ">=6.0", optional: false}
+    - {name: "glibc", version_constraint: null, optional: false}
+    - {name: "ncurses", version_constraint: null, optional: false}
+
   optional_dependencies: []
   conflicts: []
 

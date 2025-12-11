@@ -67,10 +67,14 @@ dependencies:
     - name: "openssl-devel"
       version_constraint: ">=3.0"
       optional: false
-  runtime_dependencies: 
-    - name: "libnghttp2"
-      version_constraint: ">=1.40"
-      optional: false
+  runtime_dependencies:
+    - {name: "glibc", version_constraint: null, optional: false}
+    - {name: "openssl", version_constraint: null, optional: false}
+    - {name: "zlib", version_constraint: null, optional: false}
+    - {name: "libidn2", version_constraint: null, optional: false}
+    - {name: "libnghttp2", version_constraint: null, optional: false}
+    - {name: "libunistring", version_constraint: null, optional: false}
+
   optional_dependencies: []
   conflicts: []
 

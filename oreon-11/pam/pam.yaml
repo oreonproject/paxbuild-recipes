@@ -44,9 +44,9 @@ dependencies:
     - {name: "linuxdoc-tools", version_constraint: null, optional: false}
     - {name: "systemd", version_constraint: ">=254", optional: false}
   runtime_dependencies:
-    - name: "glibc"
-      version_constraint: ">=2.30"
-      optional: false
+    - {name: "glibc", version_constraint: null, optional: false}
+    - {name: "libcap", version_constraint: null, optional: false}
+
   optional_dependencies: []
   conflicts: []
 

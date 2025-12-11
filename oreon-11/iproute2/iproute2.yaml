@@ -25,7 +25,9 @@ dependencies:
     - {name: "elfutils-libelf-devel", version_constraint: ">=0.188", optional: false}
     - {name: "pkgconf", version_constraint: ">=1.7", optional: false}
     - {name: "linux-atm-libs-devel", version_constraint: null, optional: true}
-  runtime_dependencies: []
+  runtime_dependencies:
+    - {name: "glibc", version_constraint: null, optional: false}
+
   optional_dependencies: []
   conflicts: []
 

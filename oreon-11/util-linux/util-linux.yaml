@@ -70,7 +70,11 @@ dependencies:
     - name: "gnupg2"
       version_constraint: ">=2.4"
       optional: false
-  runtime_dependencies: []
+  runtime_dependencies:
+    - {name: "glibc", version_constraint: null, optional: false}
+    - {name: "zlib", version_constraint: null, optional: false}
+    - {name: "pam", version_constraint: null, optional: false}
+
   optional_dependencies: []
   conflicts: []
 

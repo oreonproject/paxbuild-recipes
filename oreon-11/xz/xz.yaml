@@ -20,7 +20,9 @@ dependencies:
     - {name: "gnupg2", version_constraint: ">=2.4", optional: false}
     - {name: "perl-interpreter", version_constraint: ">=5.32", optional: false}
   runtime_dependencies:
-    - {name: "glibc", version_constraint: ">=2.30", optional: false}
+    - {name: "glibc", version_constraint: null, optional: false}
+    - {name: "xz-libs", version_constraint: null, optional: false}
+
   optional_dependencies: []
   conflicts: []
 

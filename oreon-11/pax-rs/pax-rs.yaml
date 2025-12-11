@@ -15,8 +15,11 @@ dependencies:
     - {name: "cargo", version_constraint: ">=1.70", optional: false}
     - {name: "gcc", version_constraint: ">=4.0", optional: false}
   runtime_dependencies:
-    - {name: "glibc", version_constraint: ">=2.30", optional: false}
-    - {name: "gcc", version_constraint: ">=4.0", optional: false}
+    - {name: "glibc", version_constraint: null, optional: false}
+    - {name: "curl", version_constraint: null, optional: false}
+    - {name: "openssl", version_constraint: null, optional: false}
+    - {name: "pkgconf", version_constraint: null, optional: false}
+
   optional_dependencies: []
   conflicts: []
 

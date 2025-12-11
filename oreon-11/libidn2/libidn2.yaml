@@ -33,9 +33,8 @@ dependencies:
       version_constraint: ">=2.4"
       optional: false
   runtime_dependencies:
-    - name: "libunistring"
-      version_constraint: ">=1.0"
-      optional: false
+    - {name: "glibc", version_constraint: null, optional: false}
+
   optional_dependencies: []
   conflicts: []
 

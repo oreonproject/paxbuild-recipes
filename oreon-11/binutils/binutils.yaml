@@ -18,7 +18,8 @@ dependencies:
     - {name: "texinfo", version_constraint: ">=7.0", optional: false}
     - {name: "zlib-devel", version_constraint: ">=1.2", optional: false}
   runtime_dependencies:
-    - {name: "glibc", version_constraint: ">=2.30", optional: false}
+    - {name: "glibc", version_constraint: null, optional: false}
+
   optional_dependencies: []
   conflicts: []
 

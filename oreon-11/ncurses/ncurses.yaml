@@ -31,7 +31,9 @@ dependencies:
     - name: "gpm-devel"
       version_constraint: ">=1.20"
       optional: true
-  runtime_dependencies: []
+  runtime_dependencies:
+    - {name: "glibc", version_constraint: null, optional: false}
+
   optional_dependencies: []
   conflicts: []
 

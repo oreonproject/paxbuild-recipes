@@ -52,9 +52,8 @@ dependencies:
       version_constraint: ">=1.5"
       optional: false
   runtime_dependencies:
-    - name: "glibc"
-      version_constraint: ">=2.30"
-      optional: false
+    - {name: "glibc", version_constraint: null, optional: false}
+
   optional_dependencies: []
   conflicts: []
 
