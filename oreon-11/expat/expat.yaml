@@ -5,7 +5,7 @@ author: "Expat development team"
 license: "MIT"
 homepage: "https://libexpat.github.io/"
 repository: "https://github.com/libexpat/libexpat"
-source_url: "https://github.com/libexpat/libexpat/releases/download/R_2_6_4/expat-2.6.4.tar.xz"
+source_url: "https://github.com/libexpat/libexpat/releases/download/R_2_6_3/expat-2.6.3.tar.xz"
 keywords:
   - xml
   - parser

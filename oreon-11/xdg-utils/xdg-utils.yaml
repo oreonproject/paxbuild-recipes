@@ -1,0 +1,71 @@
+name: xdg-utils
+version: "1.2.1"
+description: "XDG utilities"
+author: "Various"
+license: "MIT"
+homepage: "https://www.freedesktop.org/wiki/Software/xdg-utils/"
+repository: ""
+source_url: "https://gitlab.freedesktop.org/xdg/xdg-utils/-/archive/v1.2.1/xdg-utils-v1.2.1.tar.gz"
+keywords:
+  - xdg-utils
+  - desktop
+categories:
+  - desktop
+  - system
+
+dependencies:
+  build_dependencies:
+    - {name: "gcc", version_constraint: ">=11", optional: false}
+    - {name: "make", version_constraint: ">=4.3", optional: false}
+  runtime_dependencies:
+    - {name: "glibc", version_constraint: ">=2.30", optional: false}
+  optional_dependencies: []
+  conflicts: []
+
+build:
+  build_system: Make
+  build_commands:
+    - "./configure --prefix=/usr"
+    - "make -j$(nproc)"
+  build_dependencies:
+    - "gcc"
+    - "make"
+  build_flags: []
+  environment:
+    CFLAGS: "-O2 -pipe"
+  working_directory: null
+  target_architectures: [X86_64v1, X86_64v3, Aarch64]
+  cross_compiler_prefix: null
+  target_sysroot: null
+
+install:
+  install_method: RunCommands
+  install_commands:
+    - "make install DESTDIR=$DESTDIR"
+  install_directories: ["/usr/bin", "/usr/lib"]
+  install_files: []
+  post_install_commands: []
+
+files:
+  include_patterns: ["**/*.c", "**/*.h"]
+  exclude_patterns: ["**/*.o"]
+  binary_files: []
+  config_files: []
+  documentation_files: []
+  license_files: []
+
+scripts:
+  pre_install: "echo 'Installing xdg-utils...'"
+  post_install: "echo 'xdg-utils installed'"
+  pre_uninstall: null
+  post_uninstall: null
+  pre_upgrade: null
+  post_upgrade: null
+
+metadata:
+  maintainer: "Oreon Project Team <packaging@oreonproject.org>"
+  section: "desktop"
+  priority: "optional"
+  provides:
+    - "xdg-utils"
+  conflicts: []

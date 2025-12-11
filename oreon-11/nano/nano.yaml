@@ -1,0 +1,69 @@
+name: nano
+version: "8.3"
+description: "GNU nano - small, friendly text editor"
+author: "GNU Project"
+license: "GPL-3.0-or-later"
+homepage: "https://www.nano-editor.org/"
+repository: "https://git.savannah.gnu.org/git/nano.git"
+source_url: "https://www.nano-editor.org/dist/v8/nano-8.3.tar.xz"
+keywords: [nano, editor, text]
+categories: [editors, utilities]
+
+dependencies:
+  build_dependencies:
+    - {name: "gcc", version_constraint: ">=11", optional: false}
+    - {name: "make", version_constraint: ">=4.3", optional: false}
+    - {name: "ncurses-devel", version_constraint: ">=6.0", optional: false}
+  runtime_dependencies:
+    - {name: "glibc", version_constraint: ">=2.30", optional: false}
+    - {name: "ncurses", version_constraint: ">=6.0", optional: false}
+  optional_dependencies: []
+  conflicts: []
+
+build:
+  build_system: Make
+  build_commands:
+    - "./configure --prefix=/usr --sysconfdir=/etc --enable-utf8"
+    - "make -j$(nproc)"
+  build_dependencies:
+    - "gcc"
+    - "make"
+    - "ncurses-devel"
+  build_flags: []
+  environment:
+    CFLAGS: "-O2 -pipe"
+  working_directory: null
+  target_architectures: [X86_64v1, X86_64v3, Aarch64]
+  cross_compiler_prefix: null
+  target_sysroot: null
+
+install:
+  install_method: RunCommands
+  install_commands:
+    - "make install DESTDIR=$DESTDIR"
+  install_directories: ["/usr/bin", "/etc"]
+  install_files: []
+  post_install_commands: []
+
+files:
+  include_patterns: ["**/*.c", "**/*.h", "configure"]
+  exclude_patterns: ["**/*.o"]
+  binary_files: ["usr/bin/nano"]
+  config_files: ["/etc/nanorc"]
+  documentation_files: []
+  license_files: ["COPYING"]
+
+scripts:
+  pre_install: "echo 'Installing nano...'"
+  post_install: "echo 'nano installed'"
+  pre_uninstall: null
+  post_uninstall: null
+  pre_upgrade: null
+  post_upgrade: null
+
+metadata:
+  maintainer: "Oreon Project Team <packaging@oreonproject.org>"
+  section: "editors"
+  priority: "standard"
+  provides: ["nano"]
+  conflicts: []

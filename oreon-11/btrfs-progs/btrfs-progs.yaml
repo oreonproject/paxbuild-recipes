@@ -1,0 +1,72 @@
+name: btrfs-progs
+version: "6.7"
+description: "btrfs-progs - Btrfs filesystem utilities"
+author: "Various"
+license: "GPL-2.0-only"
+homepage: "https://btrfs.wiki.kernel.org/"
+repository: ""
+source_url: "https://mirrors.edge.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v6.7.tar.xz"
+keywords:
+  - btrfs-progs
+  - filesystem
+  - storage
+categories:
+  - system
+  - storage
+
+dependencies:
+  build_dependencies:
+    - {name: "gcc", version_constraint: ">=11", optional: false}
+    - {name: "make", version_constraint: ">=4.3", optional: false}
+  runtime_dependencies:
+    - {name: "glibc", version_constraint: ">=2.30", optional: false}
+  optional_dependencies: []
+  conflicts: []
+
+build:
+  build_system: Make
+  build_commands:
+    - "./configure --prefix=/usr"
+    - "make -j$(nproc)"
+  build_dependencies:
+    - "gcc"
+    - "make"
+  build_flags: []
+  environment:
+    CFLAGS: "-O2 -pipe"
+  working_directory: null
+  target_architectures: [X86_64v1, X86_64v3, Aarch64]
+  cross_compiler_prefix: null
+  target_sysroot: null
+
+install:
+  install_method: RunCommands
+  install_commands:
+    - "make install DESTDIR=$DESTDIR"
+  install_directories: ["/usr/bin", "/usr/sbin"]
+  install_files: []
+  post_install_commands: []
+
+files:
+  include_patterns: ["**/*.c", "**/*.h"]
+  exclude_patterns: ["**/*.o"]
+  binary_files: []
+  config_files: []
+  documentation_files: []
+  license_files: []
+
+scripts:
+  pre_install: "echo 'Installing btrfs-progs...'"
+  post_install: "echo 'btrfs-progs installed'"
+  pre_uninstall: null
+  post_uninstall: null
+  pre_upgrade: null
+  post_upgrade: null
+
+metadata:
+  maintainer: "Oreon Project Team <packaging@oreonproject.org>"
+  section: "system"
+  priority: "optional"
+  provides:
+    - "btrfs-progs"
+  conflicts: []

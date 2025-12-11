@@ -1,0 +1,77 @@
+name: xorg-xauth
+version: "1.1.3"
+description: "X.Org xauth"
+author: "Various"
+license: "MIT"
+homepage: "https://www.x.org/"
+repository: ""
+source_url: "https://www.x.org/releases/individual/app/xauth-1.1.3.tar.xz"
+keywords:
+  - xorg-xauth
+  - graphics
+categories:
+  - system
+  - graphics
+
+dependencies:
+  build_dependencies:
+    - {name: "gcc", version_constraint: ">=11", optional: false}
+    - {name: "make", version_constraint: ">=4.3", optional: false}
+    - {name: "meson", version_constraint: ">=0.60", optional: false}
+    - {name: "ninja", version_constraint: ">=1.8", optional: false}
+  runtime_dependencies:
+    - {name: "glibc", version_constraint: ">=2.30", optional: false}
+  optional_dependencies: []
+  conflicts: []
+
+build:
+  build_system: Make
+  build_commands:
+    - "./configure --prefix=/usr"
+    - "ninja -C build"
+  build_dependencies:
+    - "gcc"
+    - "meson"
+    - "ninja"
+  build_flags: []
+  environment:
+    CFLAGS: "-O2 -pipe"
+  working_directory: null
+  target_architectures: [X86_64v1, X86_64v3, Aarch64]
+  cross_compiler_prefix: null
+  target_sysroot: null
+
+install:
+  install_method: RunCommands
+  install_commands:
+    - "DESTDIR=$DESTDIR ninja -C build install"
+  install_directories: ["/usr/lib", "/usr/include"]
+  install_files: []
+  post_install_commands:
+    - "ldconfig -n $DESTDIR/usr/lib || true"
+
+files:
+  include_patterns: ["**/*.c", "**/*.h"]
+  exclude_patterns: ["**/*.o", "build/**"]
+  binary_files: []
+  config_files: []
+  documentation_files: []
+  license_files: []
+
+scripts:
+  pre_install: "echo 'Installing xorg-xauth...'"
+  post_install: |
+    echo 'xorg-xauth installed'
+    ldconfig 2>/dev/null || true
+  pre_uninstall: null
+  post_uninstall: "ldconfig 2>/dev/null || true"
+  pre_upgrade: null
+  post_upgrade: "ldconfig 2>/dev/null || true"
+
+metadata:
+  maintainer: "Oreon Project Team <packaging@oreonproject.org>"
+  section: "graphics"
+  priority: "optional"
+  provides:
+    - "xorg-xauth"
+  conflicts: []

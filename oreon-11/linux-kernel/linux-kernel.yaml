@@ -1,11 +1,11 @@
 name: linux-kernel
-version: "6.17.5"
+version: "6.18"
 description: "Linux Kernel"
 author: "Linus Torvalds and kernel developers"
 license: "GPL-2.0-only WITH Linux-syscall-note"
 homepage: "https://www.kernel.org/"
 repository: "https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git"
-source_url: "https://www.kernel.org/pub/linux/kernel/v6.x/linux-6.17.5.tar.xz"
+source_url: "https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.18.tar.xz"
 keywords:
   - linux-kernel
   - kernel

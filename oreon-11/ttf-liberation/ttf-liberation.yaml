@@ -1,0 +1,70 @@
+name: ttf-liberation
+version: "2.1.5"
+description: "Liberation fonts"
+author: "Various"
+license: "OFL-1.1"
+homepage: "https://github.com/liberationfonts/liberation-fonts"
+repository: ""
+source_url: "https://github.com/liberationfonts/liberation-fonts/files/7261482/liberation-fonts-ttf-2.1.5.tar.gz"
+keywords:
+  - ttf-liberation
+  - fonts
+  - locale
+categories:
+  - system
+  - fonts
+
+dependencies:
+  build_dependencies: []
+  runtime_dependencies:
+    - {name: "glibc", version_constraint: ">=2.30", optional: false}
+  optional_dependencies: []
+  conflicts: []
+
+build:
+  build_system: Make
+  build_commands:
+    - "true"
+  build_dependencies: []
+  build_flags: []
+  environment: {}
+  working_directory: null
+  target_architectures: [X86_64v1, X86_64v3, Aarch64]
+  cross_compiler_prefix: null
+  target_sysroot: null
+
+install:
+  install_method: RunCommands
+  install_commands:
+    - "mkdir -p $DESTDIR/usr/share/fonts"
+    - "cp -r * $DESTDIR/usr/share/fonts/ 2>/dev/null || true"
+  install_directories: ["/usr/share/fonts"]
+  install_files: []
+  post_install_commands:
+    - "fc-cache -f || true"
+
+files:
+  include_patterns: ["**/*.ttf", "**/*.otf"]
+  exclude_patterns: []
+  binary_files: []
+  config_files: []
+  documentation_files: []
+  license_files: []
+
+scripts:
+  pre_install: "echo 'Installing ttf-liberation...'"
+  post_install: |
+    echo 'ttf-liberation installed'
+    fc-cache -f 2>/dev/null || true
+  pre_uninstall: null
+  post_uninstall: "fc-cache -f 2>/dev/null || true"
+  pre_upgrade: null
+  post_upgrade: "fc-cache -f 2>/dev/null || true"
+
+metadata:
+  maintainer: "Oreon Project Team <packaging@oreonproject.org>"
+  section: "fonts"
+  priority: "optional"
+  provides:
+    - "ttf-liberation"
+  conflicts: []

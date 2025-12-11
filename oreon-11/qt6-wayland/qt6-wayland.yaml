@@ -1,0 +1,76 @@
+name: qt6-wayland
+version: "6.7.2"
+description: "Qt6 Wayland"
+author: "The Qt Company"
+license: "GPL-3.0-only OR LGPL-3.0-only"
+homepage: "https://www.qt.io/"
+repository: ""
+source_url: "https://download.kde.org/stable/qt/6.7/qt-everywhere-src-6.7.2.tar.xz"
+keywords:
+  - qt6
+  - qt
+categories:
+  - libraries
+  - gui
+
+dependencies:
+  build_dependencies:
+    - {name: "gcc-c++", version_constraint: ">=11", optional: false}
+    - {name: "cmake", version_constraint: ">=3.16", optional: false}
+    - {name: "ninja", version_constraint: ">=1.8", optional: false}
+  runtime_dependencies:
+    - {name: "glibc", version_constraint: ">=2.30", optional: false}
+  optional_dependencies: []
+  conflicts: []
+
+build:
+  build_system: Make
+  build_commands:
+    - "cmake -B build -DCMAKE_INSTALL_PREFIX=/usr"
+    - "cmake --build build -j$(nproc)"
+  build_dependencies:
+    - "gcc-c++"
+    - "cmake"
+    - "ninja"
+  build_flags: []
+  environment:
+    CXXFLAGS: "-O2 -pipe"
+  working_directory: null
+  target_architectures: [X86_64v1, X86_64v3, Aarch64]
+  cross_compiler_prefix: null
+  target_sysroot: null
+
+install:
+  install_method: RunCommands
+  install_commands:
+    - "DESTDIR=$DESTDIR cmake --install build"
+  install_directories: ["/usr/lib", "/usr/include/qt6"]
+  install_files: []
+  post_install_commands:
+    - "ldconfig -n $DESTDIR/usr/lib || true"
+
+files:
+  include_patterns: ["**/*.cpp", "**/*.h"]
+  exclude_patterns: ["**/*.o", "build/**"]
+  binary_files: []
+  config_files: []
+  documentation_files: []
+  license_files: []
+
+scripts:
+  pre_install: "echo 'Installing qt6-wayland...'"
+  post_install: |
+    echo 'qt6-wayland installed'
+    ldconfig 2>/dev/null || true
+  pre_uninstall: null
+  post_uninstall: "ldconfig 2>/dev/null || true"
+  pre_upgrade: null
+  post_upgrade: "ldconfig 2>/dev/null || true"
+
+metadata:
+  maintainer: "Oreon Project Team <packaging@oreonproject.org>"
+  section: "libraries"
+  priority: "optional"
+  provides:
+    - "qt6-wayland"
+  conflicts: []

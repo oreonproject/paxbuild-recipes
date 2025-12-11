@@ -5,7 +5,7 @@ author: "GNU Project"
 license: "GPL-3.0-or-later"
 homepage: "https://www.gnu.org/software/libidn/#libidn2"
 repository: "https://gitlab.com/libidn/libidn2.git"
-source_url: "https://ftpmirror.gnu.org/libidn/libidn2-2.3.7.tar.gz"
+source_url: "https://ftp.gnu.org/gnu/libidn/libidn2-2.3.7.tar.gz"
 keywords:
   - idna
   - idn

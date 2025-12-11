@@ -1,0 +1,67 @@
+name: ninja
+version: "1.12.1"
+description: "Ninja - small build system with a focus on speed"
+author: "Evan Martin"
+license: "Apache-2.0"
+homepage: "https://ninja-build.org/"
+repository: "https://github.com/ninja-build/ninja"
+source_url: "https://github.com/ninja-build/ninja/archive/v1.12.1.tar.gz"
+keywords: [ninja, build, fast]
+categories: [development, tools]
+
+dependencies:
+  build_dependencies:
+    - {name: "gcc-c++", version_constraint: ">=11", optional: false}
+    - {name: "python3", version_constraint: ">=3.7", optional: false}
+  runtime_dependencies:
+    - {name: "glibc", version_constraint: ">=2.30", optional: false}
+  optional_dependencies: []
+  conflicts: []
+
+build:
+  build_system: Make
+  build_commands:
+    - "python3 configure.py --bootstrap"
+  build_dependencies:
+    - "gcc-c++"
+    - "python3"
+  build_flags: []
+  environment:
+    CXXFLAGS: "-O2 -pipe"
+  working_directory: null
+  target_architectures: [X86_64v1, X86_64v3, Aarch64]
+  cross_compiler_prefix: null
+  target_sysroot: null
+
+install:
+  install_method: RunCommands
+  install_commands:
+    - "install -Dm755 ninja $DESTDIR/usr/bin/ninja"
+    - "install -Dm644 misc/bash-completion $DESTDIR/usr/share/bash-completion/completions/ninja"
+    - "install -Dm644 misc/zsh-completion $DESTDIR/usr/share/zsh/site-functions/_ninja"
+  install_directories: ["/usr/bin"]
+  install_files: []
+  post_install_commands: []
+
+files:
+  include_patterns: ["**/*.cc", "**/*.h", "configure.py"]
+  exclude_patterns: ["**/*.o", "build/**"]
+  binary_files: ["usr/bin/ninja"]
+  config_files: []
+  documentation_files: []
+  license_files: ["COPYING"]
+
+scripts:
+  pre_install: "echo 'Installing Ninja...'"
+  post_install: "echo 'Ninja installed'"
+  pre_uninstall: null
+  post_uninstall: null
+  pre_upgrade: null
+  post_upgrade: null
+
+metadata:
+  maintainer: "Oreon Project Team <packaging@oreonproject.org>"
+  section: "development"
+  priority: "optional"
+  provides: ["ninja", "ninja-build"]
+  conflicts: []

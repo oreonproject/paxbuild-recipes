@@ -1,0 +1,73 @@
+name: hunspell-en
+version: "2024.02.01"
+description: "Hunspell English dictionaries"
+author: "Various"
+license: "Various"
+homepage: "https://github.com/LibreOffice/dictionaries"
+repository: ""
+source_url: "https://cgit.freedesktop.org/libreoffice/dictionaries/snapshot/dictionaries-master.tar.gz"
+keywords:
+  - hunspell-en
+  - application
+categories:
+  - applications
+
+dependencies:
+  build_dependencies:
+    - {name: "gcc", version_constraint: ">=11", optional: false}
+    - {name: "gcc-c++", version_constraint: ">=11", optional: false}
+    - {name: "make", version_constraint: ">=4.3", optional: false}
+    - {name: "python3", version_constraint: ">=3.7", optional: false}
+  runtime_dependencies:
+    - {name: "glibc", version_constraint: ">=2.30", optional: false}
+  optional_dependencies: []
+  conflicts: []
+
+build:
+  build_system: Make
+  build_commands:
+    - "true"
+  build_dependencies:
+    - "gcc"
+    - "gcc-c++"
+    - "make"
+    - "python3"
+  build_flags: []
+  environment:
+    CXXFLAGS: "-O2 -pipe"
+  working_directory: null
+  target_architectures: [X86_64v1, X86_64v3, Aarch64]
+  cross_compiler_prefix: null
+  target_sysroot: null
+
+install:
+  install_method: RunCommands
+  install_commands:
+    - "make install DESTDIR=$DESTDIR"
+  install_directories: ["/usr/bin", "/usr/lib"]
+  install_files: []
+  post_install_commands: []
+
+files:
+  include_patterns: ["**/*.cpp", "**/*.c", "**/*.h"]
+  exclude_patterns: ["**/*.o"]
+  binary_files: []
+  config_files: []
+  documentation_files: []
+  license_files: []
+
+scripts:
+  pre_install: "echo 'Installing hunspell-en...'"
+  post_install: "echo 'hunspell-en installed'"
+  pre_uninstall: null
+  post_uninstall: null
+  pre_upgrade: null
+  post_upgrade: null
+
+metadata:
+  maintainer: "Oreon Project Team <packaging@oreonproject.org>"
+  section: "applications"
+  priority: "optional"
+  provides:
+    - "hunspell-en"
+  conflicts: []

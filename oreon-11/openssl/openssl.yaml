@@ -5,7 +5,7 @@ author: "OpenSSL Software Foundation"
 license: "Apache-2.0"
 homepage: "https://www.openssl.org/"
 repository: "https://github.com/openssl/openssl"
-source_url: "https://www.openssl.org/source/openssl-3.4.2.tar.gz"
+source_url: "https://www.openssl.org/source/openssl-3.1.5.tar.gz"
 keywords: [openssl, ssl, tls, crypto, security]
 categories: [security, libraries]
 

@@ -1,0 +1,74 @@
+name: vim
+version: "9.1"
+description: "Vi IMproved - enhanced vi editor"
+author: "Bram Moolenaar and contributors"
+license: "Vim"
+homepage: "https://www.vim.org/"
+repository: "https://github.com/vim/vim"
+source_url: "https://github.com/vim/vim/archive/v9.1.0.tar.gz"
+keywords: [vim, editor, vi]
+categories: [editors, utilities]
+
+dependencies:
+  build_dependencies:
+    - {name: "gcc", version_constraint: ">=11", optional: false}
+    - {name: "make", version_constraint: ">=4.3", optional: false}
+    - {name: "ncurses-devel", version_constraint: ">=6.0", optional: false}
+    - {name: "python3-devel", version_constraint: ">=3.7", optional: false}
+    - {name: "perl-devel", version_constraint: ">=5.32", optional: false}
+  runtime_dependencies:
+    - {name: "glibc", version_constraint: ">=2.30", optional: false}
+    - {name: "ncurses", version_constraint: ">=6.0", optional: false}
+  optional_dependencies: []
+  conflicts: []
+
+build:
+  build_system: Make
+  build_commands:
+    - "cd src && ./configure --prefix=/usr --enable-multibyte --with-features=huge --enable-python3interp=yes --enable-perlinterp=yes --disable-gui"
+    - "cd src && make -j$(nproc)"
+  build_dependencies:
+    - "gcc"
+    - "make"
+    - "ncurses-devel"
+    - "python3-devel"
+    - "perl-devel"
+  build_flags: []
+  environment:
+    CFLAGS: "-O2 -pipe"
+  working_directory: null
+  target_architectures: [X86_64v1, X86_64v3, Aarch64]
+  cross_compiler_prefix: null
+  target_sysroot: null
+
+install:
+  install_method: RunCommands
+  install_commands:
+    - "cd src && make install DESTDIR=$DESTDIR"
+    - "ln -sf vim $DESTDIR/usr/bin/vi"
+  install_directories: ["/usr/bin", "/usr/share/vim"]
+  install_files: []
+  post_install_commands: []
+
+files:
+  include_patterns: ["**/*.c", "**/*.h", "src/configure"]
+  exclude_patterns: ["**/*.o"]
+  binary_files: ["usr/bin/vim", "usr/bin/vi", "usr/bin/vimdiff"]
+  config_files: []
+  documentation_files: []
+  license_files: ["LICENSE"]
+
+scripts:
+  pre_install: "echo 'Installing vim...'"
+  post_install: "echo 'vim installed'"
+  pre_uninstall: null
+  post_uninstall: null
+  pre_upgrade: null
+  post_upgrade: null
+
+metadata:
+  maintainer: "Oreon Project Team <packaging@oreonproject.org>"
+  section: "editors"
+  priority: "standard"
+  provides: ["vim", "vi"]
+  conflicts: []

@@ -5,7 +5,7 @@ author: "dracut-ng team"
 license: "GPL-2.0-or-later AND LGPL-2.1-or-later AND GPL-2.0-only"
 homepage: "https://github.com/dracut-ng/dracut-ng"
 repository: "https://github.com/dracut-ng/dracut-ng"
-source_url: "https://github.com/dracut-ng/dracut-ng/archive/refs/tags/109.tar.gz"
+source_url: "https://github.com/dracutdevs/dracut/archive/refs/tags/061.tar.gz"
 keywords:
   - dracut
   - initramfs

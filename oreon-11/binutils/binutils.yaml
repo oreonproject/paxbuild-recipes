@@ -1,0 +1,92 @@
+name: binutils
+version: "2.43"
+description: "GNU Binary Utilities - assembler, linker, and related tools"
+author: "GNU Project"
+license: "GPL-3.0-or-later"
+homepage: "https://www.gnu.org/software/binutils/"
+repository: "https://sourceware.org/git/binutils-gdb.git"
+source_url: "https://ftp.gnu.org/gnu/binutils/binutils-2.43.tar.xz"
+keywords: [binutils, assembler, linker, toolchain]
+categories: [development, toolchain]
+
+dependencies:
+  build_dependencies:
+    - {name: "gcc", version_constraint: ">=11", optional: false}
+    - {name: "make", version_constraint: ">=4.3", optional: false}
+    - {name: "bison", version_constraint: ">=3.8", optional: false}
+    - {name: "flex", version_constraint: ">=2.6", optional: false}
+    - {name: "texinfo", version_constraint: ">=7.0", optional: false}
+    - {name: "zlib-devel", version_constraint: ">=1.2", optional: false}
+  runtime_dependencies:
+    - {name: "glibc", version_constraint: ">=2.30", optional: false}
+  optional_dependencies: []
+  conflicts: []
+
+build:
+  build_system: Make
+  build_commands:
+    - "mkdir -p build && cd build"
+    - "cd build && ../configure --prefix=/usr --enable-gold --enable-ld=default --enable-plugins --enable-shared --disable-werror --enable-64-bit-bfd --with-system-zlib --enable-deterministic-archives"
+    - "cd build && make -j$(nproc) tooldir=/usr"
+  build_dependencies:
+    - "gcc"
+    - "make"
+    - "bison"
+    - "flex"
+    - "texinfo"
+    - "zlib-devel"
+  build_flags: []
+  environment:
+    CFLAGS: "-O2 -pipe"
+  working_directory: null
+  target_architectures: [X86_64v1, X86_64v3, Aarch64]
+  cross_compiler_prefix: null
+  target_sysroot: null
+
+install:
+  install_method: RunCommands
+  install_commands:
+    - "cd build && make install DESTDIR=$DESTDIR tooldir=/usr"
+    - "rm -f $DESTDIR/usr/share/info/dir"
+  install_directories: ["/usr/bin", "/usr/lib", "/usr/include"]
+  install_files: []
+  post_install_commands:
+    - "ldconfig -n $DESTDIR/usr/lib || true"
+
+files:
+  include_patterns: ["**/*.c", "**/*.h", "configure"]
+  exclude_patterns: ["**/*.o", "build/**"]
+  binary_files:
+    - "usr/bin/ar"
+    - "usr/bin/as"
+    - "usr/bin/ld"
+    - "usr/bin/ld.gold"
+    - "usr/bin/ld.bfd"
+    - "usr/bin/nm"
+    - "usr/bin/objcopy"
+    - "usr/bin/objdump"
+    - "usr/bin/ranlib"
+    - "usr/bin/readelf"
+    - "usr/bin/strip"
+    - "usr/lib/libbfd*.so*"
+    - "usr/lib/libopcodes*.so*"
+  config_files: []
+  documentation_files: []
+  license_files: ["COPYING", "COPYING3", "COPYING.LIB"]
+
+scripts:
+  pre_install: "echo 'Installing binutils...'"
+  post_install: |
+    echo "binutils installed"
+    ldconfig 2>/dev/null || true
+  pre_uninstall: null
+  post_uninstall: "ldconfig 2>/dev/null || true"
+  pre_upgrade: null
+  post_upgrade: "ldconfig 2>/dev/null || true"
+
+metadata:
+  maintainer: "Oreon Project Team <packaging@oreonproject.org>"
+  section: "development"
+  priority: "required"
+  provides: ["binutils", "as", "ld"]
+  conflicts: []

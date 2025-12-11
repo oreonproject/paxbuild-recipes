@@ -1,0 +1,69 @@
+name: grep
+version: "3.11"
+description: "GNU grep - pattern matching utility"
+author: "GNU Project"
+license: "GPL-3.0-or-later"
+homepage: "https://www.gnu.org/software/grep/"
+repository: "https://git.savannah.gnu.org/git/grep.git"
+source_url: "https://ftp.gnu.org/gnu/grep/grep-3.11.tar.xz"
+keywords: [grep, search, pattern, text]
+categories: [system, utilities]
+
+dependencies:
+  build_dependencies:
+    - {name: "gcc", version_constraint: ">=11", optional: false}
+    - {name: "make", version_constraint: ">=4.3", optional: false}
+    - {name: "pcre2-devel", version_constraint: ">=10.0", optional: false}
+  runtime_dependencies:
+    - {name: "glibc", version_constraint: ">=2.30", optional: false}
+    - {name: "pcre2", version_constraint: ">=10.0", optional: false}
+  optional_dependencies: []
+  conflicts: []
+
+build:
+  build_system: Make
+  build_commands:
+    - "./configure --prefix=/usr"
+    - "make -j$(nproc)"
+  build_dependencies:
+    - "gcc"
+    - "make"
+    - "pcre2-devel"
+  build_flags: []
+  environment:
+    CFLAGS: "-O2 -pipe"
+  working_directory: null
+  target_architectures: [X86_64v1, X86_64v3, Aarch64]
+  cross_compiler_prefix: null
+  target_sysroot: null
+
+install:
+  install_method: RunCommands
+  install_commands:
+    - "make install DESTDIR=$DESTDIR"
+  install_directories: ["/usr/bin"]
+  install_files: []
+  post_install_commands: []
+
+files:
+  include_patterns: ["**/*.c", "**/*.h", "configure"]
+  exclude_patterns: ["**/*.o"]
+  binary_files: ["usr/bin/grep", "usr/bin/egrep", "usr/bin/fgrep"]
+  config_files: []
+  documentation_files: []
+  license_files: ["COPYING"]
+
+scripts:
+  pre_install: "echo 'Installing grep...'"
+  post_install: "echo 'grep installed'"
+  pre_uninstall: null
+  post_uninstall: null
+  pre_upgrade: null
+  post_upgrade: null
+
+metadata:
+  maintainer: "Oreon Project Team <packaging@oreonproject.org>"
+  section: "utilities"
+  priority: "required"
+  provides: ["grep"]
+  conflicts: []

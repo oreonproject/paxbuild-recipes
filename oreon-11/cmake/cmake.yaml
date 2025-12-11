@@ -1,0 +1,80 @@
+name: cmake
+version: "3.31.2"
+description: "CMake - cross-platform build system generator"
+author: "Kitware"
+license: "BSD-3-Clause"
+homepage: "https://cmake.org/"
+repository: "https://gitlab.kitware.com/cmake/cmake.git"
+source_url: "https://github.com/Kitware/CMake/releases/download/v3.31.2/cmake-3.31.2.tar.gz"
+keywords: [cmake, build, generator]
+categories: [development, tools]
+
+dependencies:
+  build_dependencies:
+    - {name: "gcc", version_constraint: ">=11", optional: false}
+    - {name: "gcc-c++", version_constraint: ">=11", optional: false}
+    - {name: "make", version_constraint: ">=4.3", optional: false}
+    - {name: "openssl-devel", version_constraint: ">=3.0", optional: false}
+    - {name: "curl-devel", version_constraint: ">=7.0", optional: false}
+    - {name: "expat-devel", version_constraint: ">=2.4", optional: false}
+    - {name: "zlib-devel", version_constraint: ">=1.2", optional: false}
+    - {name: "libarchive-devel", version_constraint: ">=3.5", optional: false}
+    - {name: "ncurses-devel", version_constraint: ">=6.0", optional: false}
+  runtime_dependencies:
+    - {name: "glibc", version_constraint: ">=2.30", optional: false}
+  optional_dependencies: []
+  conflicts: []
+
+build:
+  build_system: Make
+  build_commands:
+    - "./bootstrap --prefix=/usr --system-libs --mandir=/share/man --no-system-jsoncpp --no-system-librhash --datadir=/share/cmake --docdir=/share/doc/cmake --sphinx-man"
+    - "make -j$(nproc)"
+  build_dependencies:
+    - "gcc"
+    - "gcc-c++"
+    - "make"
+    - "openssl-devel"
+    - "curl-devel"
+    - "expat-devel"
+    - "zlib-devel"
+    - "libarchive-devel"
+    - "ncurses-devel"
+  build_flags: []
+  environment:
+    CXXFLAGS: "-O2 -pipe"
+  working_directory: null
+  target_architectures: [X86_64v1, X86_64v3, Aarch64]
+  cross_compiler_prefix: null
+  target_sysroot: null
+
+install:
+  install_method: RunCommands
+  install_commands:
+    - "make install DESTDIR=$DESTDIR"
+  install_directories: ["/usr/bin", "/usr/share/cmake"]
+  install_files: []
+  post_install_commands: []
+
+files:
+  include_patterns: ["**/*.c", "**/*.cxx", "**/*.h", "bootstrap"]
+  exclude_patterns: ["**/*.o"]
+  binary_files: ["usr/bin/cmake", "usr/bin/ctest", "usr/bin/cpack"]
+  config_files: []
+  documentation_files: []
+  license_files: ["Copyright.txt"]
+
+scripts:
+  pre_install: "echo 'Installing CMake...'"
+  post_install: "echo 'CMake installed'"
+  pre_uninstall: null
+  post_uninstall: null
+  pre_upgrade: null
+  post_upgrade: null
+
+metadata:
+  maintainer: "Oreon Project Team <packaging@oreonproject.org>"
+  section: "development"
+  priority: "standard"
+  provides: ["cmake"]
+  conflicts: []

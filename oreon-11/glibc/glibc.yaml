@@ -1,11 +1,11 @@
 name: glibc
-version: "2.40"
+version: "2.42"
 description: "GNU C Library - the standard C library"
 author: "GNU Project"
 license: "LGPL-2.1-or-later"
 homepage: "https://www.gnu.org/software/libc/"
 repository: "https://sourceware.org/git/glibc.git"
-source_url: "https://ftp.gnu.org/gnu/glibc/glibc-2.40.tar.xz"
+source_url: "https://ftp.gnu.org/gnu/glibc/glibc-2.42.tar.xz"
 keywords: [glibc, libc, C-library, system]
 categories: [system, libraries]
 

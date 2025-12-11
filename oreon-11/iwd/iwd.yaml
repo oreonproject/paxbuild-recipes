@@ -1,0 +1,86 @@
+name: iwd
+version: "3.0"
+description: "iwd - iNet wireless daemon"
+author: "Intel"
+license: "LGPL-2.1-or-later"
+homepage: "https://iwd.wiki.kernel.org/"
+repository: "https://git.kernel.org/pub/scm/network/wireless/iwd.git"
+source_url: "https://www.kernel.org/pub/linux/network/wireless/iwd-3.0.tar.xz"
+keywords:
+  - iwd
+  - wireless
+  - wifi
+  - networking
+categories:
+  - networking
+  - system
+
+dependencies:
+  build_dependencies:
+    - {name: "gcc", version_constraint: ">=11", optional: false}
+    - {name: "make", version_constraint: ">=4.3", optional: false}
+    - {name: "autoconf", version_constraint: ">=2.69", optional: false}
+    - {name: "readline-devel", version_constraint: ">=8.0", optional: false}
+  runtime_dependencies:
+    - {name: "glibc", version_constraint: ">=2.30", optional: false}
+    - {name: "dbus", version_constraint: ">=1.12", optional: false}
+  optional_dependencies: []
+  conflicts:
+    - "wpa_supplicant"
+
+build:
+  build_system: Make
+  build_commands:
+    - "./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --libexecdir=/usr/lib/iwd"
+    - "make -j$(nproc)"
+  build_dependencies:
+    - "gcc"
+    - "make"
+    - "autoconf"
+    - "readline-devel"
+  build_flags: []
+  environment:
+    CFLAGS: "-O2 -pipe"
+  working_directory: null
+  target_architectures: [X86_64v1, X86_64v3, Aarch64]
+  cross_compiler_prefix: null
+  target_sysroot: null
+
+install:
+  install_method: RunCommands
+  install_commands:
+    - "make install DESTDIR=$DESTDIR"
+    - "mkdir -p $DESTDIR/etc/iwd"
+    - "mkdir -p $DESTDIR/var/lib/iwd"
+  install_directories: ["/usr/bin", "/usr/lib/iwd", "/etc/iwd"]
+  install_files: []
+  post_install_commands:
+    - "systemctl enable --now iwd 2>/dev/null || true"
+
+files:
+  include_patterns: ["**/*.c", "**/*.h", "configure"]
+  exclude_patterns: ["**/*.o"]
+  binary_files: ["usr/bin/iwctl", "usr/bin/iwmon", "usr/lib/iwd/iwd"]
+  config_files: ["/etc/iwd/main.conf"]
+  documentation_files: []
+  license_files: ["COPYING"]
+
+scripts:
+  pre_install: "echo 'Installing iwd...'"
+  post_install: |
+    echo 'iwd installed'
+    systemctl enable iwd 2>/dev/null || true
+  pre_uninstall: |
+    systemctl disable --now iwd 2>/dev/null || true
+  post_uninstall: null
+  pre_upgrade: null
+  post_upgrade: |
+    systemctl restart iwd 2>/dev/null || true
+
+metadata:
+  maintainer: "Oreon Project Team <packaging@oreonproject.org>"
+  section: "networking"
+  priority: "optional"
+  provides: ["iwd", "wireless-daemon"]
+  conflicts: ["wpa_supplicant"]
+

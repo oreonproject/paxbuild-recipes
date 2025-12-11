@@ -1,0 +1,77 @@
+name: bzip2
+version: "1.0.8"
+description: "bzip2 - high-quality data compressor"
+author: "Julian Seward"
+license: "BSD-like"
+homepage: "https://sourceware.org/bzip2/"
+repository: "https://sourceware.org/git/bzip2.git"
+source_url: "https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz"
+keywords: [bzip2, compression, archive]
+categories: [system, utilities]
+
+dependencies:
+  build_dependencies:
+    - {name: "gcc", version_constraint: ">=11", optional: false}
+    - {name: "make", version_constraint: ">=4.3", optional: false}
+  runtime_dependencies:
+    - {name: "glibc", version_constraint: ">=2.30", optional: false}
+  optional_dependencies: []
+  conflicts: []
+
+build:
+  build_system: Make
+  build_commands:
+    - "make -f Makefile-libbz2_so"
+    - "make clean"
+    - "make"
+  build_dependencies:
+    - "gcc"
+    - "make"
+  build_flags: []
+  environment:
+    CFLAGS: "-O2 -pipe -fPIC"
+  working_directory: null
+  target_architectures: [X86_64v1, X86_64v3, Aarch64]
+  cross_compiler_prefix: null
+  target_sysroot: null
+
+install:
+  install_method: RunCommands
+  install_commands:
+    - "make install PREFIX=$DESTDIR/usr"
+    - "cp -a libbz2.so* $DESTDIR/usr/lib/"
+    - "ln -sf libbz2.so.1.0.8 $DESTDIR/usr/lib/libbz2.so.1.0"
+    - "ln -sf libbz2.so.1.0 $DESTDIR/usr/lib/libbz2.so.1"
+  install_directories: ["/usr/bin", "/usr/lib", "/usr/include"]
+  install_files: []
+  post_install_commands:
+    - "ldconfig -n $DESTDIR/usr/lib || true"
+
+files:
+  include_patterns: ["**/*.c", "**/*.h", "Makefile*"]
+  exclude_patterns: ["**/*.o"]
+  binary_files:
+    - "usr/bin/bzip2"
+    - "usr/bin/bunzip2"
+    - "usr/bin/bzcat"
+    - "usr/lib/libbz2.so*"
+  config_files: []
+  documentation_files: []
+  license_files: ["LICENSE"]
+
+scripts:
+  pre_install: "echo 'Installing bzip2...'"
+  post_install: |
+    echo "bzip2 installed"
+    ldconfig 2>/dev/null || true
+  pre_uninstall: null
+  post_uninstall: "ldconfig 2>/dev/null || true"
+  pre_upgrade: null
+  post_upgrade: "ldconfig 2>/dev/null || true"
+
+metadata:
+  maintainer: "Oreon Project Team <packaging@oreonproject.org>"
+  section: "utilities"
+  priority: "required"
+  provides: ["bzip2", "libbz2"]
+  conflicts: []

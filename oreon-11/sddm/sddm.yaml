@@ -1,0 +1,80 @@
+name: sddm
+version: "0.21.0"
+description: "SDDM display manager"
+author: "KDE Community"
+license: "GPL-2.0-or-later"
+homepage: "https://kde.org/"
+repository: ""
+source_url: "https://github.com/sddm/sddm/releases/download/v0.21.0/sddm-0.21.0.tar.xz"
+keywords:
+  - sddm
+  - kde
+  - plasma
+categories:
+  - desktop
+  - kde
+
+dependencies:
+  build_dependencies:
+    - {name: "gcc-c++", version_constraint: ">=11", optional: false}
+    - {name: "cmake", version_constraint: ">=3.16", optional: false}
+    - {name: "extra-cmake-modules", version_constraint: ">=6.0", optional: false}
+    - {name: "qt6-base", version_constraint: ">=6.7", optional: false}
+  runtime_dependencies:
+    - {name: "glibc", version_constraint: ">=2.30", optional: false}
+    - {name: "qt6-base", version_constraint: ">=6.7", optional: false}
+  optional_dependencies: []
+  conflicts: []
+
+build:
+  build_system: Make
+  build_commands:
+    - "cmake -B build -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF"
+    - "cmake --build build -j$(nproc)"
+  build_dependencies:
+    - "gcc-c++"
+    - "cmake"
+    - "extra-cmake-modules"
+    - "qt6-base"
+  build_flags: []
+  environment:
+    CXXFLAGS: "-O2 -pipe"
+  working_directory: null
+  target_architectures: [X86_64v1, X86_64v3, Aarch64]
+  cross_compiler_prefix: null
+  target_sysroot: null
+
+install:
+  install_method: RunCommands
+  install_commands:
+    - "DESTDIR=$DESTDIR cmake --install build"
+  install_directories: ["/usr/lib", "/usr/bin", "/usr/share"]
+  install_files: []
+  post_install_commands:
+    - "ldconfig -n $DESTDIR/usr/lib || true"
+
+files:
+  include_patterns: ["**/*.cpp", "**/*.h", "CMakeLists.txt"]
+  exclude_patterns: ["**/*.o", "build/**"]
+  binary_files: []
+  config_files: []
+  documentation_files: []
+  license_files: []
+
+scripts:
+  pre_install: "echo 'Installing sddm...'"
+  post_install: |
+    echo 'sddm installed'
+    ldconfig 2>/dev/null || true
+  pre_uninstall: null
+  post_uninstall: "ldconfig 2>/dev/null || true"
+  pre_upgrade: null
+  post_upgrade: "ldconfig 2>/dev/null || true"
+
+metadata:
+  maintainer: "Oreon Project Team <packaging@oreonproject.org>"
+  section: "desktop"
+  priority: "optional"
+  provides:
+    - "sddm"
+  conflicts: []

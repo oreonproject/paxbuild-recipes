@@ -1,0 +1,75 @@
+name: gstreamer-plugins-base
+version: "1.24.6"
+description: "GStreamer base plugins"
+author: "Various"
+license: "LGPL-2.1-or-later"
+homepage: "https://gstreamer.freedesktop.org/"
+repository: ""
+source_url: "https://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-1.24.6.tar.xz"
+keywords:
+  - gstreamer-plugins-base
+  - audio
+  - multimedia
+categories:
+  - multimedia
+  - audio
+
+dependencies:
+  build_dependencies:
+    - {name: "gcc", version_constraint: ">=11", optional: false}
+    - {name: "make", version_constraint: ">=4.3", optional: false}
+  runtime_dependencies:
+    - {name: "glibc", version_constraint: ">=2.30", optional: false}
+  optional_dependencies: []
+  conflicts: []
+
+build:
+  build_system: Make
+  build_commands:
+    - "meson setup build --prefix=/usr"
+    - "make -j$(nproc)"
+  build_dependencies:
+    - "gcc"
+    - "make"
+  build_flags: []
+  environment:
+    CFLAGS: "-O2 -pipe"
+  working_directory: null
+  target_architectures: [X86_64v1, X86_64v3, Aarch64]
+  cross_compiler_prefix: null
+  target_sysroot: null
+
+install:
+  install_method: RunCommands
+  install_commands:
+    - "make install DESTDIR=$DESTDIR"
+  install_directories: ["/usr/lib", "/usr/bin"]
+  install_files: []
+  post_install_commands:
+    - "ldconfig -n $DESTDIR/usr/lib || true"
+
+files:
+  include_patterns: ["**/*.c", "**/*.h"]
+  exclude_patterns: ["**/*.o"]
+  binary_files: []
+  config_files: []
+  documentation_files: []
+  license_files: []
+
+scripts:
+  pre_install: "echo 'Installing gstreamer-plugins-base...'"
+  post_install: |
+    echo 'gstreamer-plugins-base installed'
+    ldconfig 2>/dev/null || true
+  pre_uninstall: null
+  post_uninstall: "ldconfig 2>/dev/null || true"
+  pre_upgrade: null
+  post_upgrade: "ldconfig 2>/dev/null || true"
+
+metadata:
+  maintainer: "Oreon Project Team <packaging@oreonproject.org>"
+  section: "multimedia"
+  priority: "optional"
+  provides:
+    - "gstreamer-plugins-base"
+  conflicts: []

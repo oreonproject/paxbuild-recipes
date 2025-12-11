@@ -5,7 +5,7 @@ author: "Various"
 license: "Various"
 homepage: ""
 repository: ""
-source_url: "https://github.com/systemd/systemd/archive/refs/tags/v258.tar.gz"
+source_url: "https://github.com/systemd/systemd/archive/refs/tags/v260.tar.gz"
 keywords:
   - systemd
 categories:

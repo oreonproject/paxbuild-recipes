@@ -1,0 +1,65 @@
+name: zip
+version: "3.0"
+description: "Info-ZIP zip - archiver for .zip files"
+author: "Info-ZIP"
+license: "BSD-like"
+homepage: "http://www.info-zip.org/Zip.html"
+repository: ""
+source_url: "https://downloads.sourceforge.net/infozip/zip30.tar.gz"
+keywords: [zip, archive, compression]
+categories: [system, utilities]
+
+dependencies:
+  build_dependencies:
+    - {name: "gcc", version_constraint: ">=11", optional: false}
+    - {name: "make", version_constraint: ">=4.3", optional: false}
+  runtime_dependencies:
+    - {name: "glibc", version_constraint: ">=2.30", optional: false}
+  optional_dependencies: []
+  conflicts: []
+
+build:
+  build_system: Make
+  build_commands:
+    - "make -f unix/Makefile generic_gcc"
+  build_dependencies:
+    - "gcc"
+    - "make"
+  build_flags: []
+  environment:
+    CFLAGS: "-O2 -pipe"
+  working_directory: null
+  target_architectures: [X86_64v1, X86_64v3, Aarch64]
+  cross_compiler_prefix: null
+  target_sysroot: null
+
+install:
+  install_method: RunCommands
+  install_commands:
+    - "make -f unix/Makefile prefix=$DESTDIR/usr MANDIR=$DESTDIR/usr/share/man/man1 install"
+  install_directories: ["/usr/bin"]
+  install_files: []
+  post_install_commands: []
+
+files:
+  include_patterns: ["**/*.c", "**/*.h", "unix/Makefile"]
+  exclude_patterns: ["**/*.o"]
+  binary_files: ["usr/bin/zip", "usr/bin/zipcloak", "usr/bin/zipnote", "usr/bin/zipsplit"]
+  config_files: []
+  documentation_files: []
+  license_files: ["LICENSE"]
+
+scripts:
+  pre_install: "echo 'Installing zip...'"
+  post_install: "echo 'zip installed'"
+  pre_uninstall: null
+  post_uninstall: null
+  pre_upgrade: null
+  post_upgrade: null
+
+metadata:
+  maintainer: "Oreon Project Team <packaging@oreonproject.org>"
+  section: "utilities"
+  priority: "standard"
+  provides: ["zip"]
+  conflicts: []

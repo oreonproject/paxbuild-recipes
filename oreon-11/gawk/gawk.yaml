@@ -1,0 +1,72 @@
+name: gawk
+version: "5.3.0"
+description: "GNU awk - pattern scanning and processing language"
+author: "GNU Project"
+license: "GPL-3.0-or-later"
+homepage: "https://www.gnu.org/software/gawk/"
+repository: "https://git.savannah.gnu.org/git/gawk.git"
+source_url: "https://ftp.gnu.org/gnu/gawk/gawk-5.3.0.tar.xz"
+keywords: [gawk, awk, text, processing]
+categories: [system, utilities]
+
+dependencies:
+  build_dependencies:
+    - {name: "gcc", version_constraint: ">=11", optional: false}
+    - {name: "make", version_constraint: ">=4.3", optional: false}
+    - {name: "gmp-devel", version_constraint: ">=6.0", optional: false}
+    - {name: "mpfr-devel", version_constraint: ">=4.0", optional: false}
+  runtime_dependencies:
+    - {name: "glibc", version_constraint: ">=2.30", optional: false}
+    - {name: "gmp", version_constraint: ">=6.0", optional: false}
+    - {name: "mpfr", version_constraint: ">=4.0", optional: false}
+  optional_dependencies: []
+  conflicts: []
+
+build:
+  build_system: Make
+  build_commands:
+    - "./configure --prefix=/usr --libexecdir=/usr/lib"
+    - "make -j$(nproc)"
+  build_dependencies:
+    - "gcc"
+    - "make"
+    - "gmp-devel"
+    - "mpfr-devel"
+  build_flags: []
+  environment:
+    CFLAGS: "-O2 -pipe"
+  working_directory: null
+  target_architectures: [X86_64v1, X86_64v3, Aarch64]
+  cross_compiler_prefix: null
+  target_sysroot: null
+
+install:
+  install_method: RunCommands
+  install_commands:
+    - "make install DESTDIR=$DESTDIR"
+  install_directories: ["/usr/bin", "/usr/lib/gawk"]
+  install_files: []
+  post_install_commands: []
+
+files:
+  include_patterns: ["**/*.c", "**/*.h", "configure"]
+  exclude_patterns: ["**/*.o"]
+  binary_files: ["usr/bin/gawk", "usr/bin/awk"]
+  config_files: []
+  documentation_files: []
+  license_files: ["COPYING"]
+
+scripts:
+  pre_install: "echo 'Installing gawk...'"
+  post_install: "echo 'gawk installed'"
+  pre_uninstall: null
+  post_uninstall: null
+  pre_upgrade: null
+  post_upgrade: null
+
+metadata:
+  maintainer: "Oreon Project Team <packaging@oreonproject.org>"
+  section: "utilities"
+  priority: "required"
+  provides: ["gawk", "awk"]
+  conflicts: []

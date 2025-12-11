@@ -5,7 +5,7 @@ author: "Various"
 license: "Various"
 homepage: ""
 repository: ""
-source_url: "https://downloads.sourceforge.net/project/procps-ng/Production/procps-ng-4.0.5.tar.xz"
+source_url: "https://sourceforge.net/projects/procps-ng/files/Production/procps-ng-4.0.4.tar.xz"
 keywords:
   - procps-ng
 categories:

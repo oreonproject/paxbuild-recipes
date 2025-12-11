@@ -1,11 +1,11 @@
 name: file
-version: "5.46"
+version: "5.45"
 description: "File type identification"
 author: "Various"
 license: "Various"
 homepage: ""
 repository: ""
-source_url: "https://astron.com/pub/file/file-5.46.tar.gz"
+source_url: "https://astron.com/pub/file/file-5.45.tar.gz"
 keywords:
   - file
 categories:

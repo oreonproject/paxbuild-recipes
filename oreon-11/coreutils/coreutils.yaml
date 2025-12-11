@@ -1,11 +1,11 @@
 name: coreutils
-version: "9.9"
+version: "9.7"
 description: "GNU core utilities"
 author: "GNU Project"
 license: "GPL-3.0-or-later"
 homepage: "https://www.gnu.org/software/coreutils/"
 repository: "https://git.savannah.gnu.org/git/coreutils.git"
-source_url: "https://ftp.gnu.org/gnu/coreutils/coreutils-9.9.tar.xz"
+source_url: "https://ftp.gnu.org/gnu/coreutils/coreutils-9.7.tar.xz"
 keywords:
   - coreutils
   - gnu

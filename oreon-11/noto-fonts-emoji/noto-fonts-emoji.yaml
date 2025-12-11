@@ -1,0 +1,70 @@
+name: noto-fonts-emoji
+version: "2.047"
+description: "Noto Color Emoji font"
+author: "Various"
+license: "OFL-1.1"
+homepage: "https://fonts.google.com/noto/specimen/Noto+Color+Emoji"
+repository: ""
+source_url: "https://github.com/googlefonts/noto-emoji/archive/v2.047.tar.gz"
+keywords:
+  - noto-fonts-emoji
+  - fonts
+  - locale
+categories:
+  - system
+  - fonts
+
+dependencies:
+  build_dependencies: []
+  runtime_dependencies:
+    - {name: "glibc", version_constraint: ">=2.30", optional: false}
+  optional_dependencies: []
+  conflicts: []
+
+build:
+  build_system: Make
+  build_commands:
+    - "true"
+  build_dependencies: []
+  build_flags: []
+  environment: {}
+  working_directory: null
+  target_architectures: [X86_64v1, X86_64v3, Aarch64]
+  cross_compiler_prefix: null
+  target_sysroot: null
+
+install:
+  install_method: RunCommands
+  install_commands:
+    - "mkdir -p $DESTDIR/usr/share/fonts"
+    - "cp -r * $DESTDIR/usr/share/fonts/ 2>/dev/null || true"
+  install_directories: ["/usr/share/fonts"]
+  install_files: []
+  post_install_commands:
+    - "fc-cache -f || true"
+
+files:
+  include_patterns: ["**/*.ttf", "**/*.otf"]
+  exclude_patterns: []
+  binary_files: []
+  config_files: []
+  documentation_files: []
+  license_files: []
+
+scripts:
+  pre_install: "echo 'Installing noto-fonts-emoji...'"
+  post_install: |
+    echo 'noto-fonts-emoji installed'
+    fc-cache -f 2>/dev/null || true
+  pre_uninstall: null
+  post_uninstall: "fc-cache -f 2>/dev/null || true"
+  pre_upgrade: null
+  post_upgrade: "fc-cache -f 2>/dev/null || true"
+
+metadata:
+  maintainer: "Oreon Project Team <packaging@oreonproject.org>"
+  section: "fonts"
+  priority: "optional"
+  provides:
+    - "noto-fonts-emoji"
+  conflicts: []
